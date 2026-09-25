@@ -1,0 +1,9 @@
+ollama
+python-dotenv
+pydantic
+pydantic-settings
+requests
+pymupdf
+langdetect
+numpy
+rank-bm25
