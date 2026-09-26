@@ -13,6 +13,7 @@ from app.adaptive_retrieval.schemas import (
     RetrievalAttempt,
 )
 from app.adaptive_retrieval.query_reformulator import QueryReformulator
+from app.retrieval_memory.memory import RetrievalMemory
 
 
 class AdaptiveRetrievalController:
@@ -43,6 +44,7 @@ class AdaptiveRetrievalController:
         max_attempts_per_query: int | None = None,
         max_query_variants: int = 3,
         support_threshold: float = 0.70,
+        memory: RetrievalMemory | None = None,
     ):
         self.hybrid_retriever = hybrid_retriever
         self.reranker = reranker
@@ -66,6 +68,8 @@ class AdaptiveRetrievalController:
         self.max_query_variants = max_query_variants
 
         self.support_threshold = support_threshold
+
+        self.memory = memory
 
     def _is_sufficient(
         self,
@@ -157,6 +161,13 @@ class AdaptiveRetrievalController:
                 start=1,
             ):
 
+                if self.memory is not None and self.memory.has_query_attempt(
+                    query=current_query,
+                    requirement_id=requirement.requirement_id,
+                    candidate_k=candidate_k,
+                ):
+                    continue
+
                 final_candidate_k = candidate_k
                 final_query = current_query
 
@@ -188,6 +199,18 @@ class AdaptiveRetrievalController:
                 evidence_items = self._build_evidence_items(
                     reranked
                 )
+
+                if self.memory is not None:
+                    for evidence in evidence_items:
+                        self.memory.record_evidence(
+                            chunk_id=evidence.chunk_id,
+                            document_id=evidence.document_id,
+                            requirement_id=requirement.requirement_id,
+                            source_query=current_query,
+                            retrieval_depth=candidate_k,
+                            coverage_score=None,
+                            coverage_status=None,
+                        )
 
                 # ---------------------------------------------------------
                 # 4. Add newly discovered evidence
@@ -221,6 +244,18 @@ class AdaptiveRetrievalController:
                 final_status = requirement_coverage.coverage_status
                 final_score = requirement_coverage.coverage_score
 
+                if self.memory is not None:
+                    for evidence in evidence_items:
+                        self.memory.record_evidence(
+                            chunk_id=evidence.chunk_id,
+                            document_id=evidence.document_id,
+                            requirement_id=requirement.requirement_id,
+                            source_query=current_query,
+                            retrieval_depth=candidate_k,
+                            coverage_score=requirement_coverage.coverage_score,
+                            coverage_status=requirement_coverage.coverage_status,
+                        )
+
                 # ---------------------------------------------------------
                 # 6. Determine stopping condition
                 # ---------------------------------------------------------
@@ -229,6 +264,22 @@ class AdaptiveRetrievalController:
                     final_status,
                     final_score,
                 )
+
+                if self.memory is not None:
+                    self.memory.record_query(
+                        query=current_query,
+                        query_type=query_type,
+                        requirement_id=requirement.requirement_id,
+                        candidate_k=candidate_k,
+                        rerank_top_k=self.rerank_top_k,
+                        retrieved_chunk_ids=[
+                            item.chunk_id
+                            for item in reranked
+                        ],
+                        coverage_status=final_status,
+                        coverage_score=final_score,
+                        successful=sufficient,
+                    )
 
                 attempt = RetrievalAttempt(
                     attempt_number=global_attempt_number,

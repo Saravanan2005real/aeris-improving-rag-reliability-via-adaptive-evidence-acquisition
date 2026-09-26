@@ -18,13 +18,17 @@ Instead of relying on single-pass retrieval or naive "retrieve more" strategies,
    
    Evidence must exceed a strict threshold to be marked as `SUPPORTED`. If it doesn't, it triggers the Adaptive Controller.
 
-3. **Adaptive Retrieval Controller**  
+3. **Retrieval Memory & State Tracking**  
+   AERIS maintains an active, in-memory state of all retrieval attempts (tracking the combination of Query, Requirement ID, and Candidate Depth) as well as the evidence acquired across those attempts. This memory allows the system to seamlessly recognize and skip duplicate retrieval operations (e.g., repeating a retrieval depth that has already been evaluated), thus saving compute and preventing cyclic redundant fetching without altering the adaptive workflow.
+
+4. **Adaptive Retrieval Controller**  
    The core engine for handling evidence failures. It implements a multi-tiered adaptive recovery strategy with early stopping:
    - **Tier 1 (Depth Expansion):** Automatically expands the candidate pool (e.g., `candidate_k` from 10 → 25 → 50) if initial retrieval misses the chunk.
-   - **Tier 2 (Query Reformulation):** If depth expansion fails, it triggers the Query Reformulator to semantically rewrite the query (e.g., changing "How does the retriever rank?" to "What ranking algorithm is used?").
+   - **Tier 2 (Query Reformulation):** If depth expansion fails, it triggers the Query Reformulator to semantically rewrite the query.
+   - **Duplicate Guard:** Bypasses retrieval entirely if the `RetrievalMemory` detects the attempt was previously made.
    - **Early Stopping:** Stops retrieval immediately upon hitting the `SUPPORTED` threshold to minimize computational cost, latency, and context noise.
 
-4. **Hybrid Retrieval + Cross-Encoder Reranking**  
+5. **Hybrid Retrieval + Cross-Encoder Reranking**  
    - **Dense Retrieval:** `all-MiniLM-L6-v2`
    - **Sparse Retrieval:** BM25
    - **Fusion:** Reciprocal Rank Fusion (RRF)
@@ -39,18 +43,22 @@ graph TD
     Planner --> R1[Requirement 1]
     Planner --> R2[Requirement 2]
     
-    R1 --> InitialRet[Initial Hybrid Retrieval<br>k=10]
+    R1 --> MemCheck{Memory Guard}
+    MemCheck -->|Not Attempted| InitialRet[Hybrid Retrieval<br>k=10]
+    MemCheck -->|Already Attempted| Skip[Skip & Try Next State]
+    
     InitialRet --> Rerank[Cross-Encoder Reranking]
     Rerank --> Coverage[Evidence Coverage Estimator]
+    Coverage --> MemStore[Record Attempt & Evidence in Memory]
     
-    Coverage -->|SUPPORTED| Stop[STOP & Store Evidence]
-    Coverage -->|UNSUPPORTED| AdaptDepth[Candidate Depth Expansion<br>k=25, 50]
+    MemStore -->|SUPPORTED| Stop[STOP & Proceed]
+    MemStore -->|UNSUPPORTED| AdaptDepth[Candidate Depth Expansion<br>k=25, 50]
     
-    AdaptDepth --> Rerank
+    AdaptDepth --> MemCheck
     
     AdaptDepth -->|Still UNSUPPORTED| Reformulate[Query Reformulator]
     Reformulate --> NewQuery[New Retrieval Query]
-    NewQuery --> InitialRet
+    NewQuery --> MemCheck
 ```
 
 ## 🛠️ Installation & Setup
@@ -63,11 +71,11 @@ graph TD
 
 2. **Create a virtual environment and install dependencies**
    ```bash
-   python -m venv .venv
+   python -m venv venv
    # On Windows: 
-   .venv\Scripts\activate
+   .\venv\Scripts\Activate.ps1
    # On Mac/Linux:
-   source .venv/bin/activate
+   source venv/bin/activate
    
    pip install -r requirements.txt
    ```
@@ -85,14 +93,21 @@ graph TD
    OLLAMA_MODEL=llama3.2:latest
    ```
 
-## 🧪 Running the Adaptive Retrieval Test
+## 🧪 Running the Tests
 
-To observe the adaptive candidate expansion and query reformulation in action:
+To observe the various components of AERIS in action:
 
-```bash
-python scripts/test_adaptive_retrieval.py data/raw/test_document.pdf "How does the retriever work?"
-```
-
-**Expected Behavior:**
-- **Requirement 1** will demonstrate **Tier 1 Adaptation**: Initial retrieval at `k=10` will fail, triggering an expansion to `k=25`, which successfully uncovers the missing evidence and triggers an early stop.
-- **Requirement 2** will demonstrate **Tier 2 Adaptation**: The original query will fail at all depths (`10, 25, 50`). The controller will seamlessly rewrite the query, and the new semantic formulation will successfully retrieve and validate the evidence.
+- **Adaptive Candidate Expansion & Reformulation:**
+  ```bash
+  python scripts/test_adaptive_retrieval.py data/raw/test_document.pdf "How does the retriever work?"
+  ```
+  
+- **Memory Integration & State Tracking:**
+  ```bash
+  python scripts/test_retrieval_memory_integration.py data/raw/test_document.pdf "How does the retriever work?"
+  ```
+  
+- **Memory Reuse & Duplicate Skipping:**
+  ```bash
+  python scripts/test_memory_reuse.py data/raw/test_document.pdf "How does the retriever work?"
+  ```
