@@ -1,0 +1,1704 @@
+from typing import Dict, List
+
+from app.coverage.evidence_coverage import (
+    EvidenceCoverageEstimator,
+    EvidenceItem,
+)
+from app.planning.schemas import InformationRequirement
+from app.retrieval.hybrid_retriever import HybridRetriever
+from app.retrieval.reranker import Reranker
+
+from app.adaptive_retrieval.schemas import (
+    AdaptiveRetrievalResult,
+    RetrievalAttempt,
+)
+from app.adaptive_retrieval.query_reformulator import QueryReformulator
+from app.retrieval_memory.memory import RetrievalMemory
+
+
+class AdaptiveRetrievalController:
+    """
+    Adaptive evidence acquisition controller.
+
+    Strategy:
+        1. Retrieve with an initial candidate pool.
+        2. Rerank the retrieved evidence.
+        3. Estimate evidence coverage.
+        4. Stop if the requirement is sufficiently supported.
+        5. Otherwise expand the candidate pool.
+        6. Repeat until the maximum retrieval depth is reached.
+
+    This first implementation intentionally keeps the adaptation policy
+    simple and deterministic. Query reformulation and evidence
+    diversification can be added as later extensions.
+    """
+
+    def __init__(
+        self,
+        hybrid_retriever: HybridRetriever,
+        reranker: Reranker,
+        coverage_estimator: EvidenceCoverageEstimator,
+        query_reformulator: QueryReformulator | None = None,
+        candidate_k_schedule: List[int] | None = None,
+        rerank_top_k: int = 5,
+        max_attempts_per_query: int | None = None,
+        max_query_variants: int = 3,
+        support_threshold: float = 0.70,
+        memory: RetrievalMemory | None = None,
+    ):
+        self.hybrid_retriever = hybrid_retriever
+        self.reranker = reranker
+        self.coverage_estimator = coverage_estimator
+        self.query_reformulator = query_reformulator or QueryReformulator()
+
+        self.candidate_k_schedule = (
+            candidate_k_schedule
+            if candidate_k_schedule is not None
+            else [10, 25, 50]
+        )
+
+        self.rerank_top_k = rerank_top_k
+
+        self.max_attempts_per_query = (
+            max_attempts_per_query
+            if max_attempts_per_query is not None
+            else len(self.candidate_k_schedule)
+        )
+        
+        self.max_query_variants = max_query_variants
+
+        self.support_threshold = support_threshold
+
+        self.memory = memory
+
+    def _is_sufficient(
+        self,
+        status: str | None,
+        score: float | None,
+    ) -> bool:
+        """
+        Determine whether the current evidence is sufficient to stop.
+        """
+
+        if status == "SUPPORTED":
+            return True
+
+        if score is not None and score >= self.support_threshold:
+            return True
+
+        return False
+
+    def _build_evidence_items(
+        self,
+        reranked_items,
+    ) -> List[EvidenceItem]:
+        """
+        Convert reranker results into EvidenceItem objects expected
+        by the Step 9 coverage estimator.
+        """
+
+        evidence_items = []
+
+        for item in reranked_items:
+            evidence_items.append(
+                EvidenceItem(
+                    chunk_id=item.chunk_id,
+                    document_id=item.document_id,
+                    text=item.text,
+                    language=item.language,
+                    pages=item.pages,
+                    start_page=item.start_page,
+                    end_page=item.end_page,
+                    retrieval_score=item.retrieval_score,
+                    rerank_score=item.rerank_score,
+                )
+            )
+
+        return evidence_items
+
+    def retrieve_for_requirement(
+        self,
+        document_id: str,
+        question: str,
+        requirement: InformationRequirement,
+    ) -> AdaptiveRetrievalResult:
+        """
+        Perform adaptive retrieval for one information requirement.
+        """
+
+        if not requirement.retrieval_queries:
+            return AdaptiveRetrievalResult(
+                requirement_id=requirement.requirement_id,
+                original_query=requirement.description,
+                final_query=requirement.description,
+                final_candidate_k=0,
+                total_unique_chunks=0,
+                final_coverage_status="UNSUPPORTED",
+                final_coverage_score=0.0,
+                success=False,
+                stop_reason="No retrieval queries available.",
+            )
+
+        original_query = requirement.retrieval_queries[0]
+        queries_to_try = [(original_query, "original")]
+
+        attempts: List[RetrievalAttempt] = []
+        all_evidence: Dict[str, EvidenceItem] = {}
+
+        final_status = "UNSUPPORTED"
+        final_score = 0.0
+        final_candidate_k = 0
+        stop_reason = "Maximum adaptive retrieval depth reached."
+        global_attempt_number = 1
+        success = False
+        final_query = original_query
+
+        for query_idx, (current_query, query_type) in enumerate(queries_to_try):
+            query_sufficient = False
+            
+            for attempt_number, candidate_k in enumerate(
+                self.candidate_k_schedule[: self.max_attempts_per_query],
+                start=1,
+            ):
+
+                if self.memory is not None and self.memory.has_query_attempt(
+                    query=current_query,
+                    requirement_id=requirement.requirement_id,
+                    candidate_k=candidate_k,
+                ):
+                    continue
+
+                final_candidate_k = candidate_k
+                final_query = current_query
+
+                # ---------------------------------------------------------
+                # 1. Hybrid retrieval
+                # ---------------------------------------------------------
+
+                candidates = self.hybrid_retriever.retrieve(
+                    document_id=document_id,
+                    query=current_query,
+                    top_k=candidate_k,
+                    candidate_k=candidate_k,
+                )
+
+                # ---------------------------------------------------------
+                # 2. Cross-encoder reranking
+                # ---------------------------------------------------------
+
+                reranked = self.reranker.rerank(
+                    current_query,
+                    candidates,
+                    top_k=self.rerank_top_k,
+                )
+
+                # ---------------------------------------------------------
+                # 3. Convert evidence
+                # ---------------------------------------------------------
+
+                evidence_items = self._build_evidence_items(
+                    reranked
+                )
+
+                if self.memory is not None:
+                    for evidence in evidence_items:
+                        self.memory.record_evidence(
+                            chunk_id=evidence.chunk_id,
+                            document_id=evidence.document_id,
+                            requirement_id=requirement.requirement_id,
+                            source_query=current_query,
+                            retrieval_depth=candidate_k,
+                            coverage_score=None,
+                            coverage_status=None,
+                        )
+
+                # ---------------------------------------------------------
+                # 4. Add newly discovered evidence
+                # ---------------------------------------------------------
+
+                new_chunk_ids = []
+
+                for evidence in evidence_items:
+                    if evidence.chunk_id not in all_evidence:
+                        all_evidence[evidence.chunk_id] = evidence
+                        new_chunk_ids.append(evidence.chunk_id)
+
+                # ---------------------------------------------------------
+                # 5. Evaluate coverage
+                # ---------------------------------------------------------
+
+                coverage_result = self.coverage_estimator.estimate(
+                    question=question,
+                    requirements=[requirement],
+                    requirement_evidence={
+                        requirement.requirement_id: list(
+                            all_evidence.values()
+                        )
+                    },
+                )
+
+                requirement_coverage = (
+                    coverage_result.requirement_coverages[0]
+                )
+
+                final_status = requirement_coverage.coverage_status
+                final_score = requirement_coverage.coverage_score
+
+                if self.memory is not None:
+                    for evidence in evidence_items:
+                        self.memory.record_evidence(
+                            chunk_id=evidence.chunk_id,
+                            document_id=evidence.document_id,
+                            requirement_id=requirement.requirement_id,
+                            source_query=current_query,
+                            retrieval_depth=candidate_k,
+                            coverage_score=requirement_coverage.coverage_score,
+                            coverage_status=requirement_coverage.coverage_status,
+                        )
+
+                # ---------------------------------------------------------
+                # 6. Determine stopping condition
+                # ---------------------------------------------------------
+
+                sufficient = self._is_sufficient(
+                    final_status,
+                    final_score,
+                )
+
+                if self.memory is not None:
+                    self.memory.record_query(
+                        query=current_query,
+                        query_type=query_type,
+                        requirement_id=requirement.requirement_id,
+                        candidate_k=candidate_k,
+                        rerank_top_k=self.rerank_top_k,
+                        retrieved_chunk_ids=[
+                            item.chunk_id
+                            for item in reranked
+                        ],
+                        coverage_status=final_status,
+                        coverage_score=final_score,
+                        successful=sufficient,
+                    )
+
+                attempt = RetrievalAttempt(
+                    attempt_number=global_attempt_number,
+                    requirement_id=requirement.requirement_id,
+                    query=current_query,
+                    query_type=query_type,
+                    candidate_k=candidate_k,
+                    rerank_top_k=self.rerank_top_k,
+                    retrieved_chunk_ids=[
+                        item.chunk_id for item in reranked
+                    ],
+                    new_chunk_ids=new_chunk_ids,
+                    coverage_status=final_status,
+                    coverage_score=final_score,
+                    stopped=sufficient,
+                    stop_reason=(
+                        "Evidence requirement sufficiently supported."
+                        if sufficient
+                        else None
+                    ),
+                )
+
+                attempts.append(attempt)
+                global_attempt_number += 1
+
+                if sufficient:
+                    stop_reason = (
+                        "Evidence requirement sufficiently supported."
+                    )
+                    query_sufficient = True
+                    success = True
+                    break
+
+            if query_sufficient:
+                break
+                
+            if query_type == "original" and not query_sufficient:
+                reformulated = self.query_reformulator.reformulate(
+                    question=question,
+                    requirement=requirement,
+                    original_query=original_query,
+                    max_variants=self.max_query_variants,
+                )
+                for i, r_query in enumerate(reformulated, start=1):
+                    queries_to_try.append((r_query, f"reformulation_{i}"))
+
+        all_chunk_ids = list(all_evidence.keys())
+
+        return AdaptiveRetrievalResult(
+            requirement_id=requirement.requirement_id,
+            original_query=requirement.description,
+            final_query=final_query,
+            attempts=attempts,
+            all_chunk_ids=all_chunk_ids,
+            final_candidate_k=final_candidate_k,
+            total_unique_chunks=len(all_chunk_ids),
+            final_coverage_status=final_status,
+            final_coverage_score=final_score,
+            success=success,
+            stop_reason=stop_reason,
+        )
+import json
+import re
+from typing import Optional
+
+import ollama
+
+from app.config import settings
+from app.planning.schemas import RequirementPlan
+
+
+class RequirementPlanner:
+    """
+    Converts a user question into explicit information requirements.
+
+    The planner is intentionally separated from retrieval so that
+    requirement decomposition can later be evaluated independently.
+    """
+
+    def __init__(
+        self,
+        model: Optional[str] = None,
+        host: Optional[str] = None,
+    ):
+        self.model = model or settings.ollama_model
+        self.host = host or settings.ollama_host
+
+        self.client = ollama.Client(host=self.host)
+
+    def _build_prompt(self, question: str) -> str:
+        return f"""
+You are the Information Requirement Planner of AERIS-RAG.
+
+AERIS-RAG answers questions over user-provided documents.
+
+Your task is NOT to answer the user's question.
+
+Your task is to decompose the question into the distinct pieces of
+information that must be retrieved from the document before a complete,
+evidence-grounded answer can be produced.
+
+The central principle is:
+
+ONE QUESTION MAY REQUIRE MULTIPLE DISTINCT PIECES OF EVIDENCE.
+
+Do not simply rewrite the user's question as one requirement.
+
+You must identify the atomic information requirements needed to answer it.
+
+PLANNING RULES:
+
+1. Identify the actual information requested by the user.
+
+2. Break complex questions into separate requirements.
+
+3. Do NOT create redundant requirements.
+
+4. Each requirement should represent a distinct piece of evidence.
+
+5. If the question asks for a comparison:
+   - create requirements for the important characteristics of each item
+   - create a requirement for the actual comparison
+
+6. If the question asks for experimental results:
+   consider requirements such as:
+   - evaluated datasets/tasks
+   - evaluation metrics
+   - quantitative results
+   - baseline comparisons
+   - important findings
+   Only include requirements that are relevant to the question.
+
+7. If the question asks for multiple facts:
+   create separate requirements for each fact.
+
+8. If answering the question requires connecting information from
+   different parts of the document, classify the relevant requirement
+   as "multi_hop".
+
+9. A simple definition question may legitimately contain only one
+   requirement.
+
+10. Do not artificially create requirements just to increase the count.
+
+11. Requirements must be document-independent.
+    Do not invent facts that are not present in the question.
+
+12. Entities must be extracted from the question or be generic concepts
+    directly implied by it. NEVER invent placeholder entities such as:
+    "dataset1", "dataset2", "model1", "method1".
+    If the exact entity name is unknown from the question, use a generic
+    concept such as "dataset", "model", "performance", or leave the list empty.
+
+13. Retrieval queries must be useful for finding evidence in a document.
+
+14. Generate 1-3 retrieval queries per requirement.
+
+15. Return ONLY valid JSON.
+
+QUESTION TYPES:
+
+- definition
+- factual
+- list
+- comparison
+- quantitative
+- causal
+- procedural
+- multi_hop
+- summary
+- other
+
+COMPLEXITY:
+
+- simple = one main piece of information
+- moderate = multiple related pieces of information
+- complex = multiple pieces of evidence, comparison, multi-hop reasoning,
+  or distributed information
+
+REQUIREMENT TYPES:
+
+- definition = meaning or definition
+- fact = specific factual information
+- factual = factual information request
+- list = multiple items
+- comparison = comparing entities
+- quantitative = numerical values, metrics, measurements
+- causal = cause/effect relationship
+- procedural = how something works or is performed
+- multi_hop = requires connecting multiple pieces of evidence
+- summary = synthesis of several findings
+- other = anything else
+
+PRIORITY:
+
+1 = essential
+2 = very important
+3 = useful
+4 = secondary
+5 = optional
+
+EXPECTED EVIDENCE TYPES MAY INCLUDE:
+
+- definition
+- explanation
+- dataset
+- table
+- numerical result
+- metric
+- comparison
+- methodology
+- procedure
+- experiment
+- conclusion
+- example
+- statement
+
+IMPORTANT EXAMPLES:
+
+Example 1:
+
+Question:
+"What is Retrieval-Augmented Generation?"
+
+Good requirements:
+
+R1:
+Understand the definition of Retrieval-Augmented Generation.
+
+Only one requirement is appropriate because this is a simple definition question.
+
+Example 2:
+
+Question:
+"What is the difference between RAG-Sequence and RAG-Token?"
+
+Good requirements should separate:
+
+R1:
+How RAG-Sequence operates.
+
+R2:
+How RAG-Token operates.
+
+R3:
+The important differences between RAG-Sequence and RAG-Token.
+
+Example 3:
+
+Question:
+"What are the main experimental results?"
+
+Good requirements should consider:
+
+R1:
+What datasets/tasks were evaluated?
+
+R2:
+What metrics were used?
+
+R3:
+What quantitative results were obtained?
+
+R4:
+How did the model compare with relevant baselines?
+
+R5:
+What major experimental findings were reported?
+
+Only retain requirements that are actually relevant and supported by the
+wording of the question.
+
+Example 4:
+
+Question:
+"Which dataset was used to evaluate the model and what performance did
+the model achieve on it?"
+
+Good requirements:
+
+R1:
+Identify the dataset used for evaluation.
+
+R2:
+Identify the performance achieved on that dataset.
+
+Example 5:
+
+Question:
+"How does the retriever work?"
+
+Good requirements may include:
+
+R1:
+What retrieval mechanism is used?
+
+R2:
+How does the retriever identify or rank relevant evidence?
+
+Only create both if the question requires both pieces.
+
+JSON STRUCTURE:
+
+{{
+  "question": "original question",
+  "question_type": "definition|factual|list|comparison|quantitative|causal|procedural|multi_hop|summary|other",
+  "complexity": "simple|moderate|complex",
+  "requirements": [
+    {{
+      "requirement_id": "R1",
+      "description": "specific information that must be retrieved",
+      "requirement_type": "definition|fact|factual|list|comparison|quantitative|causal|procedural|multi_hop|summary|other",
+      "priority": 1,
+      "expected_evidence_type": "expected evidence type",
+      "entities": ["entity1", "entity2"],
+      "retrieval_queries": [
+        "retrieval query 1",
+        "retrieval query 2"
+      ]
+    }}
+  ],
+  "reasoning_summary": "short explanation of the decomposition"
+}}
+
+User question:
+
+{question}
+""".strip()
+
+    @staticmethod
+    def _extract_json(text: str) -> str:
+        """
+        Extract a JSON object even if the model accidentally adds
+        surrounding text.
+        """
+
+        text = text.strip()
+
+        # Remove markdown fences if present.
+        text = re.sub(r"^```(?:json)?\s*", "", text)
+        text = re.sub(r"\s*```$", "", text)
+
+        # Locate the outermost JSON object.
+        start = text.find("{")
+        end = text.rfind("}")
+
+        if start == -1 or end == -1 or end <= start:
+            raise ValueError("No valid JSON object found in model response.")
+
+        return text[start : end + 1]
+
+    def plan(self, question: str) -> RequirementPlan:
+        """
+        Generate a structured information requirement plan.
+        """
+
+        if not isinstance(question, str):
+            raise TypeError("question must be a string")
+
+        question = question.strip()
+
+        if not question:
+            raise ValueError("question cannot be empty")
+
+        prompt = self._build_prompt(question)
+
+        response = self.client.chat(
+            model=self.model,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ],
+            format="json",
+            options={
+                "temperature": 0,
+            },
+        )
+
+        raw_content = response["message"]["content"]
+
+        json_text = self._extract_json(raw_content)
+
+        data = json.loads(json_text)
+
+        plan = RequirementPlan.model_validate(data)
+
+        # Ensure the planner preserves the exact user question.
+        plan.question = question
+
+        return plan
+import os
+import json
+import re
+
+import ollama
+from app.config import settings
+from app.claim_extraction.schemas import ExtractedClaim, ClaimExtractionResult
+
+class ClaimExtractor:
+    """
+    Extracts atomic, verifiable claims from a given chunk of evidence text
+    using an LLM.
+    """
+
+    def __init__(self, model: str = None, host: str = None):
+        self.model = model or settings.ollama_model
+        self.host = host or settings.ollama_host
+        self.client = ollama.Client(host=self.host)
+
+    @staticmethod
+    def _extract_json(text: str) -> str:
+        text = text.strip()
+        text = re.sub(r"^```(?:json)?\s*", "", text)
+        text = re.sub(r"\s*```$", "", text)
+        start = text.find("{")
+        end = text.rfind("}")
+        if start == -1 or end == -1 or end <= start:
+            raise ValueError("No valid JSON object found in model response.")
+        return text[start : end + 1]
+
+    def extract(self, chunk_id: str, document_id: str, text: str) -> ClaimExtractionResult:
+        """
+        Extract claims from a single chunk of text.
+        """
+        prompt = (
+            "You are an expert fact extractor for a research-grade retrieval system.\n\n"
+            "Your task is to extract ALL atomic, independently verifiable claims from "
+            "the provided evidence text.\n\n"
+
+            "DEFINITION:\n"
+            "An atomic claim is one self-contained proposition that can be independently "
+            "verified from the source text. Each distinct factual assertion must become "
+            "a separate claim.\n\n"
+
+            "IMPORTANT RULES:\n"
+            "1. Extract EVERY factual proposition. Do not omit factual details.\n"
+            "2. If one sentence contains multiple independent factual assertions, split "
+            "them into separate claims.\n"
+            "3. Preserve important entities, model names, algorithms, methods, metrics, "
+            "relationships, and quantitative or comparative statements.\n"
+            "4. Do not merge separate methods or relationships into one claim.\n"
+            "5. Do not invent information that is not explicitly supported by the text.\n"
+            "6. Preserve the meaning of the source text.\n"
+            "7. Resolve pronouns only when their reference is explicitly clear from "
+            "the provided text.\n"
+            "8. Comparative or causal statements must remain claims when they are "
+            "explicitly stated in the source.\n"
+            "9. Each claim should normally express one subject-predicate relationship "
+            "or one independently testable proposition.\n"
+            "10. Do not explain, summarize, interpret, or evaluate the claims.\n\n"
+
+            "EXAMPLE:\n"
+            "Input:\n"
+            "\"The system combines dense retrieval using Model X with sparse retrieval "
+            "using BM25. The results are fused using RRF.\"\n\n"
+
+            "Correct output:\n"
+            "{\"claims\": ["
+            "\"The system uses dense retrieval using Model X.\", "
+            "\"The system uses sparse retrieval using BM25.\", "
+            "\"The dense and sparse retrieval results are fused using Reciprocal Rank Fusion (RRF).\""
+            "]}\n\n"
+
+            "Return STRICTLY a JSON object with a single key 'claims'.\n"
+            "The value of 'claims' must be a list of strings.\n"
+            "Do not include markdown, explanations, numbering, or any other fields.\n\n"
+
+            f"TEXT TO ANALYZE:\n{text}"
+        )
+
+        try:
+            response = self.client.chat(
+                model=self.model,
+                messages=[
+                    {"role": "user", "content": prompt}
+                ],
+                format="json",
+                options={
+                    "temperature": 0.0,
+                },
+            )
+
+            result_str = response["message"]["content"]
+            json_text = self._extract_json(result_str)
+            data = json.loads(json_text)
+            raw_claims = data.get("claims", [])
+
+            extracted_claims = []
+            for i, claim_text in enumerate(raw_claims):
+                claim_id = f"{chunk_id}_claim_{i+1}"
+                extracted_claims.append(
+                    ExtractedClaim(
+                        claim_id=claim_id,
+                        text=claim_text.strip(),
+                        source_chunk_id=chunk_id,
+                        document_id=document_id
+                    )
+                )
+
+            return ClaimExtractionResult(
+                chunk_id=chunk_id,
+                document_id=document_id,
+                claims=extracted_claims
+            )
+
+        except Exception as e:
+            print(f"Error during claim extraction: {e}")
+            return ClaimExtractionResult(
+                chunk_id=chunk_id,
+                document_id=document_id,
+                claims=[]
+            )
+import os
+from typing import List, Set
+
+import torch
+from sentence_transformers import SentenceTransformer, util
+
+from app.claim_extraction.schemas import ExtractedClaim
+
+class ClaimNormalizer:
+    """
+    Normalizes and deduplicates a list of raw extracted claims.
+    Uses dense embeddings to detect and merge semantically equivalent claims.
+    """
+
+    def __init__(
+        self,
+        model_name: str = "all-MiniLM-L6-v2",
+        similarity_threshold: float = 0.92
+    ):
+        self.model_name = model_name
+        self.similarity_threshold = similarity_threshold
+        # Load the sentence transformer model
+        self.model = SentenceTransformer(self.model_name)
+
+    def normalize_and_deduplicate(self, claims: List[ExtractedClaim]) -> List[ExtractedClaim]:
+        """
+        Deduplicates a list of claims by comparing their semantic embeddings.
+        Preserves the first encountered claim and its provenance.
+        """
+        if not claims:
+            return []
+
+        # 1. Exact string deduplication (case-insensitive, stripped)
+        seen_texts = set()
+        unique_raw_claims = []
+        for claim in claims:
+            normalized_text = claim.text.strip().lower()
+            # Remove trailing periods for exact matching
+            if normalized_text.endswith("."):
+                normalized_text = normalized_text[:-1]
+                
+            if normalized_text not in seen_texts:
+                seen_texts.add(normalized_text)
+                unique_raw_claims.append(claim)
+                
+        if not unique_raw_claims:
+            return []
+
+        # 2. Semantic deduplication
+        texts = [claim.text for claim in unique_raw_claims]
+        embeddings = self.model.encode(texts, convert_to_tensor=True)
+        cosine_scores = util.cos_sim(embeddings, embeddings).cpu().numpy()
+
+        final_claims = []
+        merged_indices = set()
+
+        for i in range(len(unique_raw_claims)):
+            if i in merged_indices:
+                continue
+                
+            final_claims.append(unique_raw_claims[i])
+            
+            for j in range(i + 1, len(unique_raw_claims)):
+                if j not in merged_indices:
+                    if cosine_scores[i][j] >= self.similarity_threshold:
+                        merged_indices.add(j)
+
+        return final_claims
+import json
+import os
+import re
+from typing import List
+
+import ollama
+from app.config import settings
+from app.claim_extraction.schemas import ExtractedClaim, TypedClaim, ClaimType
+
+class ClaimTyper:
+    """Classifies extracted claims into specific semantic/factual roles."""
+
+    def __init__(self, model: str = None, host: str = None):
+        self.model = model or settings.ollama_model
+        self.host = host or settings.ollama_host
+        self.client = ollama.Client(host=self.host)
+
+    @staticmethod
+    def _extract_json(text: str) -> str:
+        text = text.strip()
+        text = re.sub(r"^```(?:json)?\s*", "", text)
+        text = re.sub(r"\s*```$", "", text)
+        start = text.find("{")
+        end = text.rfind("}")
+        if start == -1 or end == -1 or end <= start:
+            raise ValueError("No valid JSON object found in model response.")
+        return text[start : end + 1]
+
+    def type_claims(self, claims: List[ExtractedClaim]) -> List[TypedClaim]:
+        """
+        Takes a list of ExtractedClaims and returns them as TypedClaims 
+        without altering their content or provenance.
+        """
+        if not claims:
+            return []
+            
+        claims_dict = {
+            claim.claim_id: claim.text for claim in claims
+        }
+        
+        prompt = (
+            "You are an expert taxonomy classifier for a research-grade RAG system.\n"
+            "Your task is to classify each provided claim into EXACTLY ONE of the "
+            "following categories:\n\n"
+            "- FACT: A general statement of fact.\n"
+            "- METHOD: A procedure, process, strategy, or system behavior.\n"
+            "- COMPONENT: A specific model, dataset, module, or piece of architecture.\n"
+            "- RELATIONSHIP: How two entities or concepts interact.\n"
+            "- QUANTITATIVE: A claim containing specific numerical values or metrics.\n"
+            "- COMPARATIVE: A claim comparing two or more entities/methods (e.g. 'improves over X').\n"
+            "- CAUSAL: A claim stating cause and effect.\n"
+            "- DEFINITION: The meaning of a term or concept.\n"
+            "- OTHER: Use this ONLY as a fallback if no other category fits.\n\n"
+            
+            "RULES:\n"
+            "1. DO NOT change the text, claim_id, or meaning of the claims.\n"
+            "2. Output strictly a JSON object where keys are the claim IDs and values are the category names (in uppercase).\n"
+            "3. Ensure every claim_id provided in the input is present in the output.\n\n"
+            
+            f"CLAIMS TO CLASSIFY:\n{json.dumps(claims_dict, indent=2)}"
+        )
+        
+        try:
+            response = self.client.chat(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                format="json",
+                options={"temperature": 0.0}
+            )
+            
+            result_str = response["message"]["content"]
+            json_text = self._extract_json(result_str)
+            typing_results = json.loads(json_text)
+            
+            typed_claims = []
+            for claim in claims:
+                claim_type_str = typing_results.get(claim.claim_id, "OTHER").upper()
+                try:
+                    claim_type = ClaimType(claim_type_str)
+                except ValueError:
+                    claim_type = ClaimType.OTHER
+                    
+                typed_claims.append(
+                    TypedClaim(
+                        claim_id=claim.claim_id,
+                        text=claim.text,
+                        source_chunk_id=claim.source_chunk_id,
+                        document_id=claim.document_id,
+                        claim_type=claim_type
+                    )
+                )
+                
+            return typed_claims
+        except Exception as e:
+            print(f"Error during claim typing: {e}")
+            # Fallback: return everything as OTHER
+            return [
+                TypedClaim(
+                    claim_id=c.claim_id,
+                    text=c.text,
+                    source_chunk_id=c.source_chunk_id,
+                    document_id=c.document_id,
+                    claim_type=ClaimType.OTHER
+                )
+                for c in claims
+            ]
+from typing import Optional
+
+from sentence_transformers import SentenceTransformer
+
+from app.claim_graph.schemas import (
+    ClaimEvidenceEdge,
+    ClaimEvidenceGraph,
+    ClaimNode,
+    EdgeType,
+    EvidenceNode,
+    EvidenceRelationEdge,
+)
+
+
+class ClaimEvidenceGraphBuilder:
+    """
+    Builds a claim-evidence graph.
+
+    Supports:
+    - many-to-many claim/evidence relationships
+    - semantic relationship discovery
+    - factual verification metadata
+    - evidence-to-evidence contradiction relations
+
+    Semantic similarity is used only for relationship discovery.
+    It is NOT treated as factual support or contradiction.
+    """
+
+    def __init__(
+        self,
+        document_id: str,
+        embedding_model: str = "all-MiniLM-L6-v2",
+        similarity_threshold: float = 0.70,
+    ):
+        self.document_id = document_id
+        self.similarity_threshold = similarity_threshold
+
+        self.claims = {}
+        self.evidence = {}
+        self.edges = {}
+
+        # Step 15D
+        self.evidence_relations = {}
+
+        self.embedding_model = SentenceTransformer(embedding_model)
+
+    def add_claim(
+        self,
+        claim_id,
+        text,
+        claim_type,
+        source_chunk_id,
+    ):
+        claim = ClaimNode(
+            claim_id=claim_id,
+            text=text,
+            claim_type=claim_type,
+            document_id=self.document_id,
+            source_chunk_id=source_chunk_id,
+        )
+
+        self.claims[claim_id] = claim
+        return claim
+
+    def add_evidence(
+        self,
+        chunk_id,
+        text,
+    ):
+        evidence = EvidenceNode(
+            chunk_id=chunk_id,
+            document_id=self.document_id,
+            text=text,
+        )
+
+        self.evidence[chunk_id] = evidence
+        return evidence
+
+    def add_edge(
+        self,
+        claim_id,
+        chunk_id,
+        edge_type=EdgeType.RELATED,
+        confidence=None,
+        verification_confidence=None,
+    ):
+        if claim_id not in self.claims:
+            raise ValueError(
+                f"Unknown claim_id: {claim_id}"
+            )
+
+        if chunk_id not in self.evidence:
+            raise ValueError(
+                f"Unknown chunk_id: {chunk_id}"
+            )
+
+        edge_id = f"{chunk_id}__{claim_id}"
+
+        edge = ClaimEvidenceEdge(
+            edge_id=edge_id,
+            claim_id=claim_id,
+            chunk_id=chunk_id,
+            edge_type=edge_type,
+            confidence=confidence,
+            verification_confidence=verification_confidence,
+        )
+
+        self.edges[edge_id] = edge
+
+        return edge
+
+    def add_evidence_relation(
+        self,
+        evidence_a_chunk_id: str,
+        evidence_b_chunk_id: str,
+        relation_type,
+        confidence: float,
+        rationale: str,
+        source_claim_a_id: str,
+        source_claim_b_id: str,
+    ):
+        """
+        Adds an evidence-to-evidence relation.
+
+        This is intentionally separate from ClaimEvidenceEdge.
+        """
+
+        if evidence_a_chunk_id not in self.evidence:
+            raise ValueError(
+                f"Unknown evidence chunk: {evidence_a_chunk_id}"
+            )
+
+        if evidence_b_chunk_id not in self.evidence:
+            raise ValueError(
+                f"Unknown evidence chunk: {evidence_b_chunk_id}"
+            )
+
+        if evidence_a_chunk_id == evidence_b_chunk_id:
+            raise ValueError(
+                "Evidence relation cannot connect a chunk to itself"
+            )
+
+        if source_claim_a_id not in self.claims:
+            raise ValueError(
+                f"Unknown source claim: {source_claim_a_id}"
+            )
+
+        if source_claim_b_id not in self.claims:
+            raise ValueError(
+                f"Unknown source claim: {source_claim_b_id}"
+            )
+
+        relation_id = (
+            f"{evidence_a_chunk_id}"
+            f"__{evidence_b_chunk_id}"
+            f"__{source_claim_a_id}"
+            f"__{source_claim_b_id}"
+        )
+
+        relation = EvidenceRelationEdge(
+            relation_id=relation_id,
+            document_id=self.document_id,
+            evidence_a_chunk_id=evidence_a_chunk_id,
+            evidence_b_chunk_id=evidence_b_chunk_id,
+            relation_type=relation_type,
+            confidence=confidence,
+            rationale=rationale,
+            source_claim_a_id=source_claim_a_id,
+            source_claim_b_id=source_claim_b_id,
+        )
+
+        self.evidence_relations[relation_id] = relation
+
+        return relation
+
+    def get_evidence_relations(
+        self,
+        chunk_id: Optional[str] = None,
+    ):
+        if chunk_id is None:
+            return list(self.evidence_relations.values())
+
+        return [
+            relation
+            for relation in self.evidence_relations.values()
+            if (
+                relation.evidence_a_chunk_id == chunk_id
+                or relation.evidence_b_chunk_id == chunk_id
+            )
+        ]
+
+    def auto_link_claims_to_evidence(self):
+        if not self.claims or not self.evidence:
+            return []
+
+        claim_ids = list(self.claims.keys())
+        evidence_ids = list(self.evidence.keys())
+
+        claim_texts = [
+            self.claims[x].text
+            for x in claim_ids
+        ]
+
+        evidence_texts = [
+            self.evidence[x].text
+            for x in evidence_ids
+        ]
+
+        claim_embeddings = self.embedding_model.encode(
+            claim_texts,
+            normalize_embeddings=True,
+        )
+
+        evidence_embeddings = self.embedding_model.encode(
+            evidence_texts,
+            normalize_embeddings=True,
+        )
+
+        new_edges = []
+
+        for claim_index, claim_id in enumerate(claim_ids):
+
+            claim_vector = claim_embeddings[claim_index]
+
+            for evidence_index, chunk_id in enumerate(
+                evidence_ids
+            ):
+                evidence_vector = evidence_embeddings[
+                    evidence_index
+                ]
+
+                similarity = float(
+                    claim_vector @ evidence_vector
+                )
+
+                if similarity >= self.similarity_threshold:
+                    edge = self.add_edge(
+                        claim_id=claim_id,
+                        chunk_id=chunk_id,
+                        edge_type=EdgeType.RELATED,
+                        confidence=similarity,
+                    )
+
+                    new_edges.append(edge)
+
+        return new_edges
+
+    def get_claim_evidence(
+        self,
+        claim_id: str,
+    ):
+        return [
+            edge
+            for edge in self.edges.values()
+            if edge.claim_id == claim_id
+        ]
+
+    def get_evidence_claims(
+        self,
+        chunk_id: str,
+    ):
+        return [
+            edge
+            for edge in self.edges.values()
+            if edge.chunk_id == chunk_id
+        ]
+
+    def build(self):
+        return ClaimEvidenceGraph(
+            document_id=self.document_id,
+            claims=list(self.claims.values()),
+            evidence=list(self.evidence.values()),
+            edges=list(self.edges.values()),
+            evidence_relations=list(
+                self.evidence_relations.values()
+            ),
+        )
+
+    def claim_count(self):
+        return len(self.claims)
+
+    def evidence_count(self):
+        return len(self.evidence)
+
+    def edge_count(self):
+        return len(self.edges)
+
+    def evidence_relation_count(self):
+        return len(self.evidence_relations)
+from pydantic import BaseModel, Field
+
+from app.claim_graph.graph import ClaimEvidenceGraphBuilder
+from app.claim_graph.schemas import (
+    ClaimEvidenceEdge,
+    EdgeType,
+)
+from app.verification.claim_verifier import (
+    ClaimVerifier,
+    MultiEvidenceVerificationResult,
+)
+
+
+class GraphVerificationResult(BaseModel):
+    claim_id: str
+    claim: str
+    evidence_count: int = Field(ge=1)
+    evidence_chunk_ids: list[str]
+    label: EdgeType
+    verification_confidence: float = Field(
+        ge=0.0,
+        le=1.0,
+    )
+    rationale: str
+
+
+class GraphClaimVerifier:
+    """
+    Integrates the claim-evidence graph with multi-evidence verification.
+
+    Graph semantic similarity and factual verification are kept separate.
+
+    Semantic similarity:
+        edge.confidence
+
+    Factual verification:
+        edge.verification_confidence
+    """
+
+    def __init__(self, verifier: ClaimVerifier):
+        self.verifier = verifier
+
+    def verify_claim(
+        self,
+        graph: ClaimEvidenceGraphBuilder,
+        claim_id: str,
+    ) -> GraphVerificationResult:
+
+        if claim_id not in graph.claims:
+            raise ValueError(
+                f"Unknown claim_id: {claim_id}"
+            )
+
+        claim = graph.claims[claim_id]
+
+        edges = graph.get_claim_evidence(claim_id)
+
+        if not edges:
+            raise ValueError(
+                f"No evidence connected to claim: {claim_id}"
+            )
+
+        evidence = []
+
+        for edge in edges:
+            if edge.chunk_id not in graph.evidence:
+                raise ValueError(
+                    f"Missing evidence node: {edge.chunk_id}"
+                )
+
+            evidence.append(
+                graph.evidence[edge.chunk_id].text
+            )
+
+        result: MultiEvidenceVerificationResult = (
+            self.verifier.verify_multiple(
+                claim=claim.text,
+                evidence=evidence,
+            )
+        )
+
+        # Map verification label to graph edge type.
+        edge_type = EdgeType(result.label.value)
+
+        # Update every evidence relationship belonging
+        # to this claim.
+        for edge in edges:
+            edge.edge_type = edge_type
+            edge.verification_confidence = result.confidence
+
+        return GraphVerificationResult(
+            claim_id=claim_id,
+            claim=claim.text,
+            evidence_count=result.evidence_count,
+            evidence_chunk_ids=[
+                edge.chunk_id for edge in edges
+            ],
+            label=edge_type,
+            verification_confidence=result.confidence,
+            rationale=result.rationale,
+        )
+from app.claim_graph.graph import ClaimEvidenceGraphBuilder
+from app.claim_graph.schemas import EvidenceRelationType
+from app.verification.cross_claim_contradiction import (
+    CrossClaimContradictionReport,
+)
+
+
+class ContradictionGraphIntegrator:
+    """
+    Persists Step 15C contradiction-analysis results
+    inside the claim-evidence graph.
+    """
+
+    def integrate(
+        self,
+        graph: ClaimEvidenceGraphBuilder,
+        report: CrossClaimContradictionReport,
+    ):
+        if report.document_id != graph.document_id:
+            raise ValueError(
+                "Report document_id does not match graph document_id"
+            )
+
+        relations = []
+
+        for result in report.conflicts:
+
+            relation_type = EvidenceRelationType(
+                result.label.value
+            )
+
+            relation = graph.add_evidence_relation(
+                evidence_a_chunk_id=result.evidence_a_chunk_id,
+                evidence_b_chunk_id=result.evidence_b_chunk_id,
+                relation_type=relation_type,
+                confidence=result.confidence,
+                rationale=result.rationale,
+                source_claim_a_id=result.claim_a_id,
+                source_claim_b_id=result.claim_b_id,
+            )
+
+            relations.append(relation)
+
+        return relations
+from app.claim_graph.graph import ClaimEvidenceGraphBuilder
+from app.claim_graph.schemas import EvidenceRelationType
+from app.verification.cross_lingual_claim import (
+    ClaimCrossLingualResult,
+)
+
+
+class CrossLingualGraphIntegrator:
+    """
+    Persists Step 16B cross-lingual claim analysis
+    into the claim-evidence graph.
+
+    Only actual cross-lingual evidence pairs are persisted.
+    """
+
+    def integrate(
+        self,
+        graph: ClaimEvidenceGraphBuilder,
+        result: ClaimCrossLingualResult,
+        evidence_pairs: list[dict],
+    ):
+        if result.claim_id not in graph.claims:
+            raise ValueError(
+                f"Unknown claim_id: {result.claim_id}"
+            )
+
+        relations = []
+
+        for pair in evidence_pairs:
+
+            evidence_a_chunk_id = pair["evidence_a_chunk_id"]
+            evidence_b_chunk_id = pair["evidence_b_chunk_id"]
+
+            if evidence_a_chunk_id not in graph.evidence:
+                raise ValueError(
+                    f"Unknown evidence chunk: "
+                    f"{evidence_a_chunk_id}"
+                )
+
+            if evidence_b_chunk_id not in graph.evidence:
+                raise ValueError(
+                    f"Unknown evidence chunk: "
+                    f"{evidence_b_chunk_id}"
+                )
+
+            claim_a_id = pair.get(
+                "source_claim_a_id",
+                result.claim_id,
+            )
+
+            claim_b_id = pair.get(
+                "source_claim_b_id",
+                result.claim_id,
+            )
+
+            relation_type = EvidenceRelationType(
+                pair["label"]
+            )
+
+            relation = graph.add_evidence_relation(
+                evidence_a_chunk_id=evidence_a_chunk_id,
+                evidence_b_chunk_id=evidence_b_chunk_id,
+                relation_type=relation_type,
+                confidence=float(pair["confidence"]),
+                rationale=pair["rationale"],
+                source_claim_a_id=claim_a_id,
+                source_claim_b_id=claim_b_id,
+            )
+
+            relations.append(relation)
+
+        return relations
+from typing import List
+
+from pydantic import BaseModel, Field
+
+from app.claim_graph.graph import ClaimEvidenceGraphBuilder
+from app.verification.graph_verifier import (
+    GraphClaimVerifier,
+    GraphVerificationResult,
+)
+from app.verification.selective_verification import (
+    SelectiveVerificationSelector,
+    VerificationCandidate,
+)
+
+
+class SelectiveVerificationReport(BaseModel):
+    candidate_count: int = Field(ge=0)
+    selected_count: int = Field(ge=0)
+    verified_count: int = Field(ge=0)
+    skipped_count: int = Field(ge=0)
+    budget: int = Field(ge=0)
+
+    candidates: List[VerificationCandidate] = Field(
+        default_factory=list
+    )
+
+    selected_claim_ids: List[str] = Field(
+        default_factory=list
+    )
+
+    verification_results: List[GraphVerificationResult] = Field(
+        default_factory=list
+    )
+
+
+class SelectiveVerificationExecutor:
+    """
+    Executes deeper verification only for claims selected
+    by the selective verification policy.
+
+    The executor itself does not decide priority.
+    Priority is delegated to SelectiveVerificationSelector.
+    """
+
+    def __init__(
+        self,
+        verifier: GraphClaimVerifier,
+        selector: SelectiveVerificationSelector | None = None,
+    ):
+        self.verifier = verifier
+        self.selector = selector or SelectiveVerificationSelector()
+
+    def execute(
+        self,
+        graph: ClaimEvidenceGraphBuilder,
+        claims: list[dict],
+        budget: int,
+    ) -> SelectiveVerificationReport:
+
+        if budget < 0:
+            raise ValueError("budget must be non-negative")
+
+        candidates = self.selector.evaluate(
+            graph=graph,
+            claims=claims,
+        )
+
+        selected = self.selector.select(
+            candidates=candidates,
+            budget=budget,
+        )
+
+        verification_results = []
+
+        for candidate in selected:
+            result = self.verifier.verify_claim(
+                graph=graph,
+                claim_id=candidate.claim_id,
+            )
+
+            verification_results.append(result)
+
+        selected_ids = [
+            candidate.claim_id
+            for candidate in selected
+        ]
+
+        skipped_count = sum(
+            1
+            for candidate in candidates
+            if candidate.claim_id not in selected_ids
+        )
+
+        return SelectiveVerificationReport(
+            candidate_count=len(candidates),
+            selected_count=len(selected),
+            verified_count=len(verification_results),
+            skipped_count=skipped_count,
+            budget=budget,
+            candidates=candidates,
+            selected_claim_ids=selected_ids,
+            verification_results=verification_results,
+        )
+from typing import Optional
+
+from sklearn.isotonic import IsotonicRegression
+
+from app.calibration.schemas import CalibrationRecord
+
+
+class ConfidenceCalibrator:
+    """
+    Learns a monotonic mapping from raw verification
+    confidence to empirical correctness probability.
+
+    Raw confidence is treated as a score, not as a
+    calibrated probability.
+    """
+
+    def __init__(self):
+
+        self.model = IsotonicRegression(
+            y_min=0.0,
+            y_max=1.0,
+            increasing=True,
+            out_of_bounds="clip",
+        )
+
+        self._fitted = False
+
+    @property
+    def fitted(self) -> bool:
+        return self._fitted
+
+    def fit(
+        self,
+        records: list[CalibrationRecord],
+    ) -> None:
+
+        if not records:
+            raise ValueError(
+                "Calibration records cannot be empty"
+            )
+
+        confidences = []
+        targets = []
+
+        for record in records:
+
+            if record.correct is None:
+                record.compute_correctness()
+
+            confidences.append(
+                record.raw_confidence
+            )
+
+            targets.append(
+                1.0 if record.correct else 0.0
+            )
+
+        if len(set(confidences)) < 2:
+            raise ValueError(
+                "Calibration requires at least "
+                "two distinct confidence values"
+            )
+
+        if len(set(targets)) < 2:
+            raise ValueError(
+                "Calibration requires both "
+                "correct and incorrect examples"
+            )
+
+        self.model.fit(
+            confidences,
+            targets,
+        )
+
+        self._fitted = True
+
+    def calibrate(
+        self,
+        raw_confidence: float,
+    ) -> float:
+
+        if not self._fitted:
+            raise RuntimeError(
+                "Calibrator must be fitted before "
+                "calibration"
+            )
+
+        if not 0.0 <= raw_confidence <= 1.0:
+            raise ValueError(
+                "raw_confidence must be between 0 and 1"
+            )
+
+        calibrated = self.model.predict(
+            [raw_confidence]
+        )[0]
+
+        return float(calibrated)
+
+    def calibrate_record(
+        self,
+        record: CalibrationRecord,
+    ) -> CalibrationRecord:
+
+        calibrated = self.calibrate(
+            record.raw_confidence
+        )
+
+        record.calibrated_confidence = calibrated
+
+        return record
+
+    def calibrate_records(
+        self,
+        records: list[CalibrationRecord],
+    ) -> list[CalibrationRecord]:
+
+        if not records:
+            raise ValueError(
+                "Calibration records cannot be empty"
+            )
+
+        return [
+            self.calibrate_record(record)
+            for record in records
+        ]

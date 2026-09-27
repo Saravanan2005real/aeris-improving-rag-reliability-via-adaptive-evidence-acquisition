@@ -1,5 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel, Field
+from app.coverage.evidence_coverage import EvidenceItem
 
 
 class RetrievalAttempt(BaseModel):
@@ -44,6 +45,8 @@ class AdaptiveRetrievalResult(BaseModel):
     final_query: str
 
     attempts: List[RetrievalAttempt] = Field(default_factory=list)
+
+    evidence: List[EvidenceItem] = Field(default_factory=list)
 
     all_chunk_ids: List[str] = Field(default_factory=list)
 

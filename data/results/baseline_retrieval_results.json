@@ -1,0 +1,3176 @@
+[
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p013_c030",
+      "test_document_p007_c018",
+      "test_document_p006_c015",
+      "test_document_p006_c014",
+      "test_document_p005_c013"
+    ],
+    "retrieved_pages": [
+      5,
+      13,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      0.49248313903808594,
+      0.4877331554889679,
+      0.48252183198928833,
+      0.4820660650730133,
+      0.48179683089256287
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 2.0689070224761963
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c010",
+      "test_document_p006_c015",
+      "test_document_p007_c016",
+      "test_document_p003_c007",
+      "test_document_p017_c037"
+    ],
+    "retrieved_pages": [
+      3,
+      4,
+      6,
+      7,
+      17
+    ],
+    "retrieval_scores": [
+      10.400747542370183,
+      9.234223357553894,
+      8.596586006329805,
+      7.861452163396139,
+      6.8088093870446285
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.007216453552246094
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p007_c016",
+      "test_document_p006_c014",
+      "test_document_p004_c010",
+      "test_document_p015_c034"
+    ],
+    "retrieved_pages": [
+      4,
+      15,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      0.03200204813108039,
+      0.030798389007344232,
+      0.030117753623188408,
+      0.02938045560996381,
+      0.029211087420042643
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06762957572937012
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p015_c034",
+      "test_document_p012_c028",
+      "test_document_p010_c024",
+      "test_document_p007_c016"
+    ],
+    "retrieved_pages": [
+      6,
+      7,
+      10,
+      12,
+      15
+    ],
+    "retrieval_scores": [
+      -7.841521739959717,
+      -8.566910743713379,
+      -8.822742462158203,
+      -9.598886489868164,
+      -9.650134086608887
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.1952950954437256
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_df_02",
+    "question": "What architecture does the dense passage retriever (DPR) use?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p003_c007",
+      "test_document_p002_c004",
+      "test_document_p009_c020",
+      "test_document_p008_c019",
+      "test_document_p003_c006"
+    ],
+    "retrieved_pages": [
+      8,
+      9,
+      2,
+      3
+    ],
+    "retrieval_scores": [
+      0.6499972939491272,
+      0.6219910979270935,
+      0.6141842007637024,
+      0.5754269957542419,
+      0.5740848183631897
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.059416770935058594
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_df_02",
+    "question": "What architecture does the dense passage retriever (DPR) use?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p003_c007",
+      "test_document_p002_c004",
+      "test_document_p004_c010",
+      "test_document_p002_c005",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      19,
+      2,
+      3,
+      4
+    ],
+    "retrieval_scores": [
+      12.460129317415138,
+      9.258367114531678,
+      6.156310713889573,
+      6.117015886511524,
+      5.777693953879206
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.012048482894897461
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_df_02",
+    "question": "What architecture does the dense passage retriever (DPR) use?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p003_c007",
+      "test_document_p002_c004",
+      "test_document_p009_c020",
+      "test_document_p007_c017",
+      "test_document_p003_c006"
+    ],
+    "retrieved_pages": [
+      9,
+      2,
+      3,
+      7
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.03225806451612903,
+      0.03036576949620428,
+      0.029857397504456328,
+      0.02967032967032967
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06673622131347656
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_df_02",
+    "question": "What architecture does the dense passage retriever (DPR) use?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p002_c004",
+      "test_document_p003_c007",
+      "test_document_p001_c001",
+      "test_document_p005_c012",
+      "test_document_p004_c010"
+    ],
+    "retrieved_pages": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "retrieval_scores": [
+      6.022452354431152,
+      4.637003421783447,
+      -1.563516616821289,
+      -2.021763324737549,
+      -2.570280075073242
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.1972846984863281
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_df_03",
+    "question": "What datasets were used in the experiments?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c042",
+      "test_document_p019_c041",
+      "test_document_p018_c040",
+      "test_document_p007_c018",
+      "test_document_p015_c034"
+    ],
+    "retrieved_pages": [
+      18,
+      19,
+      15,
+      7
+    ],
+    "retrieval_scores": [
+      0.6465819478034973,
+      0.6055632829666138,
+      0.5717378258705139,
+      0.5691090226173401,
+      0.567326545715332
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.03028392791748047
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_df_03",
+    "question": "What datasets were used in the experiments?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c041",
+      "test_document_p018_c039",
+      "test_document_p004_c009",
+      "test_document_p017_c037",
+      "test_document_p017_c038"
+    ],
+    "retrieved_pages": [
+      17,
+      18,
+      19,
+      4
+    ],
+    "retrieval_scores": [
+      9.676284075793909,
+      9.193048860210975,
+      7.247546160113769,
+      6.436485887676369,
+      6.333715342639869
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.01229548454284668
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_df_03",
+    "question": "What datasets were used in the experiments?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c041",
+      "test_document_p019_c042",
+      "test_document_p018_c039",
+      "test_document_p018_c040",
+      "test_document_p017_c037"
+    ],
+    "retrieved_pages": [
+      17,
+      18,
+      19
+    ],
+    "retrieval_scores": [
+      0.03252247488101534,
+      0.031544957774465976,
+      0.03128054740957967,
+      0.03036576949620428,
+      0.0293236301369863
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.03991866111755371
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_df_03",
+    "question": "What datasets were used in the experiments?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c041",
+      "test_document_p004_c009",
+      "test_document_p018_c039",
+      "test_document_p015_c034",
+      "test_document_p019_c042"
+    ],
+    "retrieved_pages": [
+      18,
+      19,
+      4,
+      15
+    ],
+    "retrieval_scores": [
+      1.6508713960647583,
+      0.7610092163085938,
+      -2.989871025085449,
+      -3.9480810165405273,
+      -4.471861839294434
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.1735785007476807
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_df_04",
+    "question": "What Wikipedia dump was used for building the index?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c018",
+      "test_document_p017_c038",
+      "test_document_p011_c025",
+      "test_document_p009_c022",
+      "test_document_p018_c040"
+    ],
+    "retrieved_pages": [
+      7,
+      9,
+      11,
+      17,
+      18
+    ],
+    "retrieval_scores": [
+      0.6246375441551208,
+      0.6205678582191467,
+      0.5896470546722412,
+      0.5859858989715576,
+      0.5754443407058716
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.08024191856384277
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_df_04",
+    "question": "What Wikipedia dump was used for building the index?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c009",
+      "test_document_p003_c007",
+      "test_document_p013_c030",
+      "test_document_p018_c040",
+      "test_document_p007_c018"
+    ],
+    "retrieved_pages": [
+      3,
+      4,
+      7,
+      13,
+      18
+    ],
+    "retrieval_scores": [
+      7.715488373604201,
+      7.171055277546903,
+      6.589824142112614,
+      6.344735816722967,
+      6.295438352535184
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.013466596603393555
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_df_04",
+    "question": "What Wikipedia dump was used for building the index?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c018",
+      "test_document_p004_c009",
+      "test_document_p017_c038",
+      "test_document_p018_c040",
+      "test_document_p013_c030"
+    ],
+    "retrieved_pages": [
+      4,
+      7,
+      13,
+      17,
+      18
+    ],
+    "retrieval_scores": [
+      0.03177805800756621,
+      0.031099324975891997,
+      0.031054405392392875,
+      0.031009615384615385,
+      0.030158730158730156
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.1125631332397461
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_df_04",
+    "question": "What Wikipedia dump was used for building the index?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c018",
+      "test_document_p004_c009",
+      "test_document_p018_c040",
+      "test_document_p017_c038",
+      "test_document_p009_c022"
+    ],
+    "retrieved_pages": [
+      4,
+      7,
+      9,
+      17,
+      18
+    ],
+    "retrieval_scores": [
+      2.156081199645996,
+      1.5848066806793213,
+      -5.163948059082031,
+      -6.680501937866211,
+      -7.451592445373535
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2652814388275146
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_df_05",
+    "question": "What library is used for Maximum Inner Product Search (MIPS)?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p003_c007",
+      "test_document_p002_c003",
+      "test_document_p009_c020",
+      "test_document_p019_c042"
+    ],
+    "retrieved_pages": [
+      2,
+      3,
+      9,
+      17,
+      19
+    ],
+    "retrieval_scores": [
+      0.6542059183120728,
+      0.6320022344589233,
+      0.5831984281539917,
+      0.5599772334098816,
+      0.5510971546173096
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.013107776641845703
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_df_05",
+    "question": "What library is used for Maximum Inner Product Search (MIPS)?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p003_c007",
+      "test_document_p002_c003",
+      "test_document_p017_c038",
+      "test_document_p004_c010",
+      "test_document_p018_c039"
+    ],
+    "retrieved_pages": [
+      2,
+      3,
+      4,
+      17,
+      18
+    ],
+    "retrieval_scores": [
+      13.1829452452058,
+      13.150492999774606,
+      11.684831146231927,
+      5.093186000500717,
+      5.055788357933473
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.008028745651245117
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_df_05",
+    "question": "What library is used for Maximum Inner Product Search (MIPS)?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p003_c007",
+      "test_document_p017_c038",
+      "test_document_p002_c003",
+      "test_document_p004_c009",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      2,
+      3,
+      4,
+      17,
+      19
+    ],
+    "retrieval_scores": [
+      0.03252247488101534,
+      0.032266458495966696,
+      0.03200204813108039,
+      0.029411764705882353,
+      0.029236022193768675
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.02025771141052246
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_df_05",
+    "question": "What library is used for Maximum Inner Product Search (MIPS)?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p003_c007",
+      "test_document_p002_c003",
+      "test_document_p004_c008",
+      "test_document_p004_c009"
+    ],
+    "retrieved_pages": [
+      17,
+      2,
+      3,
+      4
+    ],
+    "retrieval_scores": [
+      0.8734175562858582,
+      0.08950638771057129,
+      -5.545547962188721,
+      -10.132965087890625,
+      -10.178277015686035
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.171102523803711
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_df_06",
+    "question": "What example question does the paper give regarding the 1986 World Cup?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c018",
+      "test_document_p005_c011",
+      "test_document_p007_c016",
+      "test_document_p004_c010",
+      "test_document_p005_c013"
+    ],
+    "retrieved_pages": [
+      4,
+      5,
+      7
+    ],
+    "retrieval_scores": [
+      0.5708485245704651,
+      0.5411595106124878,
+      0.5393283367156982,
+      0.505578339099884,
+      0.5034089088439941
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.017138957977294922
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_df_06",
+    "question": "What example question does the paper give regarding the 1986 World Cup?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p005_c011",
+      "test_document_p006_c015",
+      "test_document_p019_c041",
+      "test_document_p004_c010",
+      "test_document_p004_c008"
+    ],
+    "retrieved_pages": [
+      19,
+      4,
+      5,
+      6
+    ],
+    "retrieval_scores": [
+      13.950294412349741,
+      7.131357444928426,
+      6.951523693855762,
+      6.702875717290668,
+      6.518110501244404
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.011311769485473633
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_df_06",
+    "question": "What example question does the paper give regarding the 1986 World Cup?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p005_c011",
+      "test_document_p004_c010",
+      "test_document_p007_c016",
+      "test_document_p007_c018",
+      "test_document_p006_c015"
+    ],
+    "retrieved_pages": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      0.03252247488101534,
+      0.03125,
+      0.031024531024531024,
+      0.030679156908665108,
+      0.0304147465437788
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.02741551399230957
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_df_06",
+    "question": "What example question does the paper give regarding the 1986 World Cup?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p005_c011",
+      "test_document_p012_c028",
+      "test_document_p007_c018",
+      "test_document_p019_c041",
+      "test_document_p006_c014"
+    ],
+    "retrieved_pages": [
+      5,
+      6,
+      7,
+      12,
+      19
+    ],
+    "retrieval_scores": [
+      5.250805854797363,
+      -9.25337028503418,
+      -10.019079208374023,
+      -10.665715217590332,
+      -10.696664810180664
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2376534938812256
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_mh_01",
+    "question": "Does the system that hallucinated less use FAISS for inner product search?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p009_c022",
+      "test_document_p019_c042",
+      "test_document_p005_c012",
+      "test_document_p009_c020"
+    ],
+    "retrieved_pages": [
+      17,
+      19,
+      5,
+      9
+    ],
+    "retrieval_scores": [
+      0.6406148672103882,
+      0.572759747505188,
+      0.5588499903678894,
+      0.5551456212997437,
+      0.5524612665176392
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.03478646278381348
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_mh_01",
+    "question": "Does the system that hallucinated less use FAISS for inner product search?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p019_c041",
+      "test_document_p002_c003",
+      "test_document_p004_c008",
+      "test_document_p003_c007"
+    ],
+    "retrieved_pages": [
+      2,
+      3,
+      4,
+      17,
+      19
+    ],
+    "retrieval_scores": [
+      12.83954580801415,
+      8.92704887602367,
+      8.161996262001026,
+      7.912748266584314,
+      7.391864338991156
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.008626937866210938
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_mh_01",
+    "question": "Does the system that hallucinated less use FAISS for inner product search?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p002_c003",
+      "test_document_p005_c012",
+      "test_document_p019_c041",
+      "test_document_p009_c022"
+    ],
+    "retrieved_pages": [
+      2,
+      5,
+      9,
+      17,
+      19
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.03057889822595705,
+      0.030117753623188408,
+      0.02964254577157803,
+      0.029116045245077504
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.04206728935241699
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_mh_01",
+    "question": "Does the system that hallucinated less use FAISS for inner product search?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p003_c007",
+      "test_document_p006_c014",
+      "test_document_p009_c022",
+      "test_document_p004_c009"
+    ],
+    "retrieved_pages": [
+      3,
+      4,
+      6,
+      9,
+      17
+    ],
+    "retrieval_scores": [
+      2.6206302642822266,
+      -8.380248069763184,
+      -8.9047269821167,
+      -8.943636894226074,
+      -9.905365943908691
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.1823880672454834
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_mh_02",
+    "question": "What is the architecture of the retriever used alongside the parametric generator?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p002_c004",
+      "test_document_p003_c006",
+      "test_document_p003_c007",
+      "test_document_p002_c003",
+      "test_document_p001_c001"
+    ],
+    "retrieved_pages": [
+      1,
+      2,
+      3
+    ],
+    "retrieval_scores": [
+      0.6457343697547913,
+      0.6158932447433472,
+      0.6151440739631653,
+      0.6096122860908508,
+      0.6079171895980835
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.0350337028503418
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_mh_02",
+    "question": "What is the architecture of the retriever used alongside the parametric generator?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p003_c007",
+      "test_document_p019_c041",
+      "test_document_p003_c006",
+      "test_document_p002_c003",
+      "test_document_p002_c004"
+    ],
+    "retrieved_pages": [
+      19,
+      2,
+      3
+    ],
+    "retrieval_scores": [
+      16.849622116885104,
+      13.276320014837326,
+      12.462588332872883,
+      11.65381701654823,
+      10.937924349847819
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.009084939956665039
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_mh_02",
+    "question": "What is the architecture of the retriever used alongside the parametric generator?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p003_c007",
+      "test_document_p003_c006",
+      "test_document_p002_c004",
+      "test_document_p002_c003",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      19,
+      2,
+      3
+    ],
+    "retrieval_scores": [
+      0.032266458495966696,
+      0.03200204813108039,
+      0.03177805800756621,
+      0.03125,
+      0.030621785881252923
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.047484397888183594
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_mh_02",
+    "question": "What is the architecture of the retriever used alongside the parametric generator?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p002_c004",
+      "test_document_p003_c007",
+      "test_document_p002_c003",
+      "test_document_p001_c002",
+      "test_document_p001_c001"
+    ],
+    "retrieved_pages": [
+      1,
+      2,
+      3
+    ],
+    "retrieval_scores": [
+      2.5355823040008545,
+      1.867628812789917,
+      -0.6526888608932495,
+      -0.9943189024925232,
+      -2.007143020629883
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.1811928749084473
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_mh_03",
+    "question": "Which dataset used for evaluation involves extracting sentences from Wikipedia as evidence?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p018_c040",
+      "test_document_p011_c025",
+      "test_document_p015_c034",
+      "test_document_p013_c031",
+      "test_document_p001_c001"
+    ],
+    "retrieved_pages": [
+      1,
+      11,
+      13,
+      15,
+      18
+    ],
+    "retrieval_scores": [
+      0.689447820186615,
+      0.6456231474876404,
+      0.6394421458244324,
+      0.6382223963737488,
+      0.6377143859863281
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06271505355834961
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_mh_03",
+    "question": "Which dataset used for evaluation involves extracting sentences from Wikipedia as evidence?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p018_c040",
+      "test_document_p018_c039",
+      "test_document_p017_c037",
+      "test_document_p005_c011",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      17,
+      18,
+      19,
+      5
+    ],
+    "retrieval_scores": [
+      13.927137901161625,
+      9.061649885277046,
+      7.831468232531468,
+      6.738079214623599,
+      6.319235647428179
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.007981538772583008
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_mh_03",
+    "question": "Which dataset used for evaluation involves extracting sentences from Wikipedia as evidence?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p018_c040",
+      "test_document_p005_c011",
+      "test_document_p018_c039",
+      "test_document_p019_c041",
+      "test_document_p011_c025"
+    ],
+    "retrieved_pages": [
+      11,
+      18,
+      19,
+      5
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.030776515151515152,
+      0.030621785881252923,
+      0.030090497737556562,
+      0.030017921146953404
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.08112406730651855
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_mh_03",
+    "question": "Which dataset used for evaluation involves extracting sentences from Wikipedia as evidence?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p018_c040",
+      "test_document_p018_c039",
+      "test_document_p015_c034",
+      "test_document_p005_c011",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      18,
+      19,
+      5,
+      15
+    ],
+    "retrieval_scores": [
+      3.315464496612549,
+      -0.9318097829818726,
+      -1.0126303434371948,
+      -1.6581165790557861,
+      -2.189058542251587
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2382566928863525
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_mh_04",
+    "question": "What model generates text for 'The Sun Also Rises' and is it preferred over RAG?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014",
+      "test_document_p003_c006",
+      "test_document_p002_c005",
+      "test_document_p009_c021"
+    ],
+    "retrieved_pages": [
+      9,
+      2,
+      3,
+      6
+    ],
+    "retrieval_scores": [
+      0.7385733723640442,
+      0.7021951079368591,
+      0.6477165818214417,
+      0.627963662147522,
+      0.6271856427192688
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.05977749824523926
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_mh_04",
+    "question": "What model generates text for 'The Sun Also Rises' and is it preferred over RAG?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p006_c015",
+      "test_document_p002_c005",
+      "test_document_p007_c016",
+      "test_document_p009_c021"
+    ],
+    "retrieved_pages": [
+      9,
+      2,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      19.902764174796083,
+      18.847335214311084,
+      13.589563208692299,
+      12.655929826417848,
+      12.496273201940067
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.007958173751831055
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_mh_04",
+    "question": "What model generates text for 'The Sun Also Rises' and is it preferred over RAG?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p006_c015",
+      "test_document_p002_c005",
+      "test_document_p009_c021",
+      "test_document_p003_c006"
+    ],
+    "retrieved_pages": [
+      9,
+      2,
+      3,
+      6
+    ],
+    "retrieval_scores": [
+      0.03252247488101534,
+      0.03252247488101534,
+      0.03149801587301587,
+      0.03076923076923077,
+      0.030158730158730156
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06952357292175293
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_mh_04",
+    "question": "What model generates text for 'The Sun Also Rises' and is it preferred over RAG?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014",
+      "test_document_p009_c022",
+      "test_document_p002_c005",
+      "test_document_p009_c021"
+    ],
+    "retrieved_pages": [
+      9,
+      2,
+      6
+    ],
+    "retrieval_scores": [
+      4.6086859703063965,
+      3.867030620574951,
+      0.30081433057785034,
+      -0.5785936713218689,
+      -2.0762147903442383
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.3703529834747314
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_mh_05",
+    "question": "Was the 2016 Wikipedia dump used in combination with 5 or 10 retrieved latent documents?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p008_c019",
+      "test_document_p011_c025",
+      "test_document_p018_c040",
+      "test_document_p009_c022",
+      "test_document_p007_c018"
+    ],
+    "retrieved_pages": [
+      7,
+      8,
+      9,
+      11,
+      18
+    ],
+    "retrieval_scores": [
+      0.6257097125053406,
+      0.6127979159355164,
+      0.6082251071929932,
+      0.5977866053581238,
+      0.5957975387573242
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.04262065887451172
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_mh_05",
+    "question": "Was the 2016 Wikipedia dump used in combination with 5 or 10 retrieved latent documents?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c018",
+      "test_document_p004_c009",
+      "test_document_p008_c019",
+      "test_document_p018_c040",
+      "test_document_p012_c029"
+    ],
+    "retrieved_pages": [
+      4,
+      7,
+      8,
+      12,
+      18
+    ],
+    "retrieval_scores": [
+      11.041213793301935,
+      9.851301495084124,
+      9.4388943035922,
+      8.982554288326183,
+      8.514375600480575
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.011910438537597656
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_mh_05",
+    "question": "Was the 2016 Wikipedia dump used in combination with 5 or 10 retrieved latent documents?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p008_c019",
+      "test_document_p007_c018",
+      "test_document_p018_c040",
+      "test_document_p009_c022",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      7,
+      8,
+      9,
+      18,
+      19
+    ],
+    "retrieval_scores": [
+      0.032266458495966696,
+      0.03177805800756621,
+      0.03149801587301587,
+      0.030330882352941176,
+      0.03007688828584351
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.05380558967590332
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_mh_05",
+    "question": "Was the 2016 Wikipedia dump used in combination with 5 or 10 retrieved latent documents?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p008_c019",
+      "test_document_p004_c009",
+      "test_document_p002_c004",
+      "test_document_p007_c018",
+      "test_document_p018_c040"
+    ],
+    "retrieved_pages": [
+      2,
+      4,
+      7,
+      8,
+      18
+    ],
+    "retrieval_scores": [
+      2.606520175933838,
+      1.5557055473327637,
+      -1.6036770343780518,
+      -2.8214917182922363,
+      -2.9741313457489014
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2608826160430908
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_meth_01",
+    "question": "How are the CT and WQ models initialized?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c010",
+      "test_document_p003_c006",
+      "test_document_p007_c018",
+      "test_document_p005_c013",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      3,
+      4,
+      5,
+      7,
+      19
+    ],
+    "retrieval_scores": [
+      0.5713956356048584,
+      0.5145387053489685,
+      0.5110673904418945,
+      0.5076417922973633,
+      0.5072146654129028
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.060990095138549805
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_meth_01",
+    "question": "How are the CT and WQ models initialized?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c010",
+      "test_document_p005_c012",
+      "test_document_p005_c013",
+      "test_document_p004_c009",
+      "test_document_p007_c018"
+    ],
+    "retrieved_pages": [
+      4,
+      5,
+      7
+    ],
+    "retrieval_scores": [
+      10.11910746291473,
+      7.554709597199262,
+      7.510318917619763,
+      7.262229876427197,
+      7.069392184489374
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.013528108596801758
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_meth_01",
+    "question": "How are the CT and WQ models initialized?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c010",
+      "test_document_p005_c013",
+      "test_document_p007_c018",
+      "test_document_p005_c012",
+      "test_document_p003_c006"
+    ],
+    "retrieved_pages": [
+      3,
+      4,
+      5,
+      7
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.03149801587301587,
+      0.03125763125763126,
+      0.031054405392392875,
+      0.029827662395050816
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06821441650390625
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_meth_01",
+    "question": "How are the CT and WQ models initialized?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c010",
+      "test_document_p005_c013",
+      "test_document_p003_c006",
+      "test_document_p002_c004",
+      "test_document_p001_c002"
+    ],
+    "retrieved_pages": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "retrieval_scores": [
+      5.184593200683594,
+      -1.116512417793274,
+      -2.3013644218444824,
+      -4.587894439697266,
+      -4.998917102813721
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2024431228637695
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_meth_02",
+    "question": "How does the system fuse dense and sparse retrieval?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c042",
+      "test_document_p008_c019",
+      "test_document_p007_c017",
+      "test_document_p002_c004",
+      "test_document_p009_c020"
+    ],
+    "retrieved_pages": [
+      2,
+      7,
+      8,
+      9,
+      19
+    ],
+    "retrieval_scores": [
+      0.5810501575469971,
+      0.5711599588394165,
+      0.5661299228668213,
+      0.5568984746932983,
+      0.554078996181488
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.059866905212402344
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_meth_02",
+    "question": "How does the system fuse dense and sparse retrieval?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c017",
+      "test_document_p006_c015",
+      "test_document_p004_c008",
+      "test_document_p011_c025",
+      "test_document_p009_c022"
+    ],
+    "retrieved_pages": [
+      4,
+      6,
+      7,
+      9,
+      11
+    ],
+    "retrieval_scores": [
+      6.885338025593788,
+      6.771567186907815,
+      6.273433748987719,
+      6.044219347641408,
+      6.03876987955839
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.01233673095703125
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_meth_02",
+    "question": "How does the system fuse dense and sparse retrieval?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c017",
+      "test_document_p002_c004",
+      "test_document_p005_c012",
+      "test_document_p019_c041",
+      "test_document_p009_c022"
+    ],
+    "retrieved_pages": [
+      2,
+      5,
+      7,
+      9,
+      19
+    ],
+    "retrieval_scores": [
+      0.032266458495966696,
+      0.029709507042253523,
+      0.029631255487269532,
+      0.029236022193768675,
+      0.02871794871794872
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.07159686088562012
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_meth_02",
+    "question": "How does the system fuse dense and sparse retrieval?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p002_c004",
+      "test_document_p012_c028",
+      "test_document_p001_c001",
+      "test_document_p002_c003",
+      "test_document_p005_c012"
+    ],
+    "retrieved_pages": [
+      1,
+      2,
+      12,
+      5
+    ],
+    "retrieval_scores": [
+      -4.908686637878418,
+      -5.576985836029053,
+      -6.298140525817871,
+      -8.465707778930664,
+      -8.722396850585938
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.247650384902954
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_meth_03",
+    "question": "How does the system avoid running additional forward passes?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014",
+      "test_document_p019_c042",
+      "test_document_p004_c008",
+      "test_document_p003_c006"
+    ],
+    "retrieved_pages": [
+      3,
+      19,
+      4,
+      6
+    ],
+    "retrieval_scores": [
+      0.484304279088974,
+      0.4589216411113739,
+      0.443585067987442,
+      0.4306325316429138,
+      0.42502713203430176
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.05615878105163574
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_meth_03",
+    "question": "How does the system avoid running additional forward passes?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c008",
+      "test_document_p004_c009",
+      "test_document_p007_c017",
+      "test_document_p006_c015",
+      "test_document_p017_c037"
+    ],
+    "retrieved_pages": [
+      17,
+      4,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      13.032453227236093,
+      8.768098434982306,
+      5.7345543245619695,
+      5.516351265105019,
+      4.703719257699461
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.008571386337280273
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_meth_03",
+    "question": "How does the system avoid running additional forward passes?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p004_c008",
+      "test_document_p004_c009",
+      "test_document_p019_c041",
+      "test_document_p010_c023"
+    ],
+    "retrieved_pages": [
+      10,
+      19,
+      4,
+      6
+    ],
+    "retrieval_scores": [
+      0.032018442622950824,
+      0.032018442622950824,
+      0.030834914611005692,
+      0.028850145288501453,
+      0.028790389395194696
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06657958030700684
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_meth_03",
+    "question": "How does the system avoid running additional forward passes?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c009",
+      "test_document_p004_c008",
+      "test_document_p008_c019",
+      "test_document_p010_c023",
+      "test_document_p002_c004"
+    ],
+    "retrieved_pages": [
+      8,
+      10,
+      2,
+      4
+    ],
+    "retrieval_scores": [
+      4.027176856994629,
+      -2.986774444580078,
+      -10.690319061279297,
+      -10.860118865966797,
+      -10.926361083984375
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2133221626281738
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_meth_04",
+    "question": "How do concurrent works handle entity embeddings?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p009_c021",
+      "test_document_p011_c025",
+      "test_document_p015_c034",
+      "test_document_p017_c037",
+      "test_document_p002_c004"
+    ],
+    "retrieved_pages": [
+      2,
+      9,
+      11,
+      15,
+      17
+    ],
+    "retrieval_scores": [
+      0.5316885113716125,
+      0.48733362555503845,
+      0.4835914969444275,
+      0.4804241359233856,
+      0.47491583228111267
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.05746817588806152
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_meth_04",
+    "question": "How do concurrent works handle entity embeddings?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p009_c021",
+      "test_document_p014_c033",
+      "test_document_p005_c012",
+      "test_document_p006_c015",
+      "test_document_p004_c010"
+    ],
+    "retrieved_pages": [
+      4,
+      5,
+      6,
+      9,
+      14
+    ],
+    "retrieval_scores": [
+      8.684553071915047,
+      5.055425160405857,
+      5.006557193559288,
+      4.5138957255738665,
+      4.2355614396521055
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.011497735977172852
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_meth_04",
+    "question": "How do concurrent works handle entity embeddings?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p009_c021",
+      "test_document_p014_c033",
+      "test_document_p011_c025",
+      "test_document_p005_c012",
+      "test_document_p004_c010"
+    ],
+    "retrieved_pages": [
+      4,
+      5,
+      9,
+      11,
+      14
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.03128054740957967,
+      0.031054405392392875,
+      0.030798389007344232,
+      0.02946912242686891
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.07042765617370605
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_meth_04",
+    "question": "How do concurrent works handle entity embeddings?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p009_c021",
+      "test_document_p004_c009",
+      "test_document_p005_c012",
+      "test_document_p004_c010",
+      "test_document_p018_c040"
+    ],
+    "retrieved_pages": [
+      9,
+      18,
+      4,
+      5
+    ],
+    "retrieval_scores": [
+      3.965651273727417,
+      -8.249916076660156,
+      -8.781661987304688,
+      -9.860282897949219,
+      -10.233455657958984
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.1948845386505127
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_comp_01",
+    "question": "Do people prefer RAG or purely parametric BART?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p009_c022",
+      "test_document_p006_c014",
+      "test_document_p007_c017",
+      "test_document_p006_c015",
+      "test_document_p005_c012"
+    ],
+    "retrieved_pages": [
+      9,
+      5,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      0.6921862363815308,
+      0.6916171312332153,
+      0.6112478375434875,
+      0.6013256311416626,
+      0.5596577525138855
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.029935121536254883
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_comp_01",
+    "question": "Do people prefer RAG or purely parametric BART?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p009_c022",
+      "test_document_p004_c009",
+      "test_document_p001_c002",
+      "test_document_p005_c012",
+      "test_document_p018_c040"
+    ],
+    "retrieved_pages": [
+      1,
+      4,
+      5,
+      9,
+      18
+    ],
+    "retrieval_scores": [
+      14.625018486382363,
+      6.005187942832746,
+      4.472110864542964,
+      4.464337703226415,
+      3.7095129819847874
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.00802159309387207
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_comp_01",
+    "question": "Do people prefer RAG or purely parametric BART?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p009_c022",
+      "test_document_p005_c012",
+      "test_document_p007_c017",
+      "test_document_p004_c009",
+      "test_document_p006_c014"
+    ],
+    "retrieved_pages": [
+      4,
+      5,
+      6,
+      7,
+      9
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.031009615384615385,
+      0.030798389007344232,
+      0.030621785881252923,
+      0.02946236559139785
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.040703535079956055
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_comp_01",
+    "question": "Do people prefer RAG or purely parametric BART?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p009_c022",
+      "test_document_p006_c014",
+      "test_document_p007_c017",
+      "test_document_p002_c004",
+      "test_document_p006_c015"
+    ],
+    "retrieved_pages": [
+      9,
+      2,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      8.100815773010254,
+      1.1345865726470947,
+      0.612999439239502,
+      -0.5630228519439697,
+      -0.9919811487197876
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.1731469631195068
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_comp_02",
+    "question": "Does RAG hallucinate more or less compared to other models?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p009_c022",
+      "test_document_p005_c012",
+      "test_document_p007_c017",
+      "test_document_p008_c019"
+    ],
+    "retrieved_pages": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "retrieval_scores": [
+      0.6950632929801941,
+      0.63018798828125,
+      0.6300352215766907,
+      0.6215641498565674,
+      0.5681008100509644
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.058971405029296875
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_comp_02",
+    "question": "Does RAG hallucinate more or less compared to other models?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p009_c022",
+      "test_document_p019_c041",
+      "test_document_p009_c021",
+      "test_document_p007_c017"
+    ],
+    "retrieved_pages": [
+      9,
+      19,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      11.754422126590805,
+      10.370301000129151,
+      9.697577286537822,
+      9.362720074536416,
+      8.143339413607192
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.011260032653808594
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_comp_02",
+    "question": "Does RAG hallucinate more or less compared to other models?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p009_c022",
+      "test_document_p007_c017",
+      "test_document_p005_c012",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      5,
+      6,
+      7,
+      9,
+      19
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.03225806451612903,
+      0.031009615384615385,
+      0.03036576949620428,
+      0.03036576949620428
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06859636306762695
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_comp_02",
+    "question": "Does RAG hallucinate more or less compared to other models?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p009_c022",
+      "test_document_p007_c017",
+      "test_document_p001_c002",
+      "test_document_p005_c012"
+    ],
+    "retrieved_pages": [
+      1,
+      5,
+      6,
+      7,
+      9
+    ],
+    "retrieval_scores": [
+      6.613910675048828,
+      2.395585536956787,
+      1.9327893257141113,
+      -0.5308050513267517,
+      -0.5357402563095093
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.238562822341919
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_comp_03",
+    "question": "Is FAISS on CPU faster or slower than exact search?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p004_c009",
+      "test_document_p008_c019",
+      "test_document_p011_c026",
+      "test_document_p019_c042"
+    ],
+    "retrieved_pages": [
+      4,
+      8,
+      11,
+      17,
+      19
+    ],
+    "retrieval_scores": [
+      0.6891940832138062,
+      0.5669395327568054,
+      0.5615915060043335,
+      0.5506901741027832,
+      0.548361599445343
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.05811667442321777
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_comp_03",
+    "question": "Is FAISS on CPU faster or slower than exact search?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p004_c010",
+      "test_document_p007_c017",
+      "test_document_p005_c011",
+      "test_document_p006_c014"
+    ],
+    "retrieved_pages": [
+      4,
+      5,
+      6,
+      7,
+      17
+    ],
+    "retrieval_scores": [
+      13.699575900410913,
+      6.320277527891129,
+      5.16104461182016,
+      4.85129080748901,
+      4.82044959193979
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.011545658111572266
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_comp_03",
+    "question": "Is FAISS on CPU faster or slower than exact search?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p004_c009",
+      "test_document_p007_c017",
+      "test_document_p008_c019",
+      "test_document_p006_c014"
+    ],
+    "retrieved_pages": [
+      4,
+      6,
+      7,
+      8,
+      17
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.03128054740957967,
+      0.031024531024531024,
+      0.029957522915269395,
+      0.02967032967032967
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06633996963500977
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_comp_03",
+    "question": "Is FAISS on CPU faster or slower than exact search?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c038",
+      "test_document_p004_c009",
+      "test_document_p004_c010",
+      "test_document_p008_c019",
+      "test_document_p005_c011"
+    ],
+    "retrieved_pages": [
+      8,
+      17,
+      4,
+      5
+    ],
+    "retrieval_scores": [
+      4.49392557144165,
+      -6.974436283111572,
+      -10.750723838806152,
+      -10.765641212463379,
+      -11.131974220275879
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2051196098327637
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_quant_01",
+    "question": "What percentage of cases have the top retrieved document from a gold article?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c017",
+      "test_document_p005_c013",
+      "test_document_p018_c040",
+      "test_document_p008_c019",
+      "test_document_p007_c016"
+    ],
+    "retrieved_pages": [
+      8,
+      18,
+      5,
+      7
+    ],
+    "retrieval_scores": [
+      0.6484822630882263,
+      0.5710877776145935,
+      0.5666587948799133,
+      0.5630722045898438,
+      0.559035062789917
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.03084254264831543
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_quant_01",
+    "question": "What percentage of cases have the top retrieved document from a gold article?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c017",
+      "test_document_p007_c016",
+      "test_document_p004_c010",
+      "test_document_p003_c007",
+      "test_document_p009_c021"
+    ],
+    "retrieved_pages": [
+      9,
+      3,
+      4,
+      7
+    ],
+    "retrieval_scores": [
+      14.86630608530461,
+      12.974339690692887,
+      10.194773798671953,
+      9.793697178286575,
+      8.532924064511278
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.009821414947509766
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_quant_01",
+    "question": "What percentage of cases have the top retrieved document from a gold article?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c017",
+      "test_document_p007_c016",
+      "test_document_p018_c040",
+      "test_document_p005_c013",
+      "test_document_p008_c019"
+    ],
+    "retrieved_pages": [
+      8,
+      18,
+      5,
+      7
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.0315136476426799,
+      0.031024531024531024,
+      0.0304147465437788,
+      0.030330882352941176
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.03839278221130371
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_quant_01",
+    "question": "What percentage of cases have the top retrieved document from a gold article?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c017",
+      "test_document_p007_c016",
+      "test_document_p005_c013",
+      "test_document_p002_c005",
+      "test_document_p003_c006"
+    ],
+    "retrieved_pages": [
+      2,
+      3,
+      5,
+      7
+    ],
+    "retrieval_scores": [
+      7.094695091247559,
+      -3.578991413116455,
+      -3.7554163932800293,
+      -5.381450653076172,
+      -5.878894805908203
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.1968224048614502
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_quant_02",
+    "question": "How many latent documents are models trained with?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p014_c033",
+      "test_document_p019_c041",
+      "test_document_p008_c019",
+      "test_document_p003_c006",
+      "test_document_p009_c021"
+    ],
+    "retrieved_pages": [
+      3,
+      8,
+      9,
+      14,
+      19
+    ],
+    "retrieval_scores": [
+      0.6416414976119995,
+      0.6369084119796753,
+      0.6222379803657532,
+      0.6109292507171631,
+      0.6085778474807739
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.05910134315490723
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_quant_02",
+    "question": "How many latent documents are models trained with?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p002_c004",
+      "test_document_p002_c003",
+      "test_document_p009_c022",
+      "test_document_p009_c020",
+      "test_document_p006_c015"
+    ],
+    "retrieved_pages": [
+      9,
+      2,
+      6
+    ],
+    "retrieval_scores": [
+      6.677697010898632,
+      5.994514854979802,
+      5.823494192305429,
+      5.602929593835264,
+      5.351240191429882
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.011501073837280273
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_quant_02",
+    "question": "How many latent documents are models trained with?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p002_c004",
+      "test_document_p014_c033",
+      "test_document_p009_c020",
+      "test_document_p009_c021",
+      "test_document_p008_c019"
+    ],
+    "retrieved_pages": [
+      8,
+      9,
+      2,
+      14
+    ],
+    "retrieval_scores": [
+      0.031544957774465976,
+      0.03047794966520434,
+      0.030330882352941176,
+      0.030309988518943745,
+      0.029571646010002173
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06998896598815918
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_quant_02",
+    "question": "How many latent documents are models trained with?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p008_c019",
+      "test_document_p002_c004",
+      "test_document_p003_c006",
+      "test_document_p009_c020",
+      "test_document_p002_c003"
+    ],
+    "retrieved_pages": [
+      8,
+      9,
+      2,
+      3
+    ],
+    "retrieval_scores": [
+      5.094515323638916,
+      3.1264586448669434,
+      -0.18374916911125183,
+      -0.5048645734786987,
+      -0.9612545967102051
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.315068244934082
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_quant_03",
+    "question": "What is the number of instances for the FEVER dataset?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c041",
+      "test_document_p019_c042",
+      "test_document_p018_c040",
+      "test_document_p005_c012",
+      "test_document_p015_c034"
+    ],
+    "retrieved_pages": [
+      18,
+      19,
+      5,
+      15
+    ],
+    "retrieval_scores": [
+      0.6201008558273315,
+      0.6179333925247192,
+      0.5732880234718323,
+      0.5616901516914368,
+      0.5553032159805298
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.013291120529174805
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_quant_03",
+    "question": "What is the number of instances for the FEVER dataset?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c042",
+      "test_document_p019_c041",
+      "test_document_p007_c016",
+      "test_document_p018_c039",
+      "test_document_p015_c034"
+    ],
+    "retrieved_pages": [
+      18,
+      19,
+      15,
+      7
+    ],
+    "retrieval_scores": [
+      15.45279908120823,
+      13.968405433936883,
+      12.401595986089573,
+      9.861733505665903,
+      8.771047226148157
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.009474039077758789
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_quant_03",
+    "question": "What is the number of instances for the FEVER dataset?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c042",
+      "test_document_p019_c041",
+      "test_document_p015_c034",
+      "test_document_p018_c039",
+      "test_document_p005_c012"
+    ],
+    "retrieved_pages": [
+      18,
+      19,
+      5,
+      15
+    ],
+    "retrieval_scores": [
+      0.03252247488101534,
+      0.03252247488101534,
+      0.03076923076923077,
+      0.03055037313432836,
+      0.029910714285714284
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.02479410171508789
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_quant_03",
+    "question": "What is the number of instances for the FEVER dataset?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c041",
+      "test_document_p018_c039",
+      "test_document_p015_c034",
+      "test_document_p019_c042",
+      "test_document_p018_c040"
+    ],
+    "retrieved_pages": [
+      18,
+      19,
+      15
+    ],
+    "retrieval_scores": [
+      4.993791580200195,
+      -0.7980189323425293,
+      -1.3311370611190796,
+      -3.8110594749450684,
+      -4.300718307495117
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2250888347625732
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_unans_01",
+    "question": "What is the capital of Japan?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c016",
+      "test_document_p007_c018",
+      "test_document_p011_c025",
+      "test_document_p011_c026",
+      "test_document_p002_c003"
+    ],
+    "retrieved_pages": [
+      2,
+      11,
+      7
+    ],
+    "retrieval_scores": [
+      0.39961114525794983,
+      0.3736962080001831,
+      0.3599908947944641,
+      0.3599192500114441,
+      0.3475504517555237
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.03580975532531738
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_unans_01",
+    "question": "What is the capital of Japan?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c016",
+      "test_document_p003_c007",
+      "test_document_p004_c010",
+      "test_document_p006_c015",
+      "test_document_p006_c014"
+    ],
+    "retrieved_pages": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      6.921728656034431,
+      6.318680399623457,
+      6.149363703740686,
+      4.4335794166541,
+      4.343490762760521
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.010060787200927734
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_unans_01",
+    "question": "What is the capital of Japan?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c016",
+      "test_document_p003_c007",
+      "test_document_p006_c015",
+      "test_document_p007_c018",
+      "test_document_p004_c010"
+    ],
+    "retrieved_pages": [
+      3,
+      4,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.0304147465437788,
+      0.029709507042253523,
+      0.02946236559139785,
+      0.029386529386529386
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.048007965087890625
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_unans_01",
+    "question": "What is the capital of Japan?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p013_c030",
+      "test_document_p011_c025",
+      "test_document_p007_c018",
+      "test_document_p006_c014",
+      "test_document_p015_c035"
+    ],
+    "retrieved_pages": [
+      6,
+      7,
+      11,
+      13,
+      15
+    ],
+    "retrieval_scores": [
+      -11.055405616760254,
+      -11.059785842895508,
+      -11.09935188293457,
+      -11.147079467773438,
+      -11.171686172485352
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2714595794677734
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_unans_02",
+    "question": "What hardware was used to train the RAG models?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p003_c006",
+      "test_document_p009_c022",
+      "test_document_p006_c015",
+      "test_document_p007_c017"
+    ],
+    "retrieved_pages": [
+      9,
+      3,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      0.6103150248527527,
+      0.5765578746795654,
+      0.5707865953445435,
+      0.5686861872673035,
+      0.5625269412994385
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.03171062469482422
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_unans_02",
+    "question": "What hardware was used to train the RAG models?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p003_c007",
+      "test_document_p017_c037",
+      "test_document_p004_c010",
+      "test_document_p019_c041",
+      "test_document_p007_c016"
+    ],
+    "retrieved_pages": [
+      3,
+      4,
+      7,
+      17,
+      19
+    ],
+    "retrieval_scores": [
+      9.606297474480506,
+      8.928500758870339,
+      8.762128472321635,
+      8.586374073904508,
+      7.933902709560779
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.008125782012939453
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_unans_02",
+    "question": "What hardware was used to train the RAG models?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p003_c006",
+      "test_document_p017_c037",
+      "test_document_p006_c015",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      19,
+      17,
+      3,
+      6
+    ],
+    "retrieval_scores": [
+      0.031544957774465976,
+      0.030834914611005692,
+      0.030834914611005692,
+      0.029910714285714284,
+      0.029910714285714284
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.044595956802368164
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_unans_02",
+    "question": "What hardware was used to train the RAG models?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p017_c037",
+      "test_document_p005_c012",
+      "test_document_p017_c038",
+      "test_document_p004_c010",
+      "test_document_p019_c041"
+    ],
+    "retrieved_pages": [
+      17,
+      19,
+      4,
+      5
+    ],
+    "retrieval_scores": [
+      2.0117850303649902,
+      1.8141716718673706,
+      1.45491623878479,
+      0.9420509338378906,
+      0.6666054725646973
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.243119716644287
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_unans_03",
+    "question": "Who is the lead author of the purely parametric BART paper?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014",
+      "test_document_p009_c022",
+      "test_document_p007_c016",
+      "test_document_p007_c017"
+    ],
+    "retrieved_pages": [
+      9,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      0.6621675491333008,
+      0.6314762830734253,
+      0.6181073784828186,
+      0.6010812520980835,
+      0.5801168084144592
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.06147003173828125
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_unans_03",
+    "question": "Who is the lead author of the purely parametric BART paper?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p007_c018",
+      "test_document_p007_c016",
+      "test_document_p010_c023",
+      "test_document_p009_c022"
+    ],
+    "retrieved_pages": [
+      9,
+      10,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      12.913659734547906,
+      10.203674698259812,
+      9.64032136270498,
+      9.594405464626192,
+      8.870272106530326
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.008646965026855469
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_unans_03",
+    "question": "Who is the lead author of the purely parametric BART paper?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p007_c016",
+      "test_document_p007_c018",
+      "test_document_p009_c022",
+      "test_document_p006_c014"
+    ],
+    "retrieved_pages": [
+      9,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.03149801587301587,
+      0.03128054740957967,
+      0.03125763125763126,
+      0.031054405392392875
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.0759284496307373
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_unans_03",
+    "question": "Who is the lead author of the purely parametric BART paper?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p009_c022",
+      "test_document_p002_c004",
+      "test_document_p006_c014",
+      "test_document_p007_c017"
+    ],
+    "retrieved_pages": [
+      9,
+      2,
+      6,
+      7
+    ],
+    "retrieval_scores": [
+      -0.11742489784955978,
+      -1.1162484884262085,
+      -5.478026866912842,
+      -6.333920001983643,
+      -6.356410980224609
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.3002636432647705
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_unans_04",
+    "question": "How many days did it take to build the December 2016 Wikipedia dump?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c018",
+      "test_document_p011_c025",
+      "test_document_p017_c038",
+      "test_document_p013_c030",
+      "test_document_p004_c009"
+    ],
+    "retrieved_pages": [
+      4,
+      7,
+      11,
+      13,
+      17
+    ],
+    "retrieval_scores": [
+      0.6015904545783997,
+      0.5764274001121521,
+      0.5716642737388611,
+      0.5681910514831543,
+      0.5626369714736938
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.015114784240722656
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_unans_04",
+    "question": "How many days did it take to build the December 2016 Wikipedia dump?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c018",
+      "test_document_p004_c009",
+      "test_document_p018_c040",
+      "test_document_p009_c022",
+      "test_document_p013_c031"
+    ],
+    "retrieved_pages": [
+      4,
+      7,
+      9,
+      13,
+      18
+    ],
+    "retrieval_scores": [
+      13.448302911423859,
+      11.52351435979152,
+      9.268811194970835,
+      9.121203631833868,
+      7.385126105690572
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.009713411331176758
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_unans_04",
+    "question": "How many days did it take to build the December 2016 Wikipedia dump?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c018",
+      "test_document_p004_c009",
+      "test_document_p018_c040",
+      "test_document_p017_c038",
+      "test_document_p009_c022"
+    ],
+    "retrieved_pages": [
+      4,
+      7,
+      9,
+      17,
+      18
+    ],
+    "retrieval_scores": [
+      0.03278688524590164,
+      0.0315136476426799,
+      0.031024531024531024,
+      0.03057889822595705,
+      0.030330882352941176
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.025426387786865234
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_unans_04",
+    "question": "How many days did it take to build the December 2016 Wikipedia dump?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c018",
+      "test_document_p004_c009",
+      "test_document_p018_c040",
+      "test_document_p013_c031",
+      "test_document_p012_c029"
+    ],
+    "retrieved_pages": [
+      4,
+      7,
+      12,
+      13,
+      18
+    ],
+    "retrieval_scores": [
+      1.2208410501480103,
+      -0.5635604858398438,
+      -9.780719757080078,
+      -9.860086441040039,
+      -10.906784057617188
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.190875768661499
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_contra_01",
+    "question": "Do models hallucinate more or less?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p019_c041",
+      "test_document_p014_c033",
+      "test_document_p019_c042",
+      "test_document_p011_c026"
+    ],
+    "retrieved_pages": [
+      11,
+      19,
+      6,
+      14
+    ],
+    "retrieval_scores": [
+      0.5498542785644531,
+      0.5227250456809998,
+      0.5207182765007019,
+      0.5194193124771118,
+      0.5110276341438293
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.031514883041381836
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_contra_01",
+    "question": "Do models hallucinate more or less?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p009_c022",
+      "test_document_p006_c014",
+      "test_document_p008_c019",
+      "test_document_p001_c002",
+      "test_document_p018_c040"
+    ],
+    "retrieved_pages": [
+      1,
+      6,
+      8,
+      9,
+      18
+    ],
+    "retrieval_scores": [
+      7.593371208649772,
+      7.152585216743454,
+      5.867497402519164,
+      5.299205992100777,
+      4.644107182466106
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.01254415512084961
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_contra_01",
+    "question": "Do models hallucinate more or less?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p009_c022",
+      "test_document_p019_c041",
+      "test_document_p005_c012",
+      "test_document_p008_c019"
+    ],
+    "retrieved_pages": [
+      5,
+      6,
+      8,
+      9,
+      19
+    ],
+    "retrieval_scores": [
+      0.03252247488101534,
+      0.03131881575727918,
+      0.03128054740957967,
+      0.03007688828584351,
+      0.029206349206349208
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.049417972564697266
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_contra_01",
+    "question": "Do models hallucinate more or less?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p009_c022",
+      "test_document_p001_c002",
+      "test_document_p008_c019",
+      "test_document_p002_c005"
+    ],
+    "retrieved_pages": [
+      1,
+      2,
+      6,
+      8,
+      9
+    ],
+    "retrieval_scores": [
+      4.019221305847168,
+      -1.4203212261199951,
+      -4.846608638763428,
+      -6.096569538116455,
+      -8.56466293334961
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2037947177886963
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_contra_02",
+    "question": "Does the system retrieve 5, 10, or 1000 documents?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p008_c019",
+      "test_document_p019_c041",
+      "test_document_p019_c042",
+      "test_document_p017_c038",
+      "test_document_p018_c040"
+    ],
+    "retrieved_pages": [
+      8,
+      17,
+      18,
+      19
+    ],
+    "retrieval_scores": [
+      0.6802676320075989,
+      0.6247661709785461,
+      0.5961611866950989,
+      0.5629892945289612,
+      0.5548918843269348
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.03753972053527832
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_contra_02",
+    "question": "Does the system retrieve 5, 10, or 1000 documents?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p007_c017",
+      "test_document_p019_c041",
+      "test_document_p004_c008",
+      "test_document_p018_c039",
+      "test_document_p006_c015"
+    ],
+    "retrieved_pages": [
+      4,
+      6,
+      7,
+      18,
+      19
+    ],
+    "retrieval_scores": [
+      7.447315570114691,
+      7.44300861425708,
+      6.003119578818766,
+      5.917386618242562,
+      5.241381542893024
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.010029077529907227
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_contra_02",
+    "question": "Does the system retrieve 5, 10, or 1000 documents?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p019_c041",
+      "test_document_p007_c017",
+      "test_document_p008_c019",
+      "test_document_p017_c038",
+      "test_document_p009_c021"
+    ],
+    "retrieved_pages": [
+      7,
+      8,
+      9,
+      17,
+      19
+    ],
+    "retrieval_scores": [
+      0.03225806451612903,
+      0.031544957774465976,
+      0.030886196246139225,
+      0.03055037313432836,
+      0.03007688828584351
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.0480036735534668
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_contra_02",
+    "question": "Does the system retrieve 5, 10, or 1000 documents?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p008_c019",
+      "test_document_p018_c039",
+      "test_document_p002_c004",
+      "test_document_p019_c041",
+      "test_document_p007_c017"
+    ],
+    "retrieved_pages": [
+      2,
+      7,
+      8,
+      18,
+      19
+    ],
+    "retrieval_scores": [
+      3.069110870361328,
+      -1.7100636959075928,
+      -2.5923898220062256,
+      -2.698326587677002,
+      -4.148343086242676
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2547078132629395
+  },
+  {
+    "baseline_name": "DENSE_TOP_K",
+    "question_id": "q_multi_01",
+    "question": "Does the RAG paper evaluate on multilingual tasks?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p008_c019",
+      "test_document_p007_c017",
+      "test_document_p009_c022",
+      "test_document_p005_c012"
+    ],
+    "retrieved_pages": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "retrieval_scores": [
+      0.6444358825683594,
+      0.6307302713394165,
+      0.6209188103675842,
+      0.618280827999115,
+      0.6063032150268555
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.05990004539489746
+  },
+  {
+    "baseline_name": "BM25_TOP_K",
+    "question_id": "q_multi_01",
+    "question": "Does the RAG paper evaluate on multilingual tasks?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c010",
+      "test_document_p019_c041",
+      "test_document_p004_c008",
+      "test_document_p001_c002",
+      "test_document_p006_c015"
+    ],
+    "retrieved_pages": [
+      1,
+      19,
+      4,
+      6
+    ],
+    "retrieval_scores": [
+      7.535150605023671,
+      6.755021507485451,
+      6.33175119038773,
+      6.2647853559670885,
+      5.8744076928815385
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.014425039291381836
+  },
+  {
+    "baseline_name": "HYBRID_TOP_K",
+    "question_id": "q_multi_01",
+    "question": "Does the RAG paper evaluate on multilingual tasks?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p004_c010",
+      "test_document_p005_c012",
+      "test_document_p009_c021",
+      "test_document_p001_c002"
+    ],
+    "retrieved_pages": [
+      1,
+      4,
+      5,
+      6,
+      9
+    ],
+    "retrieval_scores": [
+      0.03047794966520434,
+      0.03009207275993712,
+      0.030090497737556562,
+      0.029857397504456328,
+      0.029709507042253523
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 0.1234598159790039
+  },
+  {
+    "baseline_name": "HYBRID_RERANKED",
+    "question_id": "q_multi_01",
+    "question": "Does the RAG paper evaluate on multilingual tasks?",
+    "document_id": "test_document",
+    "retrieved_chunk_ids": [
+      "test_document_p004_c010",
+      "test_document_p001_c002",
+      "test_document_p017_c037",
+      "test_document_p005_c012",
+      "test_document_p007_c017"
+    ],
+    "retrieved_pages": [
+      1,
+      4,
+      5,
+      7,
+      17
+    ],
+    "retrieval_scores": [
+      0.8500316143035889,
+      0.10357500612735748,
+      -0.41992783546447754,
+      -0.5014303922653198,
+      -0.5419332981109619
+    ],
+    "retrieval_count": 5,
+    "latency_seconds": 1.2478306293487549
+  }
+]

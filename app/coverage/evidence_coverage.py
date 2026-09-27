@@ -111,153 +111,28 @@ class EvidenceCoverageEstimator:
 
         return f"""
 You are a strict evidence verifier for AERIS-RAG.
+Evaluate whether the DOCUMENT EVIDENCE supports the INFORMATION REQUIREMENT.
 
-Your ONLY task is to determine whether the DOCUMENT EVIDENCE
-actually supports the INFORMATION REQUIREMENT.
-
-Do NOT answer the requirement.
-
-Do NOT use outside knowledge.
-
-Do NOT infer facts that are not explicitly supported by the evidence.
-
-==================================================
-INFORMATION REQUIREMENT
-==================================================
-
-Description:
+REQUIREMENT:
 {requirement.description}
+(Type: {requirement.requirement_type}, Expected Evidence: {requirement.expected_evidence_type})
+Entities: {", ".join(requirement.entities)}
 
-Requirement type:
-{requirement.requirement_type}
-
-Expected evidence type:
-{requirement.expected_evidence_type}
-
-Entities:
-{", ".join(requirement.entities)}
-
-==================================================
-DOCUMENT EVIDENCE
-==================================================
-
+EVIDENCE:
 {evidence.text}
 
-==================================================
-EVALUATION RULES
-==================================================
+RULES:
+- Score 4 dimensions (0.0 to 1.0):
+  1. directness: Does the evidence explicitly address the requirement?
+  2. relevance: Is it actually relevant to the requirement?
+  3. completeness: Is there enough info to satisfy the requirement?
+  4. evidence_type_match: Does it contain the expected evidence type?
+- coverage_score = (0.30 * directness) + (0.25 * relevance) + (0.25 * completeness) + (0.20 * evidence_type_match)
+- coverage_status: "SUPPORTED" if score >= 0.70, "PARTIAL" if score >= 0.35, else "UNSUPPORTED"
+- Do not infer facts. Related topic/terminology is NOT supporting evidence.
+- Respond ONLY with valid JSON.
 
-The evidence must be evaluated against the EXACT requirement.
-
-A passage is NOT supporting evidence merely because:
-
-- it discusses the same general topic
-- it contains related terminology
-- it contains numbers
-- it mentions the same dataset
-- it mentions the same model
-- it is from the same section
-- it is semantically similar
-
-For example:
-
-Requirement:
-"What metrics were used?"
-
-Evidence:
-"The dataset contains 3,610 test examples."
-
-This is UNSUPPORTED.
-
-Why?
-
-Because the number of test examples is not an evaluation metric.
-
-Another example:
-
-Requirement:
-"What quantitative results were obtained?"
-
-Evidence:
-"The dataset contains 3,610 test examples."
-
-This is also UNSUPPORTED.
-
-Why?
-
-Because dataset size is not a model performance result.
-
-==================================================
-SCORING
-==================================================
-
-Evaluate four dimensions from 0.0 to 1.0.
-
-1. DIRECTNESS
-
-Does the evidence explicitly address the requirement?
-
-2. RELEVANCE
-
-Is the information actually relevant to what is being requested?
-
-3. COMPLETENESS
-
-Does the evidence provide enough information to satisfy the requirement?
-
-4. EVIDENCE_TYPE_MATCH
-
-Does the evidence contain the type of evidence requested?
-
-Examples:
-
-Requirement type = quantitative
-Expected evidence = numerical result
-
-Then model performance values, accuracy, F1, EM, scores,
-improvements, etc. can match.
-
-Dataset size alone does NOT match.
-
-Requirement type = comparison
-Expected evidence = comparison
-
-The evidence should actually compare methods, models,
-systems, datasets, or results.
-
-Requirement type = definition
-Expected evidence = definition
-
-The evidence should explicitly define or explain the concept.
-
-==================================================
-FINAL DECISION
-==================================================
-
-SUPPORTED:
-The evidence directly and sufficiently supports the requirement.
-
-PARTIAL:
-The evidence supports an important part of the requirement
-but is incomplete.
-
-UNSUPPORTED:
-The evidence does not actually support the requirement.
-
-Use:
-
-SUPPORTED only when the evidence itself justifies the claim.
-
-Do NOT be generous.
-
-==================================================
-OUTPUT
-==================================================
-
-Return ONLY valid JSON.
-
-Use exactly this structure:
-
+OUTPUT FORMAT:
 {{
   "directness": 0.0,
   "relevance": 0.0,
@@ -265,25 +140,8 @@ Use exactly this structure:
   "evidence_type_match": 0.0,
   "coverage_status": "SUPPORTED|PARTIAL|UNSUPPORTED",
   "coverage_score": 0.0,
-  "explanation": "brief evidence-grounded explanation"
+  "explanation": "brief explanation"
 }}
-
-Coverage score must be calculated from the four dimensions.
-
-Use:
-
-coverage_score =
-0.30 * directness +
-0.25 * relevance +
-0.25 * completeness +
-0.20 * evidence_type_match
-
-Do not assign a high score unless the evidence genuinely satisfies
-the requirement.
-
-Remember:
-
-RELATED INFORMATION IS NOT THE SAME AS SUPPORTING EVIDENCE.
 """.strip()
 
     @staticmethod
@@ -331,7 +189,6 @@ RELATED INFORMATION IS NOT THE SAME AS SUPPORTING EVIDENCE.
                     "content": prompt,
                 }
             ],
-            format="json",
             options={
                 "temperature": 0,
             },
@@ -489,7 +346,22 @@ RELATED INFORMATION IS NOT THE SAME AS SUPPORTING EVIDENCE.
                         }
                     )
 
-                except Exception:
+                    # Early stopping:
+                    # If the strongest available evidence already
+                    # satisfies the requirement, do not spend additional
+                    # Ollama calls evaluating weaker evidence.
+                    if (
+                        evaluation["status"] == "SUPPORTED"
+                        and evaluation["score"] >= 0.70
+                    ):
+                        break
+
+                except Exception as exc:
+                    print(
+                        f"[Coverage] Evaluation failed for "
+                        f"requirement={requirement.requirement_id}, "
+                        f"chunk={item.chunk_id}: {exc}"
+                    )
                     continue
 
             if not evidence_evaluations:

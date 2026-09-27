@@ -189,7 +189,7 @@ class AdaptiveRetrievalController:
                 reranked = self.reranker.rerank(
                     current_query,
                     candidates,
-                    top_k=self.rerank_top_k,
+                    top_k=candidate_k,
                 )
 
                 # ---------------------------------------------------------
@@ -227,15 +227,40 @@ class AdaptiveRetrievalController:
                 # 5. Evaluate coverage
                 # ---------------------------------------------------------
 
-                coverage_result = self.coverage_estimator.estimate(
-                    question=question,
-                    requirements=[requirement],
-                    requirement_evidence={
-                        requirement.requirement_id: list(
-                            all_evidence.values()
-                        )
-                    },
+                # Avoid repeating the same expensive LLM coverage evaluation
+                # when adaptive retrieval produces the same strongest evidence.
+                coverage_evidence = sorted(
+                    all_evidence.values(),
+                    key=lambda item: (
+                        item.rerank_score
+                        if item.rerank_score is not None
+                        else float("-inf")
+                    ),
+                    reverse=True,
+                )[: self.rerank_top_k]
+
+                coverage_signature = (
+                    requirement.requirement_id,
+                    tuple(item.chunk_id for item in coverage_evidence),
                 )
+
+                if (
+                    getattr(self, "_last_coverage_signature", None)
+                    == coverage_signature
+                    and getattr(self, "_last_coverage_result", None) is not None
+                ):
+                    coverage_result = self._last_coverage_result
+                else:
+                    coverage_result = self.coverage_estimator.estimate(
+                        question=question,
+                        requirements=[requirement],
+                        requirement_evidence={
+                            requirement.requirement_id: coverage_evidence
+                        },
+                    )
+
+                    self._last_coverage_signature = coverage_signature
+                    self._last_coverage_result = coverage_result
 
                 requirement_coverage = (
                     coverage_result.requirement_coverages[0]
@@ -271,7 +296,7 @@ class AdaptiveRetrievalController:
                         query_type=query_type,
                         requirement_id=requirement.requirement_id,
                         candidate_k=candidate_k,
-                        rerank_top_k=self.rerank_top_k,
+                        rerank_top_k=candidate_k,
                         retrieved_chunk_ids=[
                             item.chunk_id
                             for item in reranked
@@ -287,7 +312,7 @@ class AdaptiveRetrievalController:
                     query=current_query,
                     query_type=query_type,
                     candidate_k=candidate_k,
-                    rerank_top_k=self.rerank_top_k,
+                    rerank_top_k=candidate_k,
                     retrieved_chunk_ids=[
                         item.chunk_id for item in reranked
                     ],
@@ -333,6 +358,7 @@ class AdaptiveRetrievalController:
             original_query=requirement.description,
             final_query=final_query,
             attempts=attempts,
+            evidence=list(all_evidence.values()),
             all_chunk_ids=all_chunk_ids,
             final_candidate_k=final_candidate_k,
             total_unique_chunks=len(all_chunk_ids),
