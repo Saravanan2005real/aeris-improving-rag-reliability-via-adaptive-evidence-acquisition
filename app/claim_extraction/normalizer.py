@@ -1,9 +1,6 @@
 import os
 from typing import List, Set
 
-import torch
-from sentence_transformers import SentenceTransformer, util
-
 from app.claim_extraction.schemas import ExtractedClaim
 
 class ClaimNormalizer:
@@ -20,6 +17,7 @@ class ClaimNormalizer:
         self.model_name = model_name
         self.similarity_threshold = similarity_threshold
         # Load the sentence transformer model
+        from sentence_transformers import SentenceTransformer
         self.model = SentenceTransformer(self.model_name)
 
     def normalize_and_deduplicate(self, claims: List[ExtractedClaim]) -> List[ExtractedClaim]:
@@ -49,6 +47,7 @@ class ClaimNormalizer:
         # 2. Semantic deduplication
         texts = [claim.text for claim in unique_raw_claims]
         embeddings = self.model.encode(texts, convert_to_tensor=True)
+        from sentence_transformers import util
         cosine_scores = util.cos_sim(embeddings, embeddings).cpu().numpy()
 
         final_claims = []

@@ -1,0 +1,460 @@
+[
+  {
+    "experiment_id": "exp_20261002_121658",
+    "variant": "FULL_AERIS",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "question_type": "DIRECT_FACT",
+    "expected_answerability": true,
+    "final_status": "COMPLETED",
+    "final_confidence": 0.9,
+    "answer": "Avoiding catastrophic forgetting in mitigating model biases in sentence-pair classification with elastic weight consolidation",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "expected_chunk_ids": [
+      "test_document_p001_c001"
+    ],
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "evidence_count": 3,
+    "claim_count": 39,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "contradiction_count": 0,
+    "cross_lingual_count": 0,
+    "latency_seconds": 172.29846572875977,
+    "stage_latencies": {
+      "PLANNING": 0.0,
+      "RETRIEVAL": 0.0,
+      "COVERAGE": 0.0,
+      "CLAIM_GRAPH": 0.0,
+      "VERIFICATION": 0.0,
+      "CONTRADICTION": 0.0,
+      "CROSS_LINGUAL": 0.0,
+      "CALIBRATION": 0.0,
+      "SELECTIVE_VERIFICATION": 0.0,
+      "ANSWER_GENERATION": 0.0,
+      "COMPLETED": 0.0
+    },
+    "stage_statuses": {
+      "PLANNING": "COMPLETED",
+      "RETRIEVAL": "COMPLETED",
+      "COVERAGE": "COMPLETED",
+      "CLAIM_GRAPH": "COMPLETED",
+      "VERIFICATION": "COMPLETED",
+      "CONTRADICTION": "COMPLETED",
+      "CROSS_LINGUAL": "COMPLETED",
+      "CALIBRATION": "SKIPPED",
+      "SELECTIVE_VERIFICATION": "COMPLETED",
+      "ANSWER_GENERATION": "COMPLETED",
+      "COMPLETED": "COMPLETED"
+    },
+    "error": null,
+    "timestamp": "2026-10-02T12:19:51.119105"
+  },
+  {
+    "experiment_id": "exp_20261002_121658",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "question_type": "DIRECT_FACT",
+    "expected_answerability": true,
+    "final_status": "COMPLETED",
+    "final_confidence": 0.9,
+    "answer": "Avoiding catastrophic forgetting in mitigating model biases in sentence-pair classification with elastic weight consolidation",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "expected_chunk_ids": [
+      "test_document_p001_c001"
+    ],
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "evidence_count": 3,
+    "claim_count": 39,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "contradiction_count": 0,
+    "cross_lingual_count": 0,
+    "latency_seconds": 26.830809831619263,
+    "stage_latencies": {
+      "PLANNING": 0.0,
+      "RETRIEVAL": 0.0,
+      "COVERAGE": 0.0,
+      "CLAIM_GRAPH": 0.0,
+      "VERIFICATION": 0.0,
+      "CONTRADICTION": 0.0,
+      "CROSS_LINGUAL": 0.0,
+      "CALIBRATION": 0.0,
+      "SELECTIVE_VERIFICATION": 0.0,
+      "ANSWER_GENERATION": 0.0,
+      "COMPLETED": 0.0
+    },
+    "stage_statuses": {
+      "PLANNING": "COMPLETED",
+      "RETRIEVAL": "COMPLETED",
+      "COVERAGE": "COMPLETED",
+      "CLAIM_GRAPH": "COMPLETED",
+      "VERIFICATION": "COMPLETED",
+      "CONTRADICTION": "COMPLETED",
+      "CROSS_LINGUAL": "COMPLETED",
+      "CALIBRATION": "SKIPPED",
+      "SELECTIVE_VERIFICATION": "COMPLETED",
+      "ANSWER_GENERATION": "COMPLETED",
+      "COMPLETED": "COMPLETED"
+    },
+    "error": null,
+    "timestamp": "2026-10-02T12:20:17.951533"
+  },
+  {
+    "experiment_id": "exp_20261002_121658",
+    "variant": "NO_QUERY_REFORMULATION",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "question_type": "DIRECT_FACT",
+    "expected_answerability": true,
+    "final_status": "COMPLETED",
+    "final_confidence": 0.9,
+    "answer": "Avoiding catastrophic forgetting in mitigating model biases in sentence-pair classification with elastic weight consolidation",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "expected_chunk_ids": [
+      "test_document_p001_c001"
+    ],
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "evidence_count": 3,
+    "claim_count": 39,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "contradiction_count": 0,
+    "cross_lingual_count": 0,
+    "latency_seconds": 26.830575227737427,
+    "stage_latencies": {
+      "PLANNING": 0.0,
+      "RETRIEVAL": 0.0,
+      "COVERAGE": 0.0,
+      "CLAIM_GRAPH": 0.0,
+      "VERIFICATION": 0.0,
+      "CONTRADICTION": 0.0,
+      "CROSS_LINGUAL": 0.0,
+      "CALIBRATION": 0.0,
+      "SELECTIVE_VERIFICATION": 0.0,
+      "ANSWER_GENERATION": 0.0,
+      "COMPLETED": 0.0
+    },
+    "stage_statuses": {
+      "PLANNING": "COMPLETED",
+      "RETRIEVAL": "COMPLETED",
+      "COVERAGE": "COMPLETED",
+      "CLAIM_GRAPH": "COMPLETED",
+      "VERIFICATION": "COMPLETED",
+      "CONTRADICTION": "COMPLETED",
+      "CROSS_LINGUAL": "COMPLETED",
+      "CALIBRATION": "SKIPPED",
+      "SELECTIVE_VERIFICATION": "COMPLETED",
+      "ANSWER_GENERATION": "COMPLETED",
+      "COMPLETED": "COMPLETED"
+    },
+    "error": null,
+    "timestamp": "2026-10-02T12:20:44.784358"
+  },
+  {
+    "experiment_id": "exp_20261002_121658",
+    "variant": "NO_RETRIEVAL_MEMORY",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "question_type": "DIRECT_FACT",
+    "expected_answerability": true,
+    "final_status": "COMPLETED",
+    "final_confidence": 0.9,
+    "answer": "Avoiding catastrophic forgetting in mitigating model biases in sentence-pair classification with elastic weight consolidation",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "expected_chunk_ids": [
+      "test_document_p001_c001"
+    ],
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "evidence_count": 3,
+    "claim_count": 39,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "contradiction_count": 0,
+    "cross_lingual_count": 0,
+    "latency_seconds": 26.367018222808838,
+    "stage_latencies": {
+      "PLANNING": 0.0,
+      "RETRIEVAL": 0.0,
+      "COVERAGE": 0.0,
+      "CLAIM_GRAPH": 0.0,
+      "VERIFICATION": 0.0,
+      "CONTRADICTION": 0.0,
+      "CROSS_LINGUAL": 0.0,
+      "CALIBRATION": 0.0,
+      "SELECTIVE_VERIFICATION": 0.0,
+      "ANSWER_GENERATION": 0.0,
+      "COMPLETED": 0.0
+    },
+    "stage_statuses": {
+      "PLANNING": "COMPLETED",
+      "RETRIEVAL": "COMPLETED",
+      "COVERAGE": "COMPLETED",
+      "CLAIM_GRAPH": "COMPLETED",
+      "VERIFICATION": "COMPLETED",
+      "CONTRADICTION": "COMPLETED",
+      "CROSS_LINGUAL": "COMPLETED",
+      "CALIBRATION": "SKIPPED",
+      "SELECTIVE_VERIFICATION": "COMPLETED",
+      "ANSWER_GENERATION": "COMPLETED",
+      "COMPLETED": "COMPLETED"
+    },
+    "error": null,
+    "timestamp": "2026-10-02T12:21:11.153017"
+  },
+  {
+    "experiment_id": "exp_20261002_121658",
+    "variant": "NO_CLAIM_VERIFICATION",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "question_type": "DIRECT_FACT",
+    "expected_answerability": true,
+    "final_status": "COMPLETED",
+    "final_confidence": 1.0,
+    "answer": "Avoiding catastrophic forgetting in mitigating model biases in sentence-pair classification with elastic weight consolidation",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "expected_chunk_ids": [
+      "test_document_p001_c001"
+    ],
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "evidence_count": 3,
+    "claim_count": 39,
+    "verified_claim_count": 0,
+    "selected_verification_count": 2,
+    "contradiction_count": 0,
+    "cross_lingual_count": 0,
+    "latency_seconds": 25.19296431541443,
+    "stage_latencies": {
+      "PLANNING": 0.0,
+      "RETRIEVAL": 0.0,
+      "COVERAGE": 0.0,
+      "CLAIM_GRAPH": 0.0,
+      "VERIFICATION": 0.0,
+      "CONTRADICTION": 0.0,
+      "CROSS_LINGUAL": 0.0,
+      "CALIBRATION": 0.0,
+      "SELECTIVE_VERIFICATION": 0.0,
+      "ANSWER_GENERATION": 0.0,
+      "COMPLETED": 0.0
+    },
+    "stage_statuses": {
+      "PLANNING": "COMPLETED",
+      "RETRIEVAL": "COMPLETED",
+      "COVERAGE": "COMPLETED",
+      "CLAIM_GRAPH": "COMPLETED",
+      "VERIFICATION": "SKIPPED",
+      "CONTRADICTION": "COMPLETED",
+      "CROSS_LINGUAL": "COMPLETED",
+      "CALIBRATION": "SKIPPED",
+      "SELECTIVE_VERIFICATION": "COMPLETED",
+      "ANSWER_GENERATION": "COMPLETED",
+      "COMPLETED": "COMPLETED"
+    },
+    "error": null,
+    "timestamp": "2026-10-02T12:21:36.348803"
+  },
+  {
+    "experiment_id": "exp_20261002_121658",
+    "variant": "NO_CONTRADICTION_ANALYSIS",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "question_type": "DIRECT_FACT",
+    "expected_answerability": true,
+    "final_status": "FAILED",
+    "final_confidence": null,
+    "answer": null,
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "expected_chunk_ids": [
+      "test_document_p001_c001"
+    ],
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "evidence_count": 3,
+    "claim_count": 0,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "contradiction_count": 0,
+    "cross_lingual_count": 0,
+    "latency_seconds": 22.9558846950531,
+    "stage_latencies": {
+      "PLANNING": 0.0,
+      "RETRIEVAL": 0.0,
+      "COVERAGE": 0.0,
+      "CLAIM_GRAPH": 0.0,
+      "VERIFICATION": 0.0,
+      "CONTRADICTION": 0.0,
+      "CROSS_LINGUAL": 0.0,
+      "CALIBRATION": 0.0,
+      "SELECTIVE_VERIFICATION": 0.0,
+      "FAILED": 0.0
+    },
+    "stage_statuses": {
+      "PLANNING": "COMPLETED",
+      "RETRIEVAL": "COMPLETED",
+      "COVERAGE": "COMPLETED",
+      "CLAIM_GRAPH": "COMPLETED",
+      "VERIFICATION": "COMPLETED",
+      "CONTRADICTION": "SKIPPED",
+      "CROSS_LINGUAL": "COMPLETED",
+      "CALIBRATION": "SKIPPED",
+      "SELECTIVE_VERIFICATION": "COMPLETED",
+      "FAILED": "FAILED"
+    },
+    "error": null,
+    "timestamp": "2026-10-02T12:21:59.307359"
+  },
+  {
+    "experiment_id": "exp_20261002_121658",
+    "variant": "NO_CROSSLINGUAL_AGREEMENT",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "question_type": "DIRECT_FACT",
+    "expected_answerability": true,
+    "final_status": "COMPLETED",
+    "final_confidence": 0.9,
+    "answer": "Avoiding catastrophic forgetting in mitigating model biases in sentence-pair classification with elastic weight consolidation",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "expected_chunk_ids": [
+      "test_document_p001_c001"
+    ],
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "evidence_count": 3,
+    "claim_count": 39,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "contradiction_count": 0,
+    "cross_lingual_count": 0,
+    "latency_seconds": 26.978204250335693,
+    "stage_latencies": {
+      "PLANNING": 0.0,
+      "RETRIEVAL": 0.0,
+      "COVERAGE": 0.0,
+      "CLAIM_GRAPH": 0.0,
+      "VERIFICATION": 0.0,
+      "CONTRADICTION": 0.0,
+      "CROSS_LINGUAL": 0.0,
+      "CALIBRATION": 0.0,
+      "SELECTIVE_VERIFICATION": 0.0,
+      "ANSWER_GENERATION": 0.0,
+      "COMPLETED": 0.0
+    },
+    "stage_statuses": {
+      "PLANNING": "COMPLETED",
+      "RETRIEVAL": "COMPLETED",
+      "COVERAGE": "COMPLETED",
+      "CLAIM_GRAPH": "COMPLETED",
+      "VERIFICATION": "COMPLETED",
+      "CONTRADICTION": "COMPLETED",
+      "CROSS_LINGUAL": "SKIPPED",
+      "CALIBRATION": "SKIPPED",
+      "SELECTIVE_VERIFICATION": "COMPLETED",
+      "ANSWER_GENERATION": "COMPLETED",
+      "COMPLETED": "COMPLETED"
+    },
+    "error": null,
+    "timestamp": "2026-10-02T12:22:26.288247"
+  },
+  {
+    "experiment_id": "exp_20261002_121658",
+    "variant": "NO_SELECTIVE_VERIFICATION",
+    "question_id": "q_df_01",
+    "question": "What is the full title of the paper?",
+    "document_id": "test_document",
+    "question_type": "DIRECT_FACT",
+    "expected_answerability": true,
+    "final_status": "COMPLETED",
+    "final_confidence": 0.9,
+    "answer": "Avoiding catastrophic forgetting in mitigating model biases in sentence-pair classification with elastic weight consolidation",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "expected_chunk_ids": [
+      "test_document_p001_c001"
+    ],
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "evidence_count": 3,
+    "claim_count": 39,
+    "verified_claim_count": 2,
+    "selected_verification_count": 0,
+    "contradiction_count": 0,
+    "cross_lingual_count": 0,
+    "latency_seconds": 24.609597206115723,
+    "stage_latencies": {
+      "PLANNING": 0.0,
+      "RETRIEVAL": 0.0,
+      "COVERAGE": 0.0,
+      "CLAIM_GRAPH": 0.0,
+      "VERIFICATION": 0.0,
+      "CONTRADICTION": 0.0,
+      "CROSS_LINGUAL": 0.0,
+      "CALIBRATION": 0.0,
+      "SELECTIVE_VERIFICATION": 0.0,
+      "ANSWER_GENERATION": 0.0,
+      "COMPLETED": 0.0
+    },
+    "stage_statuses": {
+      "PLANNING": "COMPLETED",
+      "RETRIEVAL": "COMPLETED",
+      "COVERAGE": "COMPLETED",
+      "CLAIM_GRAPH": "COMPLETED",
+      "VERIFICATION": "COMPLETED",
+      "CONTRADICTION": "COMPLETED",
+      "CROSS_LINGUAL": "COMPLETED",
+      "CALIBRATION": "SKIPPED",
+      "SELECTIVE_VERIFICATION": "SKIPPED",
+      "ANSWER_GENERATION": "COMPLETED",
+      "COMPLETED": "COMPLETED"
+    },
+    "error": null,
+    "timestamp": "2026-10-02T12:22:50.901100"
+  }
+]

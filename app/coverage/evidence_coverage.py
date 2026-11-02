@@ -1,4 +1,6 @@
 import json
+import time
+from app.performance_cache import aeris_cache
 import re
 from typing import List, Optional
 
@@ -7,6 +9,8 @@ from pydantic import BaseModel, Field
 
 from app.config import settings
 from app.planning.schemas import InformationRequirement
+from app.utils.json_parser import extract_json
+from app.utils.model_client import get_ollama_client, timed_model_chat
 
 
 class EvidenceItem(BaseModel):
@@ -97,11 +101,13 @@ class EvidenceCoverageEstimator:
         self,
         model: Optional[str] = None,
         host: Optional[str] = None,
+        timeout: Optional[float] = None,
     ):
         self.model = model or settings.ollama_model
         self.host = host or settings.ollama_host
+        self.timeout = timeout or settings.ollama_timeout
 
-        self.client = ollama.Client(host=self.host)
+        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
 
     def _build_prompt(
         self,
@@ -130,7 +136,8 @@ RULES:
 - coverage_score = (0.30 * directness) + (0.25 * relevance) + (0.25 * completeness) + (0.20 * evidence_type_match)
 - coverage_status: "SUPPORTED" if score >= 0.70, "PARTIAL" if score >= 0.35, else "UNSUPPORTED"
 - Do not infer facts. Related topic/terminology is NOT supporting evidence.
-- Respond ONLY with valid JSON.
+- Respond ONLY with valid JSON. Do not include markdown blocks, preamble, or explanation outside the JSON.
+- Start your response exactly with {{ and end exactly with }}.
 
 OUTPUT FORMAT:
 {{
@@ -144,31 +151,6 @@ OUTPUT FORMAT:
 }}
 """.strip()
 
-    @staticmethod
-    def _extract_json(text: str) -> str:
-        text = text.strip()
-
-        text = re.sub(
-            r"^```(?:json)?\s*",
-            "",
-            text
-        )
-
-        text = re.sub(
-            r"\s*```$",
-            "",
-            text
-        )
-
-        start = text.find("{")
-        end = text.rfind("}")
-
-        if start == -1 or end == -1 or end <= start:
-            raise ValueError(
-                "No valid JSON object found in model response."
-            )
-
-        return text[start:end + 1]
 
     def _evaluate_pair(
         self,
@@ -181,22 +163,32 @@ OUTPUT FORMAT:
             evidence,
         )
 
-        response = self.client.chat(
-            model=self.model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
-            options={
-                "temperature": 0,
-            },
-        )
+        try:
+            chat_res = timed_model_chat(
+                client=self.client,
+                model=self.model,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ],
+                format="json",
+                options={
+                    "temperature": 0,
+                    "num_predict": 1024,
+                },
+                stage="Coverage",
+            )
+            elapsed = chat_res["elapsed_seconds"]
+            raw_content = chat_res["content"]
+        except Exception as e:
+            elapsed = 0.0
+            ctx_size = len(prompt)
+            print(f"Error during evidence coverage [Model: {self.model}, Stage: coverage, Context: {ctx_size} chars]: {e}")
+            raise e
 
-        raw_content = response["message"]["content"]
-
-        json_text = self._extract_json(
+        json_text = extract_json(
             raw_content
         )
 
@@ -333,11 +325,29 @@ OUTPUT FORMAT:
 
             for item in req_evidence:
 
+                # OPTIMIZATION: FAST-PATH DETERMINISTIC THRESHOLDING
+                if getattr(item, "rerank_score", 0.0) >= 0.90:
+                    evidence_evaluations.append({
+                        "evidence": item,
+                        "status": "SUPPORTED",
+                        "score": 0.90,
+                        "directness": 0.9,
+                        "relevance": 0.9,
+                        "completeness": 0.9,
+                        "evidence_type_match": 0.9,
+                        "explanation": "Fast-path: Exceptionally high reranker confidence indicates sufficient semantic overlap."
+                    })
+                    break
+
                 try:
-                    evaluation = self._evaluate_pair(
+                    cache_key = {"req": requirement.description, "chunk": item.chunk_id}
+                    evaluation = aeris_cache.get("coverage", cache_key)
+                    if not evaluation:
+                        evaluation = self._evaluate_pair(
                         requirement,
                         item,
                     )
+                        aeris_cache.set("coverage", cache_key, evaluation)
 
                     evidence_evaluations.append(
                         {
@@ -362,7 +372,7 @@ OUTPUT FORMAT:
                         f"requirement={requirement.requirement_id}, "
                         f"chunk={item.chunk_id}: {exc}"
                     )
-                    continue
+                    raise exc
 
             if not evidence_evaluations:
                 requirement_coverages.append(

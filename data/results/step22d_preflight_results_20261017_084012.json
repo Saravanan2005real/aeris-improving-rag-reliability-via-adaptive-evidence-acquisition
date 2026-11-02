@@ -1,0 +1,43 @@
+{
+  "step": "Step 22D",
+  "timestamp_utc": "2026-10-17T08:40:12.034951+00:00",
+  "evaluated_target": "exp_final224_repaired_20261011_222000 remediation",
+  "gate_status": "PASS",
+  "checks": {
+    "adaptive_retrieval_ablation_isolated": {
+      "status": "PASS",
+      "details": "Candidate depth schedule pinned to base k under NO_ADAPTIVE_RETRIEVAL; reformulation executed and isolated in telemetry."
+    },
+    "known_supported_cases_accepted": {
+      "status": "PASS",
+      "details": "All 5 synthetic test categories (direct facts, methods, quantitative, multi-hop, paraphrases) validated as SUPPORTED."
+    },
+    "genuinely_unsupported_cases_rejected": {
+      "status": "PASS",
+      "details": "Genuinely ungrounded claim strictly rejected; structured downgrade category EVIDENCE_UNSUPPORTED returned."
+    },
+    "retrieval_memory_produces_valid_hit": {
+      "status": "PASS",
+      "details": "End-to-end evidence delivery verified on cache hits; chunk IDs, text payloads, and coverage preserved; depth and session/document isolation enforced; malformed entry fallback verified."
+    },
+    "eligible_cross_lingual_pairs_evaluated": {
+      "status": "PASS",
+      "details": "Eligible bilingual pairs evaluated; monolingual pairs bypassed as SKIPPED (MONOLINGUAL) rather than falsely counted."
+    },
+    "model_timeouts_and_monotonic_timing_enforced": {
+      "status": "PASS",
+      "details": "Explicit HTTP timeouts enforced with ModelTimeoutError; sleep/suspension drift detected and flagged with LatencyContaminationError."
+    },
+    "telemetry_distinguishes_execution_bypass_skip_failure": {
+      "status": "PASS",
+      "details": "Telemetry cleanly records execution vs bypass vs skip vs failure; downgrade_details captures structured defect categories."
+    }
+  },
+  "summary": {
+    "total_checks": 7,
+    "passed": 7,
+    "failed": 0,
+    "unresolved": 0,
+    "overall_gate_status": "PASS"
+  }
+}

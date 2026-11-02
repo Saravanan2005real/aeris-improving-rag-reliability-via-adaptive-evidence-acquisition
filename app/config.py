@@ -5,6 +5,10 @@ class Settings(BaseSettings):
     ollama_host: str = "http://localhost:11434"
     ollama_model: str = "llama3.2:latest"
     embedding_model: str = "nomic-embed-text:latest"
+    ollama_timeout: float = 60.0
+    ollama_connect_timeout: float = 10.0
+    ollama_claim_extraction_timeout: float = 180.0
+    max_anomaly_latency_seconds: float = 300.0
 
     model_config = SettingsConfigDict(
         env_file=".env",

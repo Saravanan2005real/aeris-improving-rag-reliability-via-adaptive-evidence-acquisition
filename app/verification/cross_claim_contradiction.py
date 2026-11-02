@@ -109,10 +109,28 @@ class CrossClaimContradictionAnalyzer:
                     evidence_a = graph.evidence[chunk_a_id]
                     evidence_b = graph.evidence[chunk_b_id]
 
-                    result = self.classifier.classify(
-                        evidence_a=evidence_a.text,
-                        evidence_b=evidence_b.text,
-                    )
+                    # OPTIMIZATION: Semantic pre-filtering (word overlap)
+                    import re
+                    stopwords = {"a", "an", "the", "is", "are", "was", "were", "to", "of", "and", "in", "it", "that", "this", "on", "for", "with", "as", "by"}
+                    words1 = set(w for w in evidence_a.text.lower().split() if w not in stopwords)
+                    words2 = set(w for w in evidence_b.text.lower().split() if w not in stopwords)
+                    
+                    if len(words1) > 0 and len(words2) > 0 and len(words1.intersection(words2)) == 0:
+                        # No overlap, highly unlikely to contradict. Skip expensive NLI inference.
+                        continue
+                        
+                    from app.performance_cache import aeris_cache
+                    cache_key = {"p": f"{chunk_a_id}<>{chunk_b_id}"}
+                    cached = aeris_cache.get("contradiction", cache_key)
+                    if cached:
+                        from app.verification.contradiction_classifier import ContradictionResult
+                        result = ContradictionResult(**cached)
+                    else:
+                        result = self.classifier.classify(
+                            evidence_a=evidence_a.text,
+                            evidence_b=evidence_b.text,
+                        )
+                        aeris_cache.set("contradiction", cache_key, result.dict())
 
                     results.append(
                         CrossClaimContradictionResult(

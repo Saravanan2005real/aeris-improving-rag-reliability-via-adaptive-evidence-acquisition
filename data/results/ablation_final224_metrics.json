@@ -1,0 +1,256 @@
+{
+  "variant_performance": {
+    "FULL_AERIS": {
+      "count": 28,
+      "successful_runs": 27,
+      "failed_runs": 1,
+      "mean_latency": 101.93225864853177,
+      "median_latency": 69.39657878875732,
+      "p90_latency": 200.48127374649047,
+      "p95_latency": 209.9345225214958,
+      "max_latency": 216.75452375411987,
+      "json_repairs": 16,
+      "schema_retries": 185,
+      "per_stage_mean_latency": {
+        "PLANNING": 5.9831973178557485,
+        "RETRIEVAL": 9.102358425000732,
+        "COVERAGE": 3.881071461364627e-05,
+        "CLAIM_GRAPH": 71.09373333928981,
+        "VERIFICATION": 2.52701714642691,
+        "CONTRADICTION": 0.29561074642905233,
+        "CROSS_LINGUAL": 8.27678564486892e-05,
+        "CALIBRATION": 1.0257139885132866e-05,
+        "SELECTIVE_VERIFICATION": 1.5761667178563326,
+        "ANSWER_GENERATION": 6.029950264286266
+      },
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_ADAPTIVE_RETRIEVAL": {
+      "count": 28,
+      "successful_runs": 28,
+      "failed_runs": 0,
+      "mean_latency": 99.66380725588117,
+      "median_latency": 63.59990096092224,
+      "p90_latency": 200.86712882518768,
+      "p95_latency": 203.67803592681884,
+      "max_latency": 211.31632351875305,
+      "json_repairs": 13,
+      "schema_retries": 183,
+      "per_stage_mean_latency": {
+        "PLANNING": 5.8810405607146095,
+        "RETRIEVAL": 7.656324975001293,
+        "COVERAGE": 3.858571497923029e-05,
+        "CLAIM_GRAPH": 75.48867970357034,
+        "VERIFICATION": 2.6059639464282163,
+        "CONTRADICTION": 0.24492817142891,
+        "CROSS_LINGUAL": 8.969999908003956e-05,
+        "CALIBRATION": 1.0828569689432957e-05,
+        "SELECTIVE_VERIFICATION": 1.59212173571411,
+        "ANSWER_GENERATION": 6.194040899998591
+      },
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_CLAIM_VERIFICATION": {
+      "count": 28,
+      "successful_runs": 28,
+      "failed_runs": 0,
+      "mean_latency": 98.61979902642113,
+      "median_latency": 64.54078149795532,
+      "p90_latency": 195.3866551399231,
+      "p95_latency": 207.64530783891675,
+      "max_latency": 222.95940828323364,
+      "json_repairs": 6,
+      "schema_retries": 183,
+      "per_stage_mean_latency": {
+        "PLANNING": 5.919790953570295,
+        "RETRIEVAL": 8.423958639284788,
+        "COVERAGE": 4.3171429881892565e-05,
+        "CLAIM_GRAPH": 76.1498086142861,
+        "VERIFICATION": 3.82142752641812e-06,
+        "CONTRADICTION": 0.29808864285587333,
+        "CROSS_LINGUAL": 0.00011329285605045567,
+        "CALIBRATION": 2.839288624402668e-06,
+        "SELECTIVE_VERIFICATION": 1.9054644071407634,
+        "ANSWER_GENERATION": 5.921822125002758
+      },
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_CONTRADICTION_ANALYSIS": {
+      "count": 28,
+      "successful_runs": 28,
+      "failed_runs": 0,
+      "mean_latency": 101.08879486152104,
+      "median_latency": 68.24727511405945,
+      "p90_latency": 202.85754296779632,
+      "p95_latency": 203.8487132191658,
+      "max_latency": 219.15282154083252,
+      "json_repairs": 13,
+      "schema_retries": 183,
+      "per_stage_mean_latency": {
+        "PLANNING": 5.991999253567234,
+        "RETRIEVAL": 8.398696221432017,
+        "COVERAGE": 3.978928621758574e-05,
+        "CLAIM_GRAPH": 76.2810491250015,
+        "VERIFICATION": 2.619266667856469,
+        "CONTRADICTION": 2.53214654679011e-06,
+        "CROSS_LINGUAL": 0.00013054643308610788,
+        "CALIBRATION": 1.525714053838913e-05,
+        "SELECTIVE_VERIFICATION": 1.6089189500011603,
+        "ANSWER_GENERATION": 6.187980624999909
+      },
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_CROSSLINGUAL_AGREEMENT": {
+      "count": 28,
+      "successful_runs": 28,
+      "failed_runs": 0,
+      "mean_latency": 100.36128974812371,
+      "median_latency": 66.16552579402924,
+      "p90_latency": 199.18377237319947,
+      "p95_latency": 203.9514841079712,
+      "max_latency": 218.53406929969788,
+      "json_repairs": 13,
+      "schema_retries": 183,
+      "per_stage_mean_latency": {
+        "PLANNING": 5.88929574285742,
+        "RETRIEVAL": 8.398630035714762,
+        "COVERAGE": 3.9525001609165755e-05,
+        "CLAIM_GRAPH": 75.47225684642866,
+        "VERIFICATION": 2.5859085249997276,
+        "CONTRADICTION": 0.24200089642960979,
+        "CROSS_LINGUAL": 1.3714265410921404e-06,
+        "CALIBRATION": 1.858928590081632e-05,
+        "SELECTIVE_VERIFICATION": 1.593652953570459,
+        "ANSWER_GENERATION": 6.178770703574368
+      },
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_QUERY_REFORMULATION": {
+      "count": 28,
+      "successful_runs": 28,
+      "failed_runs": 0,
+      "mean_latency": 98.88507169485092,
+      "median_latency": 63.56153893470764,
+      "p90_latency": 200.32748799324037,
+      "p95_latency": 202.940749502182,
+      "max_latency": 204.4641227722168,
+      "json_repairs": 13,
+      "schema_retries": 183,
+      "per_stage_mean_latency": {
+        "PLANNING": 5.8809118107154585,
+        "RETRIEVAL": 7.184154417855358,
+        "COVERAGE": 3.954999972068306e-05,
+        "CLAIM_GRAPH": 75.23243688571529,
+        "VERIFICATION": 2.5890493821415084,
+        "CONTRADICTION": 0.23841538214453198,
+        "CROSS_LINGUAL": 8.265714443820928e-05,
+        "CALIBRATION": 9.960712174818451e-06,
+        "SELECTIVE_VERIFICATION": 1.5819103071459852,
+        "ANSWER_GENERATION": 6.177304700001384
+      },
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_RETRIEVAL_MEMORY": {
+      "count": 28,
+      "successful_runs": 28,
+      "failed_runs": 0,
+      "mean_latency": 100.28652283123562,
+      "median_latency": 66.28764283657074,
+      "p90_latency": 201.02290618419647,
+      "p95_latency": 206.3762205004692,
+      "max_latency": 218.70346975326538,
+      "json_repairs": 13,
+      "schema_retries": 183,
+      "per_stage_mean_latency": {
+        "PLANNING": 5.880774839283341,
+        "RETRIEVAL": 8.357529703571345,
+        "COVERAGE": 4.91249977910359e-05,
+        "CLAIM_GRAPH": 75.45336767500079,
+        "VERIFICATION": 2.582937382140829,
+        "CONTRADICTION": 0.2374983892857147,
+        "CROSS_LINGUAL": 8.521428597824914e-05,
+        "CALIBRATION": 1.0385714371555618e-05,
+        "SELECTIVE_VERIFICATION": 1.5795566642846097,
+        "ANSWER_GENERATION": 6.194028664283645
+      },
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_SELECTIVE_VERIFICATION": {
+      "count": 28,
+      "successful_runs": 28,
+      "failed_runs": 0,
+      "mean_latency": 98.15486348526818,
+      "median_latency": 65.14895915985107,
+      "p90_latency": 195.99420096874238,
+      "p95_latency": 201.5241000175476,
+      "max_latency": 212.98718237876892,
+      "json_repairs": 10,
+      "schema_retries": 183,
+      "per_stage_mean_latency": {
+        "PLANNING": 5.88114387143183,
+        "RETRIEVAL": 8.318129053573232,
+        "COVERAGE": 4.029643501520955e-05,
+        "CLAIM_GRAPH": 74.8941568035755,
+        "VERIFICATION": 2.6061781535754562,
+        "CONTRADICTION": 0.24382038928680622,
+        "CROSS_LINGUAL": 0.00010596785640310762,
+        "CALIBRATION": 1.4253570822932358e-05,
+        "SELECTIVE_VERIFICATION": 8.35712333875043e-07,
+        "ANSWER_GENERATION": 6.208885671426417
+      },
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    }
+  },
+  "deltas_vs_full_aeris": {
+    "NO_ADAPTIVE_RETRIEVAL": {
+      "evidence_hit_rate_delta": 0.0,
+      "evidence_recall_delta": 0.0,
+      "latency_delta_seconds": -2.2684513926506042,
+      "latency_delta_percent": -2.2254499436457635
+    },
+    "NO_CLAIM_VERIFICATION": {
+      "evidence_hit_rate_delta": 0.0,
+      "evidence_recall_delta": 0.0,
+      "latency_delta_seconds": -3.3124596221106373,
+      "latency_delta_percent": -3.24966763812444
+    },
+    "NO_CONTRADICTION_ANALYSIS": {
+      "evidence_hit_rate_delta": 0.0,
+      "evidence_recall_delta": 0.0,
+      "latency_delta_seconds": -0.8434637870107338,
+      "latency_delta_percent": -0.8274748329859392
+    },
+    "NO_CROSSLINGUAL_AGREEMENT": {
+      "evidence_hit_rate_delta": 0.0,
+      "evidence_recall_delta": 0.0,
+      "latency_delta_seconds": -1.5709689004080616,
+      "latency_delta_percent": -1.541189139960934
+    },
+    "NO_QUERY_REFORMULATION": {
+      "evidence_hit_rate_delta": 0.0,
+      "evidence_recall_delta": 0.0,
+      "latency_delta_seconds": -3.04718695368085,
+      "latency_delta_percent": -2.989423558431805
+    },
+    "NO_RETRIEVAL_MEMORY": {
+      "evidence_hit_rate_delta": 0.0,
+      "evidence_recall_delta": 0.0,
+      "latency_delta_seconds": -1.6457358172961563,
+      "latency_delta_percent": -1.6145387526148587
+    },
+    "NO_SELECTIVE_VERIFICATION": {
+      "evidence_hit_rate_delta": 0.0,
+      "evidence_recall_delta": 0.0,
+      "latency_delta_seconds": -3.7773951632635914,
+      "latency_delta_percent": -3.7057897208853823
+    }
+  }
+}

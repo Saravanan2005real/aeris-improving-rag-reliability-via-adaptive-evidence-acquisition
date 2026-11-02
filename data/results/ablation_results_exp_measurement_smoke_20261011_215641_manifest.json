@@ -1,0 +1,11 @@
+{
+  "experiment_id": "exp_measurement_smoke_20261011_215641",
+  "timestamp": "2026-10-11T21:57:11.481037",
+  "model_name": "llama3.2",
+  "benchmark_path": "data/benchmark/aeris_benchmark.json",
+  "benchmark_question_count": 4,
+  "variant_list": [
+    "FULL_AERIS"
+  ],
+  "expected_run_count": 4
+}

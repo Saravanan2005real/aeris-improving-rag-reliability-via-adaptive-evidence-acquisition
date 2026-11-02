@@ -1,0 +1,554 @@
+{
+  "total_failures": 63,
+  "stage_counts": {
+    "FAILED": 63
+  },
+  "type_counts": {
+    "Pydantic Validation Error": 16,
+    "JSON Parsing Error": 47
+  },
+  "question_stage_matrix": {
+    "q_df_06": {
+      "FULL_AERIS": "FAILED",
+      "NO_ADAPTIVE_RETRIEVAL": "FAILED",
+      "NO_QUERY_REFORMULATION": "FAILED",
+      "NO_RETRIEVAL_MEMORY": "FAILED",
+      "NO_CLAIM_VERIFICATION": "FAILED",
+      "NO_CONTRADICTION_ANALYSIS": "FAILED",
+      "NO_CROSSLINGUAL_AGREEMENT": "FAILED",
+      "NO_SELECTIVE_VERIFICATION": "FAILED"
+    },
+    "q_mh_02": {
+      "FULL_AERIS": "FAILED",
+      "NO_ADAPTIVE_RETRIEVAL": "FAILED",
+      "NO_QUERY_REFORMULATION": "FAILED",
+      "NO_RETRIEVAL_MEMORY": "FAILED",
+      "NO_CLAIM_VERIFICATION": "FAILED",
+      "NO_CONTRADICTION_ANALYSIS": "FAILED",
+      "NO_CROSSLINGUAL_AGREEMENT": "FAILED",
+      "NO_SELECTIVE_VERIFICATION": "FAILED"
+    },
+    "q_mh_04": {
+      "FULL_AERIS": "FAILED",
+      "NO_ADAPTIVE_RETRIEVAL": "FAILED",
+      "NO_QUERY_REFORMULATION": "FAILED",
+      "NO_RETRIEVAL_MEMORY": "FAILED",
+      "NO_CLAIM_VERIFICATION": "FAILED",
+      "NO_CONTRADICTION_ANALYSIS": "FAILED",
+      "NO_CROSSLINGUAL_AGREEMENT": "FAILED",
+      "NO_SELECTIVE_VERIFICATION": "FAILED"
+    },
+    "q_meth_01": {
+      "FULL_AERIS": "FAILED",
+      "NO_ADAPTIVE_RETRIEVAL": "FAILED",
+      "NO_QUERY_REFORMULATION": "FAILED",
+      "NO_RETRIEVAL_MEMORY": "FAILED",
+      "NO_CLAIM_VERIFICATION": "FAILED",
+      "NO_CONTRADICTION_ANALYSIS": "FAILED",
+      "NO_CROSSLINGUAL_AGREEMENT": "FAILED",
+      "NO_SELECTIVE_VERIFICATION": "FAILED"
+    },
+    "q_comp_01": {
+      "FULL_AERIS": "FAILED",
+      "NO_ADAPTIVE_RETRIEVAL": "FAILED",
+      "NO_QUERY_REFORMULATION": "FAILED",
+      "NO_RETRIEVAL_MEMORY": "FAILED",
+      "NO_CLAIM_VERIFICATION": "FAILED",
+      "NO_CONTRADICTION_ANALYSIS": "FAILED",
+      "NO_CROSSLINGUAL_AGREEMENT": "FAILED",
+      "NO_SELECTIVE_VERIFICATION": "FAILED"
+    },
+    "q_comp_02": {
+      "FULL_AERIS": "FAILED",
+      "NO_ADAPTIVE_RETRIEVAL": "FAILED",
+      "NO_QUERY_REFORMULATION": "FAILED",
+      "NO_RETRIEVAL_MEMORY": "FAILED",
+      "NO_CLAIM_VERIFICATION": "FAILED",
+      "NO_CONTRADICTION_ANALYSIS": "FAILED",
+      "NO_CROSSLINGUAL_AGREEMENT": "FAILED",
+      "NO_SELECTIVE_VERIFICATION": "FAILED"
+    },
+    "q_quant_02": {
+      "FULL_AERIS": "FAILED",
+      "NO_ADAPTIVE_RETRIEVAL": "FAILED",
+      "NO_QUERY_REFORMULATION": "FAILED",
+      "NO_RETRIEVAL_MEMORY": "FAILED",
+      "NO_CONTRADICTION_ANALYSIS": "FAILED",
+      "NO_CROSSLINGUAL_AGREEMENT": "FAILED",
+      "NO_SELECTIVE_VERIFICATION": "FAILED"
+    },
+    "q_contra_02": {
+      "FULL_AERIS": "FAILED",
+      "NO_ADAPTIVE_RETRIEVAL": "FAILED",
+      "NO_QUERY_REFORMULATION": "FAILED",
+      "NO_RETRIEVAL_MEMORY": "FAILED",
+      "NO_CLAIM_VERIFICATION": "FAILED",
+      "NO_CONTRADICTION_ANALYSIS": "FAILED",
+      "NO_CROSSLINGUAL_AGREEMENT": "FAILED",
+      "NO_SELECTIVE_VERIFICATION": "FAILED"
+    }
+  },
+  "q_quant_02_analysis": {
+    "FULL_AERIS_status": "FAILED",
+    "FULL_AERIS_failed_stage": [
+      "FAILED"
+    ],
+    "NO_CLAIM_VERIFICATION_status": "COMPLETED",
+    "NO_CLAIM_VERIFICATION_stage_statuses": {
+      "PLANNING": "COMPLETED",
+      "RETRIEVAL": "COMPLETED",
+      "COVERAGE": "COMPLETED",
+      "CLAIM_GRAPH": "COMPLETED",
+      "VERIFICATION": "SKIPPED",
+      "CONTRADICTION": "COMPLETED",
+      "CROSS_LINGUAL": "COMPLETED",
+      "CALIBRATION": "SKIPPED",
+      "SELECTIVE_VERIFICATION": "COMPLETED",
+      "ANSWER_GENERATION": "COMPLETED",
+      "COMPLETED": "COMPLETED"
+    }
+  },
+  "failures": [
+    {
+      "question_id": "q_df_06",
+      "variant": "FULL_AERIS",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 459, in run\n    answer_result = self.answer_generator.generate(\n  File \"E:\\aeris-rag\\app\\answer_generation\\answer_generator.py\", line 149, in generate\n    return GroundedAnswer(\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\npydantic_core._pydantic_core.ValidationError: 1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\n"
+    },
+    {
+      "question_id": "q_mh_02",
+      "variant": "FULL_AERIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_mh_04",
+      "variant": "FULL_AERIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_meth_01",
+      "variant": "FULL_AERIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_01",
+      "variant": "FULL_AERIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_02",
+      "variant": "FULL_AERIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_quant_02",
+      "variant": "FULL_AERIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_contra_02",
+      "variant": "FULL_AERIS",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 75, in run\n    plan = self.planner.plan(request.question)\n  File \"E:\\aeris-rag\\app\\planning\\requirement_planner.py\", line 324, in plan\n    plan = RequirementPlan.model_validate(data)\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 716, in model_validate\n    return cls.__pydantic_validator__.validate_python(\npydantic_core._pydantic_core.ValidationError: 1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\n"
+    },
+    {
+      "question_id": "q_df_06",
+      "variant": "NO_ADAPTIVE_RETRIEVAL",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 459, in run\n    answer_result = self.answer_generator.generate(\n  File \"E:\\aeris-rag\\app\\answer_generation\\answer_generator.py\", line 149, in generate\n    return GroundedAnswer(\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\npydantic_core._pydantic_core.ValidationError: 1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\n"
+    },
+    {
+      "question_id": "q_mh_02",
+      "variant": "NO_ADAPTIVE_RETRIEVAL",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_mh_04",
+      "variant": "NO_ADAPTIVE_RETRIEVAL",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_meth_01",
+      "variant": "NO_ADAPTIVE_RETRIEVAL",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_01",
+      "variant": "NO_ADAPTIVE_RETRIEVAL",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_02",
+      "variant": "NO_ADAPTIVE_RETRIEVAL",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_quant_02",
+      "variant": "NO_ADAPTIVE_RETRIEVAL",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_contra_02",
+      "variant": "NO_ADAPTIVE_RETRIEVAL",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 75, in run\n    plan = self.planner.plan(request.question)\n  File \"E:\\aeris-rag\\app\\planning\\requirement_planner.py\", line 324, in plan\n    plan = RequirementPlan.model_validate(data)\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 716, in model_validate\n    return cls.__pydantic_validator__.validate_python(\npydantic_core._pydantic_core.ValidationError: 1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\n"
+    },
+    {
+      "question_id": "q_df_06",
+      "variant": "NO_QUERY_REFORMULATION",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 459, in run\n    answer_result = self.answer_generator.generate(\n  File \"E:\\aeris-rag\\app\\answer_generation\\answer_generator.py\", line 149, in generate\n    return GroundedAnswer(\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\npydantic_core._pydantic_core.ValidationError: 1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\n"
+    },
+    {
+      "question_id": "q_mh_02",
+      "variant": "NO_QUERY_REFORMULATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_mh_04",
+      "variant": "NO_QUERY_REFORMULATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_meth_01",
+      "variant": "NO_QUERY_REFORMULATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_01",
+      "variant": "NO_QUERY_REFORMULATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_02",
+      "variant": "NO_QUERY_REFORMULATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_quant_02",
+      "variant": "NO_QUERY_REFORMULATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_contra_02",
+      "variant": "NO_QUERY_REFORMULATION",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 75, in run\n    plan = self.planner.plan(request.question)\n  File \"E:\\aeris-rag\\app\\planning\\requirement_planner.py\", line 324, in plan\n    plan = RequirementPlan.model_validate(data)\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 716, in model_validate\n    return cls.__pydantic_validator__.validate_python(\npydantic_core._pydantic_core.ValidationError: 1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\n"
+    },
+    {
+      "question_id": "q_df_06",
+      "variant": "NO_RETRIEVAL_MEMORY",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 459, in run\n    answer_result = self.answer_generator.generate(\n  File \"E:\\aeris-rag\\app\\answer_generation\\answer_generator.py\", line 149, in generate\n    return GroundedAnswer(\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\npydantic_core._pydantic_core.ValidationError: 1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\n"
+    },
+    {
+      "question_id": "q_mh_02",
+      "variant": "NO_RETRIEVAL_MEMORY",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_mh_04",
+      "variant": "NO_RETRIEVAL_MEMORY",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_meth_01",
+      "variant": "NO_RETRIEVAL_MEMORY",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_01",
+      "variant": "NO_RETRIEVAL_MEMORY",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_02",
+      "variant": "NO_RETRIEVAL_MEMORY",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_quant_02",
+      "variant": "NO_RETRIEVAL_MEMORY",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_contra_02",
+      "variant": "NO_RETRIEVAL_MEMORY",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 75, in run\n    plan = self.planner.plan(request.question)\n  File \"E:\\aeris-rag\\app\\planning\\requirement_planner.py\", line 324, in plan\n    plan = RequirementPlan.model_validate(data)\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 716, in model_validate\n    return cls.__pydantic_validator__.validate_python(\npydantic_core._pydantic_core.ValidationError: 1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\n"
+    },
+    {
+      "question_id": "q_df_06",
+      "variant": "NO_CLAIM_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 459, in run\n    answer_result = self.answer_generator.generate(\n  File \"E:\\aeris-rag\\app\\answer_generation\\answer_generator.py\", line 149, in generate\n    return GroundedAnswer(\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\npydantic_core._pydantic_core.ValidationError: 1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\n"
+    },
+    {
+      "question_id": "q_mh_02",
+      "variant": "NO_CLAIM_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_mh_04",
+      "variant": "NO_CLAIM_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 411, in run\n    self.selective_verification_executor.execute(\n  File \"E:\\aeris-rag\\app\\verification\\selective_executor.py\", line 76, in execute\n    result = self.verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_meth_01",
+      "variant": "NO_CLAIM_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_01",
+      "variant": "NO_CLAIM_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 411, in run\n    self.selective_verification_executor.execute(\n  File \"E:\\aeris-rag\\app\\verification\\selective_executor.py\", line 76, in execute\n    result = self.verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_02",
+      "variant": "NO_CLAIM_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 411, in run\n    self.selective_verification_executor.execute(\n  File \"E:\\aeris-rag\\app\\verification\\selective_executor.py\", line 76, in execute\n    result = self.verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_contra_02",
+      "variant": "NO_CLAIM_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 75, in run\n    plan = self.planner.plan(request.question)\n  File \"E:\\aeris-rag\\app\\planning\\requirement_planner.py\", line 324, in plan\n    plan = RequirementPlan.model_validate(data)\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 716, in model_validate\n    return cls.__pydantic_validator__.validate_python(\npydantic_core._pydantic_core.ValidationError: 1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\n"
+    },
+    {
+      "question_id": "q_df_06",
+      "variant": "NO_CONTRADICTION_ANALYSIS",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 459, in run\n    answer_result = self.answer_generator.generate(\n  File \"E:\\aeris-rag\\app\\answer_generation\\answer_generator.py\", line 149, in generate\n    return GroundedAnswer(\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\npydantic_core._pydantic_core.ValidationError: 1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\n"
+    },
+    {
+      "question_id": "q_mh_02",
+      "variant": "NO_CONTRADICTION_ANALYSIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_mh_04",
+      "variant": "NO_CONTRADICTION_ANALYSIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_meth_01",
+      "variant": "NO_CONTRADICTION_ANALYSIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_01",
+      "variant": "NO_CONTRADICTION_ANALYSIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_02",
+      "variant": "NO_CONTRADICTION_ANALYSIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_quant_02",
+      "variant": "NO_CONTRADICTION_ANALYSIS",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_contra_02",
+      "variant": "NO_CONTRADICTION_ANALYSIS",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 75, in run\n    plan = self.planner.plan(request.question)\n  File \"E:\\aeris-rag\\app\\planning\\requirement_planner.py\", line 324, in plan\n    plan = RequirementPlan.model_validate(data)\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 716, in model_validate\n    return cls.__pydantic_validator__.validate_python(\npydantic_core._pydantic_core.ValidationError: 1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\n"
+    },
+    {
+      "question_id": "q_df_06",
+      "variant": "NO_CROSSLINGUAL_AGREEMENT",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 459, in run\n    answer_result = self.answer_generator.generate(\n  File \"E:\\aeris-rag\\app\\answer_generation\\answer_generator.py\", line 149, in generate\n    return GroundedAnswer(\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\npydantic_core._pydantic_core.ValidationError: 1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\n"
+    },
+    {
+      "question_id": "q_mh_02",
+      "variant": "NO_CROSSLINGUAL_AGREEMENT",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_mh_04",
+      "variant": "NO_CROSSLINGUAL_AGREEMENT",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_meth_01",
+      "variant": "NO_CROSSLINGUAL_AGREEMENT",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_01",
+      "variant": "NO_CROSSLINGUAL_AGREEMENT",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_02",
+      "variant": "NO_CROSSLINGUAL_AGREEMENT",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_quant_02",
+      "variant": "NO_CROSSLINGUAL_AGREEMENT",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_contra_02",
+      "variant": "NO_CROSSLINGUAL_AGREEMENT",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 75, in run\n    plan = self.planner.plan(request.question)\n  File \"E:\\aeris-rag\\app\\planning\\requirement_planner.py\", line 324, in plan\n    plan = RequirementPlan.model_validate(data)\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 716, in model_validate\n    return cls.__pydantic_validator__.validate_python(\npydantic_core._pydantic_core.ValidationError: 1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\n"
+    },
+    {
+      "question_id": "q_df_06",
+      "variant": "NO_SELECTIVE_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 459, in run\n    answer_result = self.answer_generator.generate(\n  File \"E:\\aeris-rag\\app\\answer_generation\\answer_generator.py\", line 149, in generate\n    return GroundedAnswer(\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 250, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\npydantic_core._pydantic_core.ValidationError: 1 validation error for GroundedAnswer\nanswer\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\n"
+    },
+    {
+      "question_id": "q_mh_02",
+      "variant": "NO_SELECTIVE_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_mh_04",
+      "variant": "NO_SELECTIVE_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_meth_01",
+      "variant": "NO_SELECTIVE_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 177, in run\n    typed_claims = self.claim_typer.type_claims(\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 96, in type_claims\n    raise e\n  File \"E:\\aeris-rag\\app\\claim_extraction\\typer.py\", line 70, in type_claims\n    json_text = extract_json(result_str)\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_01",
+      "variant": "NO_SELECTIVE_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_comp_02",
+      "variant": "NO_SELECTIVE_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_quant_02",
+      "variant": "NO_SELECTIVE_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "JSON Parsing Error",
+      "error_message": "No valid JSON object or array found in model response.\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 227, in run\n    result = self.graph_verifier.verify_claim(\n  File \"E:\\aeris-rag\\app\\verification\\graph_verifier.py\", line 76, in verify_claim\n    self.verifier.verify_multiple(\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 292, in verify_multiple\n    raise e\n  File \"E:\\aeris-rag\\app\\verification\\claim_verifier.py\", line 289, in verify_multiple\n    json_text = extract_json(response[\"message\"][\"content\"])\n  File \"E:\\aeris-rag\\app\\utils\\json_parser.py\", line 89, in extract_json\n    raise JSONParsingError(\"No valid JSON object or array found in model response.\")\napp.utils.json_parser.JSONParsingError: No valid JSON object or array found in model response.\n"
+    },
+    {
+      "question_id": "q_contra_02",
+      "variant": "NO_SELECTIVE_VERIFICATION",
+      "failed_stage": "FAILED",
+      "error_type": "Pydantic Validation Error",
+      "error_message": "1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nTraceback (most recent call last):\n  File \"E:\\aeris-rag\\app\\controller\\controller.py\", line 75, in run\n    plan = self.planner.plan(request.question)\n  File \"E:\\aeris-rag\\app\\planning\\requirement_planner.py\", line 324, in plan\n    plan = RequirementPlan.model_validate(data)\n  File \"C:\\Users\\Saravanan\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\pydantic\\main.py\", line 716, in model_validate\n    return cls.__pydantic_validator__.validate_python(\npydantic_core._pydantic_core.ValidationError: 1 validation error for RequirementPlan\nreasoning_summary\n  Field required [type=missing, input_value={'question': 'Does the sy...ystem can retrieve?']}]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\n"
+    }
+  ]
+}

@@ -6,6 +6,9 @@ from typing import List, Optional
 
 import ollama
 from pydantic import BaseModel, Field
+from app.config import settings
+from app.utils.json_parser import extract_json
+from app.utils.model_client import get_ollama_client, timed_model_chat
 
 
 class VerificationLabel(str, Enum):
@@ -52,11 +55,14 @@ class ClaimVerifier:
         VerificationStrength.LOW: 0.35,
     }
 
-    def __init__(self, model: Optional[str] = None):
+    def __init__(self, model: Optional[str] = None, host: Optional[str] = None, timeout: Optional[float] = None):
         self.model = model or os.getenv(
             "OLLAMA_MODEL",
-            "llama3.2:latest",
+            settings.ollama_model,
         )
+        self.host = host or settings.ollama_host
+        self.timeout = timeout or settings.ollama_timeout
+        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
 
     # =========================================================
     # SINGLE-EVIDENCE VERIFICATION
@@ -193,53 +199,6 @@ Return exactly:
 }}
 """
 
-    # =========================================================
-    # JSON PARSER
-    # =========================================================
-
-    def _extract_json(self, text: str) -> dict:
-
-        text = text.strip()
-
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            pass
-
-        cleaned = re.sub(
-            r"```(?:json)?",
-            "",
-            text,
-            flags=re.IGNORECASE,
-        ).replace("```", "").strip()
-
-        try:
-            return json.loads(cleaned)
-        except json.JSONDecodeError:
-            pass
-
-        match = re.search(
-            r"\{.*\}",
-            text,
-            flags=re.DOTALL,
-        )
-
-        if match:
-            return json.loads(match.group(0))
-
-        if "{" in text and "}" not in text:
-            try:
-                fixed_text = text.strip()
-                if not fixed_text.endswith('"'):
-                    fixed_text += '"'
-                fixed_text += "\n}"
-                return json.loads(fixed_text[fixed_text.find("{"):])
-            except Exception:
-                pass
-
-        raise ValueError(
-            f"Could not parse verifier JSON:\n{text}"
-        )
 
     # =========================================================
     # SINGLE EVIDENCE API
@@ -256,43 +215,76 @@ Return exactly:
             evidence=evidence,
         )
 
-        response = ollama.chat(
-            model=self.model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
-            options={
-                "temperature": 0,
-            },
-        )
+        from app.utils.diagnostics import log_generation_attempt
+        messages = [{"role": "user", "content": prompt}]
+        max_attempts = 3
+        
+        for attempt in range(1, max_attempts + 1):
+            parse_success = False
+            schema_success = False
+            repair_invoked = False
+            retry_invoked = (attempt > 1)
+            
+            try:
+                chat_res = timed_model_chat(
+                    client=self.client,
+                    model=self.model,
+                    messages=messages,
+                    options={
+                        "temperature": 0,
+                        "num_predict": 1024,
+                    },
+                    stage="Verification",
+                )
+                elapsed = chat_res["elapsed_seconds"]
+                raw_content = chat_res["content"]
+            except Exception as e:
+                elapsed = 0.0
+                ctx_size = len(messages[-1]["content"])
+                print(f"Error during claim verification [Model: {self.model}, Stage: verification, Context: {ctx_size} chars]: {e}")
+                raise e
 
-        result = self._extract_json(
-            response["message"]["content"]
-        )
+            ctx_size = len(messages[-1]["content"])
 
-        label = VerificationLabel(
-            result["label"].strip().upper()
-        )
-
-        strength = VerificationStrength(
-            result["strength"].strip().upper()
-        )
-
-        confidence = self.STRENGTH_SCORES[strength]
-
-        return ClaimVerificationResult(
-            claim=claim,
-            evidence=evidence,
-            label=label,
-            confidence=confidence,
-            strength=strength,
-            rationale=str(
-                result["rationale"]
-            ).strip(),
-        )
+            try:
+                import json as std_json
+                try:
+                    std_json.loads(raw_content)
+                except:
+                    repair_invoked = True
+                    
+                json_text = extract_json(raw_content)
+                parse_success = True
+                
+                result = std_json.loads(json_text)
+                
+                label = VerificationLabel(result["label"].strip().upper())
+                strength = VerificationStrength(result["strength"].strip().upper())
+                rationale = str(result["rationale"]).strip()
+                schema_success = True
+                
+                confidence = self.STRENGTH_SCORES[strength]
+                
+                res = ClaimVerificationResult(
+                    claim=claim,
+                    evidence=evidence,
+                    label=label,
+                    confidence=confidence,
+                    strength=strength,
+                    rationale=rationale,
+                )
+                
+                log_generation_attempt("Verification", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
+                return res
+                
+            except Exception as e:
+                log_generation_attempt("Verification", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
+                if attempt == max_attempts:
+                    raise e
+                    
+                messages.append({"role": "assistant", "content": raw_content})
+                error_msg = f"Your previous response failed validation with error: {str(e)}. Please correct the JSON structure to strictly contain 'label', 'strength', and 'rationale' as specified."
+                messages.append({"role": "user", "content": error_msg})
 
     # =========================================================
     # MULTI-EVIDENCE API
@@ -314,41 +306,74 @@ Return exactly:
             evidence=evidence,
         )
 
-        response = ollama.chat(
-            model=self.model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
-            options={
-                "temperature": 0,
-            },
-        )
+        from app.utils.diagnostics import log_generation_attempt
+        messages = [{"role": "user", "content": prompt}]
+        max_attempts = 3
+        
+        for attempt in range(1, max_attempts + 1):
+            parse_success = False
+            schema_success = False
+            repair_invoked = False
+            retry_invoked = (attempt > 1)
+            
+            try:
+                chat_res = timed_model_chat(
+                    client=self.client,
+                    model=self.model,
+                    messages=messages,
+                    options={
+                        "temperature": 0,
+                        "num_predict": 1024,
+                    },
+                    stage="Verification",
+                )
+                elapsed = chat_res["elapsed_seconds"]
+                raw_content = chat_res["content"]
+            except Exception as e:
+                elapsed = 0.0
+                ctx_size = len(messages[-1]["content"])
+                print(f"Error during claim verification [Model: {self.model}, Stage: verification, Context: {ctx_size} chars]: {e}")
+                raise e
 
-        result = self._extract_json(
-            response["message"]["content"]
-        )
+            ctx_size = len(messages[-1]["content"])
 
-        label = VerificationLabel(
-            result["label"].strip().upper()
-        )
-
-        strength = VerificationStrength(
-            result["strength"].strip().upper()
-        )
-
-        confidence = self.STRENGTH_SCORES[strength]
-
-        return MultiEvidenceVerificationResult(
-            claim=claim,
-            evidence_count=len(evidence),
-            evidence=evidence,
-            label=label,
-            confidence=confidence,
-            strength=strength,
-            rationale=str(
-                result["rationale"]
-            ).strip(),
-        )
+            try:
+                import json as std_json
+                try:
+                    std_json.loads(raw_content)
+                except:
+                    repair_invoked = True
+                    
+                json_text = extract_json(raw_content)
+                parse_success = True
+                
+                result = std_json.loads(json_text)
+                
+                label = VerificationLabel(result["label"].strip().upper())
+                strength = VerificationStrength(result["strength"].strip().upper())
+                rationale = str(result["rationale"]).strip()
+                schema_success = True
+                
+                confidence = self.STRENGTH_SCORES[strength]
+                
+                res = MultiEvidenceVerificationResult(
+                    claim=claim,
+                    evidence_count=len(evidence),
+                    evidence=evidence,
+                    label=label,
+                    confidence=confidence,
+                    strength=strength,
+                    rationale=rationale,
+                )
+                
+                log_generation_attempt("Verification", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
+                return res
+                
+            except Exception as e:
+                log_generation_attempt("Verification", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
+                if attempt == max_attempts:
+                    raise e
+                    
+                messages.append({"role": "assistant", "content": raw_content})
+                error_msg = f"Your previous response failed validation with error: {str(e)}. Please correct the JSON structure to strictly contain 'label', 'strength', and 'rationale' as specified."
+                messages.append({"role": "user", "content": error_msg})

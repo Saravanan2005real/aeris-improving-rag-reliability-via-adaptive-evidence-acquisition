@@ -1,0 +1,2501 @@
+[
+  {
+    "question_id": "q_df_01",
+    "question_type": "DIRECT_FACT",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Avoiding catastrophic forgetting in mitigating model biases in sentence-pair classification with elastic weight consolidation",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 22,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 169.69656319999194,
+    "stage_latencies": {
+      "PLANNING": 11.140797400003066,
+      "RETRIEVAL": 8.370590999998967,
+      "COVERAGE": 2.7400004910305142e-05,
+      "CLAIM_GRAPH": 144.11521709999943,
+      "VERIFICATION": 1.3218425999948522,
+      "CONTRADICTION": 0.000494699997943826,
+      "CROSS_LINGUAL": 8.929999603424221e-05,
+      "CALIBRATION": 1.2300006346777081e-05,
+      "SELECTIVE_VERIFICATION": 0.7759042000107002,
+      "ANSWER_GENERATION": 3.9710792999976547,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_02",
+    "question_type": "DIRECT_FACT",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 69,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 305.41665009999997,
+    "stage_latencies": {
+      "PLANNING": 4.593272899990552,
+      "RETRIEVAL": 2.7470510999992257,
+      "COVERAGE": 2.4900000425986946e-05,
+      "CLAIM_GRAPH": 294.3925828999927,
+      "VERIFICATION": 8.019999950192869e-05,
+      "CONTRADICTION": 0.003373600004124455,
+      "CROSS_LINGUAL": 8.440000237897038e-05,
+      "CALIBRATION": 2.7000060072168708e-06,
+      "SELECTIVE_VERIFICATION": 0.0008892000041669235,
+      "ANSWER_GENERATION": 3.678582099993946,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_03",
+    "question_type": "DIRECT_FACT",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 54,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 178.31906370000797,
+    "stage_latencies": {
+      "PLANNING": 4.380414200000814,
+      "RETRIEVAL": 3.8414207000023453,
+      "COVERAGE": 3.720000677276403e-05,
+      "CLAIM_GRAPH": 166.47338229999878,
+      "VERIFICATION": 4.569999873638153e-05,
+      "CONTRADICTION": 0.001319799994234927,
+      "CROSS_LINGUAL": 5.629999213851988e-05,
+      "CALIBRATION": 2.800006768666208e-06,
+      "SELECTIVE_VERIFICATION": 0.0005118999979458749,
+      "ANSWER_GENERATION": 3.621377899995423,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_04",
+    "question_type": "DIRECT_FACT",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 48,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 60.286768099991605,
+    "stage_latencies": {
+      "PLANNING": 4.4354253999918,
+      "RETRIEVAL": 2.6897102999937488,
+      "COVERAGE": 3.37999954354018e-05,
+      "CLAIM_GRAPH": 47.724396299992804,
+      "VERIFICATION": 1.0246044999948936,
+      "CONTRADICTION": 0.000948499990045093,
+      "CROSS_LINGUAL": 6.330000178422779e-05,
+      "CALIBRATION": 6.699992809444666e-06,
+      "SELECTIVE_VERIFICATION": 0.6113500999927055,
+      "ANSWER_GENERATION": 3.799694900008035,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_05",
+    "question_type": "DIRECT_FACT",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 72,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 64.91726829999243,
+    "stage_latencies": {
+      "PLANNING": 4.3075224999920465,
+      "RETRIEVAL": 11.15309769999294,
+      "COVERAGE": 2.849999873433262e-05,
+      "CLAIM_GRAPH": 46.07852249999996,
+      "VERIFICATION": 7.940000796224922e-05,
+      "CONTRADICTION": 0.003544300008798018,
+      "CROSS_LINGUAL": 0.00010600000678095967,
+      "CALIBRATION": 3.2999960239976645e-06,
+      "SELECTIVE_VERIFICATION": 0.0009595000010449439,
+      "ANSWER_GENERATION": 3.3726904000068316,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_06",
+    "question_type": "DIRECT_FACT",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 41,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 42.92463380000845,
+    "stage_latencies": {
+      "PLANNING": 4.613854700000957,
+      "RETRIEVAL": 2.589007999995374,
+      "COVERAGE": 4.149999585933983e-05,
+      "CLAIM_GRAPH": 29.82041480000771,
+      "VERIFICATION": 4.710000939667225e-05,
+      "CONTRADICTION": 0.0012264999968465418,
+      "CROSS_LINGUAL": 6.890000076964498e-05,
+      "CALIBRATION": 2.5000044843181968e-06,
+      "SELECTIVE_VERIFICATION": 0.0006705999985570088,
+      "ANSWER_GENERATION": 5.898936700003105,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_01",
+    "question_type": "MULTI_HOP",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 4,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 75,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": false
+      }
+    },
+    "total_latency": 125.06865439999092,
+    "stage_latencies": {
+      "PLANNING": 6.564506299997447,
+      "RETRIEVAL": 55.59539309999673,
+      "COVERAGE": 3.5599994589574635e-05,
+      "CLAIM_GRAPH": 54.497873100001016,
+      "VERIFICATION": 2.4824284999922384,
+      "CONTRADICTION": 0.004015300000901334,
+      "CROSS_LINGUAL": 0.00011390000872779638,
+      "CALIBRATION": 2.0099992980249226e-05,
+      "SELECTIVE_VERIFICATION": 2.0488191000040388,
+      "ANSWER_GENERATION": 3.874736199999461,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_02",
+    "question_type": "MULTI_HOP",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The retriever used alongside the parametric generator is DPR.",
+    "supporting_chunk_ids": [
+      "test_document_p003_c006"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p003_c006_claim_2",
+      "test_document_p003_c006_claim_7"
+    ],
+    "evidence_count": 4,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 84,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 76.51198670000304,
+    "stage_latencies": {
+      "PLANNING": 10.544159400000353,
+      "RETRIEVAL": 3.0083678999944823,
+      "COVERAGE": 5.089999467600137e-05,
+      "CLAIM_GRAPH": 52.69467079998867,
+      "VERIFICATION": 3.7673521999968216,
+      "CONTRADICTION": 0.003599300005589612,
+      "CROSS_LINGUAL": 0.00011330000415910035,
+      "CALIBRATION": 1.2300006346777081e-05,
+      "SELECTIVE_VERIFICATION": 2.4274546000087867,
+      "ANSWER_GENERATION": 4.065511099994183,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_03",
+    "question_type": "MULTI_HOP",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.65,
+    "answer": "We explored modelling this null document logit by learning (i) a document embedding for the null document, (ii) a static learnt bias term, or (iii) a neural network to predict the logit.",
+    "supporting_chunk_ids": [
+      "test_document_p018_c040"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p018_c040_claim_4"
+    ],
+    "evidence_count": 5,
+    "evidence_hit": true,
+    "evidence_recall": 0.5,
+    "claim_count": 51,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 54.238591500004986,
+    "stage_latencies": {
+      "PLANNING": 6.064369400002761,
+      "RETRIEVAL": 8.192996600002516,
+      "COVERAGE": 8.250000246334821e-05,
+      "CLAIM_GRAPH": 31.019542099995306,
+      "VERIFICATION": 2.2088897000066936,
+      "CONTRADICTION": 0.8006052999990061,
+      "CROSS_LINGUAL": 0.00012669998977798969,
+      "CALIBRATION": 1.2999997125007212e-05,
+      "SELECTIVE_VERIFICATION": 1.5086295000073733,
+      "ANSWER_GENERATION": 4.442634799997904,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_04",
+    "question_type": "MULTI_HOP",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The model that generates text for 'The Sun Also Rises' is RAG-Sequence.",
+    "supporting_chunk_ids": [
+      "test_document_p003_c006"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p003_c006_claim_1",
+      "test_document_p003_c006_claim_2",
+      "test_document_p003_c006_claim_7"
+    ],
+    "evidence_count": 5,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 50,
+    "verified_claim_count": 6,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 180.30445860000327,
+    "stage_latencies": {
+      "PLANNING": 6.182851399993524,
+      "RETRIEVAL": 3.335188199998811,
+      "COVERAGE": 5.509999755304307e-05,
+      "CLAIM_GRAPH": 155.76859970000805,
+      "VERIFICATION": 6.104471200000262,
+      "CONTRADICTION": 0.9547205999988364,
+      "CROSS_LINGUAL": 0.00012490000517573208,
+      "CALIBRATION": 3.499999002087861e-05,
+      "SELECTIVE_VERIFICATION": 3.228830099993502,
+      "ANSWER_GENERATION": 4.7289659999951255,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_05",
+    "question_type": "MULTI_HOP",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.65,
+    "answer": "The 2016 Wikipedia dump was used in combination with 5 retrieved latent documents.",
+    "supporting_chunk_ids": [
+      "test_document_p018_c040",
+      "test_document_p008_c019"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p018_c040_claim_4",
+      "test_document_p008_c019_claim_4"
+    ],
+    "evidence_count": 4,
+    "evidence_hit": true,
+    "evidence_recall": 0.5,
+    "claim_count": 66,
+    "verified_claim_count": 7,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 194.0194741000014,
+    "stage_latencies": {
+      "PLANNING": 6.902012199992896,
+      "RETRIEVAL": 3.1414742000051774,
+      "COVERAGE": 7.539999205619097e-05,
+      "CLAIM_GRAPH": 167.88052130000142,
+      "VERIFICATION": 8.334148200010532,
+      "CONTRADICTION": 0.7018622000032337,
+      "CROSS_LINGUAL": 0.00014629999350290745,
+      "CALIBRATION": 2.3100001271814108e-05,
+      "SELECTIVE_VERIFICATION": 2.5498184000025503,
+      "ANSWER_GENERATION": 4.508417099990766,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_meth_01",
+    "question_type": "METHOD",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The CT and WQ models are initialized with the NQ RAG model, using the same train/dev/test splits as prior work.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 1.0,
+    "claim_count": 51,
+    "verified_claim_count": 4,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 191.84959209999943,
+    "stage_latencies": {
+      "PLANNING": 6.128506199995172,
+      "RETRIEVAL": 12.452162000001408,
+      "COVERAGE": 0.00010109999857377261,
+      "CLAIM_GRAPH": 161.94712480000453,
+      "VERIFICATION": 3.6828035000071395,
+      "CONTRADICTION": 0.6824285000038799,
+      "CROSS_LINGUAL": 0.00016239999968092889,
+      "CALIBRATION": 2.7599991881288588e-05,
+      "SELECTIVE_VERIFICATION": 2.7256728999927873,
+      "ANSWER_GENERATION": 4.229956900002435,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_meth_02",
+    "question_type": "METHOD",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The system fuses dense and sparse retrieval by leveraging a retrieval module to augment pre-trained, generative language models.",
+    "supporting_chunk_ids": [
+      "test_document_p009_c020"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p009_c020_claim_5"
+    ],
+    "evidence_count": 5,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 74,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true,
+        "requirement_3_success": true
+      }
+    },
+    "total_latency": 79.00980930001242,
+    "stage_latencies": {
+      "PLANNING": 7.743070600001374,
+      "RETRIEVAL": 13.153170000005048,
+      "COVERAGE": 7.419999747071415e-05,
+      "CLAIM_GRAPH": 47.546805099991616,
+      "VERIFICATION": 3.596579799996107,
+      "CONTRADICTION": 0.003255100004025735,
+      "CROSS_LINGUAL": 0.00012929999502375722,
+      "CALIBRATION": 1.6599995433352888e-05,
+      "SELECTIVE_VERIFICATION": 2.904905699993833,
+      "ANSWER_GENERATION": 4.060809199989308,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_meth_03",
+    "question_type": "METHOD",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The system avoids running additional forward passes by leveraging bi-directional attention in the encoder-decoder model, similar to BART and T5.",
+    "supporting_chunk_ids": [
+      "test_document_p009_c020"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p009_c020_claim_4"
+    ],
+    "evidence_count": 4,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 63,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 69.44151219999185,
+    "stage_latencies": {
+      "PLANNING": 6.427862199998344,
+      "RETRIEVAL": 8.672466699994402,
+      "COVERAGE": 7.380000897683203e-05,
+      "CLAIM_GRAPH": 44.28407700000389,
+      "VERIFICATION": 3.1279058000072837,
+      "CONTRADICTION": 0.0023278000007849187,
+      "CROSS_LINGUAL": 9.99000039882958e-05,
+      "CALIBRATION": 1.3900003978051245e-05,
+      "SELECTIVE_VERIFICATION": 2.9046900999965146,
+      "ANSWER_GENERATION": 4.021335799989174,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_meth_04",
+    "question_type": "METHOD",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.65,
+    "answer": "Concurrent works handle entity embeddings by learning a document embedding for the null document, a static learnt bias term, or a neural network to predict the logit.",
+    "supporting_chunk_ids": [
+      "test_document_p018_c040"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p018_c040_claim_4"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 43,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 46.90225629998895,
+    "stage_latencies": {
+      "PLANNING": 6.052548899999238,
+      "RETRIEVAL": 3.132650100000319,
+      "COVERAGE": 7.090000144671649e-05,
+      "CLAIM_GRAPH": 31.804125000009662,
+      "VERIFICATION": 1.1513049000059254,
+      "CONTRADICTION": 0.000949699999182485,
+      "CROSS_LINGUAL": 7.6299998909235e-05,
+      "CALIBRATION": 9.60000033956021e-06,
+      "SELECTIVE_VERIFICATION": 0.662082199996803,
+      "ANSWER_GENERATION": 4.097844300005818,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_comp_01",
+    "question_type": "COMPARATIVE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "People generally prefer RAG over purely parametric BART.",
+    "supporting_chunk_ids": [
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c014_claim_1",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 6,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 66,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true,
+        "requirement_3_success": true
+      }
+    },
+    "total_latency": 68.38361750000331,
+    "stage_latencies": {
+      "PLANNING": 13.502187800011598,
+      "RETRIEVAL": 3.669010400000843,
+      "COVERAGE": 6.53000024612993e-05,
+      "CLAIM_GRAPH": 40.263299300000654,
+      "VERIFICATION": 3.8178594000055455,
+      "CONTRADICTION": 0.002275599996210076,
+      "CROSS_LINGUAL": 9.709999721962959e-05,
+      "CALIBRATION": 1.85999961104244e-05,
+      "SELECTIVE_VERIFICATION": 3.111873200003174,
+      "ANSWER_GENERATION": 4.01623799999652,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_comp_02",
+    "question_type": "COMPARATIVE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "RAG hallucinates less compared to other models.",
+    "supporting_chunk_ids": [
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c014_claim_1",
+      "test_document_p006_c014_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 1.0,
+    "claim_count": 45,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 46.48746580000443,
+    "stage_latencies": {
+      "PLANNING": 6.458495600003516,
+      "RETRIEVAL": 3.1891753999952925,
+      "COVERAGE": 8.870000601746142e-05,
+      "CLAIM_GRAPH": 26.150336899998365,
+      "VERIFICATION": 3.406810199987376,
+      "CONTRADICTION": 0.001664900002651848,
+      "CROSS_LINGUAL": 8.889999298844486e-05,
+      "CALIBRATION": 1.309999788645655e-05,
+      "SELECTIVE_VERIFICATION": 3.154819600007613,
+      "ANSWER_GENERATION": 4.125442499993369,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_comp_03",
+    "question_type": "COMPARATIVE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "FAISS on CPU is slower than exact search.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [],
+    "evidence_count": 5,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 104,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true,
+        "requirement_3_success": true
+      }
+    },
+    "total_latency": 88.61610870000732,
+    "stage_latencies": {
+      "PLANNING": 7.58842729999742,
+      "RETRIEVAL": 10.351725000000442,
+      "COVERAGE": 6.230000872164965e-05,
+      "CLAIM_GRAPH": 64.27586449999944,
+      "VERIFICATION": 1.460715400011395,
+      "CONTRADICTION": 0.005311500004609115,
+      "CROSS_LINGUAL": 0.00017270000535063446,
+      "CALIBRATION": 1.9700004486367106e-05,
+      "SELECTIVE_VERIFICATION": 1.0992238000035286,
+      "ANSWER_GENERATION": 3.833843899992644,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_quant_01",
+    "question_type": "QUANTITATIVE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 54,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 42.962449300001026,
+    "stage_latencies": {
+      "PLANNING": 5.061521700001322,
+      "RETRIEVAL": 2.6427725000103237,
+      "COVERAGE": 3.2800002372823656e-05,
+      "CLAIM_GRAPH": 31.384981800001697,
+      "VERIFICATION": 4.870000702794641e-05,
+      "CONTRADICTION": 0.0017179999995278195,
+      "CROSS_LINGUAL": 7.929999264888465e-05,
+      "CALIBRATION": 3.7999998312443495e-06,
+      "SELECTIVE_VERIFICATION": 0.0007871999987401068,
+      "ANSWER_GENERATION": 3.8698303999990458,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_quant_02",
+    "question_type": "QUANTITATIVE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "5 or 10",
+    "supporting_chunk_ids": [
+      "test_document_p008_c019"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p008_c019_claim_3",
+      "test_document_p008_c019_claim_4"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 1.0,
+    "claim_count": 51,
+    "verified_claim_count": 9,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 56.50555899999745,
+    "stage_latencies": {
+      "PLANNING": 4.460961899996619,
+      "RETRIEVAL": 2.5928542999899946,
+      "COVERAGE": 3.2800002372823656e-05,
+      "CLAIM_GRAPH": 31.102622099992004,
+      "VERIFICATION": 9.929904899996473,
+      "CONTRADICTION": 1.1090111999947112,
+      "CROSS_LINGUAL": 0.00017169999773614109,
+      "CALIBRATION": 2.950000634882599e-05,
+      "SELECTIVE_VERIFICATION": 2.7642695999966236,
+      "ANSWER_GENERATION": 4.545022000005702,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_quant_03",
+    "question_type": "QUANTITATIVE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The FEVER dataset contains 1,000 instances.",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 42,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 39.89786230000027,
+    "stage_latencies": {
+      "PLANNING": 4.703921399996034,
+      "RETRIEVAL": 2.662972699996317,
+      "COVERAGE": 3.159999323543161e-05,
+      "CLAIM_GRAPH": 26.489051999989897,
+      "VERIFICATION": 1.330682899992098,
+      "CONTRADICTION": 0.0007329000072786584,
+      "CROSS_LINGUAL": 0.0001033000007737428,
+      "CALIBRATION": 1.309999788645655e-05,
+      "SELECTIVE_VERIFICATION": 0.811248500001966,
+      "ANSWER_GENERATION": 3.8984428999974625,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_unans_01",
+    "question_type": "UNANSWERABLE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 60,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      }
+    },
+    "total_latency": 224.97258529999817,
+    "stage_latencies": {
+      "PLANNING": 4.415819499990903,
+      "RETRIEVAL": 44.05209930001001,
+      "COVERAGE": 3.650000144261867e-05,
+      "CLAIM_GRAPH": 165.07880730000034,
+      "VERIFICATION": 3.412477599995327,
+      "CONTRADICTION": 1.1404539000068326,
+      "CROSS_LINGUAL": 9.529999806545675e-05,
+      "CALIBRATION": 1.309999788645655e-05,
+      "SELECTIVE_VERIFICATION": 2.9203206999955,
+      "ANSWER_GENERATION": 3.9516220999939833,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_unans_02",
+    "question_type": "UNANSWERABLE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG models were trained using the same hardware as the DPR model, as mentioned in the document.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 42,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 44.64004769999883,
+    "stage_latencies": {
+      "PLANNING": 4.468604900001083,
+      "RETRIEVAL": 2.512124100001529,
+      "COVERAGE": 4.1799998143687844e-05,
+      "CLAIM_GRAPH": 31.208715599990683,
+      "VERIFICATION": 1.3912767000001622,
+      "CONTRADICTION": 0.0007340000011026859,
+      "CROSS_LINGUAL": 6.669999856967479e-05,
+      "CALIBRATION": 6.800008122809231e-06,
+      "SELECTIVE_VERIFICATION": 1.1270587000035448,
+      "ANSWER_GENERATION": 3.9309996999945724,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_unans_03",
+    "question_type": "UNANSWERABLE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 19,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      }
+    },
+    "total_latency": 66.88237709998793,
+    "stage_latencies": {
+      "PLANNING": 4.495679800005746,
+      "RETRIEVAL": 38.87362570001278,
+      "COVERAGE": 3.710000601131469e-05,
+      "CLAIM_GRAPH": 15.325858600001084,
+      "VERIFICATION": 2.235362699997495,
+      "CONTRADICTION": 0.0003336000081617385,
+      "CROSS_LINGUAL": 9.099999442696571e-05,
+      "CALIBRATION": 1.4299992471933365e-05,
+      "SELECTIVE_VERIFICATION": 1.9441167000040878,
+      "ANSWER_GENERATION": 4.006839099994977,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_unans_04",
+    "question_type": "UNANSWERABLE",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 48,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 41.827740600012476,
+    "stage_latencies": {
+      "PLANNING": 4.858364100000472,
+      "RETRIEVAL": 2.542298199987272,
+      "COVERAGE": 3.330000618007034e-05,
+      "CLAIM_GRAPH": 28.724934199999552,
+      "VERIFICATION": 1.0998583000036888,
+      "CONTRADICTION": 0.0010427999950479716,
+      "CROSS_LINGUAL": 6.940000457689166e-05,
+      "CALIBRATION": 8.399991202168167e-06,
+      "SELECTIVE_VERIFICATION": 0.612151499997708,
+      "ANSWER_GENERATION": 3.9886036999960197,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_contra_01",
+    "question_type": "CONTRADICTION",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "models hallucinate less",
+    "supporting_chunk_ids": [
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c014_claim_1"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 1.0,
+    "claim_count": 52,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 63.55821879999712,
+    "stage_latencies": {
+      "PLANNING": 6.53785940000671,
+      "RETRIEVAL": 6.514805400001933,
+      "COVERAGE": 2.820001100189984e-05,
+      "CLAIM_GRAPH": 42.593307999995886,
+      "VERIFICATION": 2.1980441000050632,
+      "CONTRADICTION": 0.0012549000093713403,
+      "CROSS_LINGUAL": 7.409999670926481e-05,
+      "CALIBRATION": 8.800008799880743e-06,
+      "SELECTIVE_VERIFICATION": 1.9807652000017697,
+      "ANSWER_GENERATION": 3.7316170999984024,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_contra_02",
+    "question_type": "CONTRADICTION",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "5, 10, or 1000 documents",
+    "supporting_chunk_ids": [
+      "test_document_p008_c019"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p008_c019_claim_3",
+      "test_document_p008_c019_claim_4"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 0.5,
+    "claim_count": 58,
+    "verified_claim_count": 6,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 56.54707610000332,
+    "stage_latencies": {
+      "PLANNING": 6.674955399997998,
+      "RETRIEVAL": 2.5528576000069734,
+      "COVERAGE": 2.370000584051013e-05,
+      "CLAIM_GRAPH": 34.2260510000051,
+      "VERIFICATION": 6.294006700001773,
+      "CONTRADICTION": 0.003100999994785525,
+      "CROSS_LINGUAL": 0.00012770001194439828,
+      "CALIBRATION": 1.9499988411553204e-05,
+      "SELECTIVE_VERIFICATION": 2.735914099990623,
+      "ANSWER_GENERATION": 4.059131500005606,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_multi_01",
+    "question_type": "MULTILINGUAL",
+    "variant": "FULL_AERIS",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG paper evaluates on multilingual tasks.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 54,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 49.261006799992174,
+    "stage_latencies": {
+      "PLANNING": 4.664189899995108,
+      "RETRIEVAL": 6.680825899995398,
+      "COVERAGE": 3.159999323543161e-05,
+      "CLAIM_GRAPH": 31.62760320000234,
+      "VERIFICATION": 1.4177391000121133,
+      "CONTRADICTION": 0.0017063000123016536,
+      "CROSS_LINGUAL": 7.059999916236848e-05,
+      "CALIBRATION": 7.599999662488699e-06,
+      "SELECTIVE_VERIFICATION": 1.1029237000038847,
+      "ANSWER_GENERATION": 3.7654552000021795,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_01",
+    "question_type": "DIRECT_FACT",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Avoiding catastrophic forgetting in mitigating model biases in sentence-pair classification with elastic weight consolidation",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 48,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 183.62125419999938,
+    "stage_latencies": {
+      "PLANNING": 4.195678300005966,
+      "RETRIEVAL": 7.236429600001429,
+      "COVERAGE": 5.289999535307288e-05,
+      "CLAIM_GRAPH": 162.01149370000348,
+      "VERIFICATION": 2.7554560999997193,
+      "CONTRADICTION": 1.1820663999969838,
+      "CROSS_LINGUAL": 0.00014319999900180846,
+      "CALIBRATION": 1.7800004570744932e-05,
+      "SELECTIVE_VERIFICATION": 2.059040599997388,
+      "ANSWER_GENERATION": 4.179679599998053,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_02",
+    "question_type": "DIRECT_FACT",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 69,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 308.2329735999956,
+    "stage_latencies": {
+      "PLANNING": 4.675153800009866,
+      "RETRIEVAL": 2.744063499994809,
+      "COVERAGE": 3.840000135824084e-05,
+      "CLAIM_GRAPH": 297.1331586000015,
+      "VERIFICATION": 8.3099992480129e-05,
+      "CONTRADICTION": 0.002499500013072975,
+      "CROSS_LINGUAL": 8.310000703204423e-05,
+      "CALIBRATION": 3.6999990697950125e-06,
+      "SELECTIVE_VERIFICATION": 0.0009295000054407865,
+      "ANSWER_GENERATION": 3.6762697999947704,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_03",
+    "question_type": "DIRECT_FACT",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 54,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 180.29547480000474,
+    "stage_latencies": {
+      "PLANNING": 4.39937079999072,
+      "RETRIEVAL": 5.759941500000423,
+      "COVERAGE": 4.119999357499182e-05,
+      "CLAIM_GRAPH": 166.5820507999888,
+      "VERIFICATION": 4.7299996367655694e-05,
+      "CONTRADICTION": 0.002302699998836033,
+      "CROSS_LINGUAL": 8.349999552592635e-05,
+      "CALIBRATION": 3.700013621710241e-06,
+      "SELECTIVE_VERIFICATION": 0.0009065999911399558,
+      "ANSWER_GENERATION": 3.550065799994627,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_04",
+    "question_type": "DIRECT_FACT",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 48,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 61.77159040000697,
+    "stage_latencies": {
+      "PLANNING": 4.465695799997775,
+      "RETRIEVAL": 3.154923599999165,
+      "COVERAGE": 4.25000034738332e-05,
+      "CLAIM_GRAPH": 48.6065862000105,
+      "VERIFICATION": 1.059192400003667,
+      "CONTRADICTION": 0.0010847999947145581,
+      "CROSS_LINGUAL": 7.190000906120986e-05,
+      "CALIBRATION": 7.599999662488699e-06,
+      "SELECTIVE_VERIFICATION": 0.6149412999948254,
+      "ANSWER_GENERATION": 3.868506400001934,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_05",
+    "question_type": "DIRECT_FACT",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 72,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 65.66673450000235,
+    "stage_latencies": {
+      "PLANNING": 4.282944699996733,
+      "RETRIEVAL": 10.728354599996237,
+      "COVERAGE": 2.8700000257231295e-05,
+      "CLAIM_GRAPH": 47.224603899987414,
+      "VERIFICATION": 8.379999781027436e-05,
+      "CONTRADICTION": 0.0032977000082610175,
+      "CROSS_LINGUAL": 9.23999905353412e-05,
+      "CALIBRATION": 2.7999922167509794e-06,
+      "SELECTIVE_VERIFICATION": 0.0010421000042697415,
+      "ANSWER_GENERATION": 3.4256090999988373,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_df_06",
+    "question_type": "DIRECT_FACT",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 41,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 44.35016889999679,
+    "stage_latencies": {
+      "PLANNING": 4.740068600003724,
+      "RETRIEVAL": 2.600156100001186,
+      "COVERAGE": 3.599999763537198e-05,
+      "CLAIM_GRAPH": 30.88496279998799,
+      "VERIFICATION": 3.929999365936965e-05,
+      "CONTRADICTION": 0.0007649999897694215,
+      "CROSS_LINGUAL": 4.889999399892986e-05,
+      "CALIBRATION": 2.0000006770715117e-06,
+      "SELECTIVE_VERIFICATION": 0.00046070000098552555,
+      "ANSWER_GENERATION": 6.123221100002411,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_01",
+    "question_type": "MULTI_HOP",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 4,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 75,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": false
+      }
+    },
+    "total_latency": 116.48946939999587,
+    "stage_latencies": {
+      "PLANNING": 6.679796500000521,
+      "RETRIEVAL": 48.05800969999109,
+      "COVERAGE": 5.729999975301325e-05,
+      "CLAIM_GRAPH": 53.33049780000874,
+      "VERIFICATION": 2.53465149999829,
+      "CONTRADICTION": 0.0029403000080492347,
+      "CROSS_LINGUAL": 9.620000491850078e-05,
+      "CALIBRATION": 1.1399999493733048e-05,
+      "SELECTIVE_VERIFICATION": 2.0016348000062862,
+      "ANSWER_GENERATION": 3.8810217999998713,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_02",
+    "question_type": "MULTI_HOP",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The retriever used alongside the parametric generator is DPR.",
+    "supporting_chunk_ids": [
+      "test_document_p003_c006"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p003_c006_claim_2",
+      "test_document_p003_c006_claim_7"
+    ],
+    "evidence_count": 4,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 84,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 75.7721859000012,
+    "stage_latencies": {
+      "PLANNING": 10.684989700006554,
+      "RETRIEVAL": 3.224082000000635,
+      "COVERAGE": 5.049999163020402e-05,
+      "CLAIM_GRAPH": 52.03961639999761,
+      "VERIFICATION": 3.3918718000059016,
+      "CONTRADICTION": 0.004483800003072247,
+      "CROSS_LINGUAL": 0.00012650000280700624,
+      "CALIBRATION": 1.5099998563528061e-05,
+      "SELECTIVE_VERIFICATION": 2.3991891000041505,
+      "ANSWER_GENERATION": 4.026533999989624,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_03",
+    "question_type": "MULTI_HOP",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.65,
+    "answer": "We explored modelling this null document logit by learning (i) a document embedding for the null document, (ii) a static learnt bias term, or (iii) a neural network to predict the logit.",
+    "supporting_chunk_ids": [
+      "test_document_p018_c040"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p018_c040_claim_4"
+    ],
+    "evidence_count": 5,
+    "evidence_hit": true,
+    "evidence_recall": 0.5,
+    "claim_count": 51,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 53.72780630001216,
+    "stage_latencies": {
+      "PLANNING": 6.157828299998073,
+      "RETRIEVAL": 8.308291300010751,
+      "COVERAGE": 5.1099996198900044e-05,
+      "CLAIM_GRAPH": 30.422734400010086,
+      "VERIFICATION": 2.0958616999996593,
+      "CONTRADICTION": 0.7626640999951633,
+      "CROSS_LINGUAL": 0.0001281000004382804,
+      "CALIBRATION": 1.829999382607639e-05,
+      "SELECTIVE_VERIFICATION": 1.4997421000007307,
+      "ANSWER_GENERATION": 4.479609200003324,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_04",
+    "question_type": "MULTI_HOP",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "RAG-Token performs better than RAG-Sequence on Jeopardy question generation.",
+    "supporting_chunk_ids": [
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 5,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 66,
+    "verified_claim_count": 7,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 3,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 192.69730309999431,
+    "stage_latencies": {
+      "PLANNING": 6.185669100013911,
+      "RETRIEVAL": 3.350934200003394,
+      "COVERAGE": 5.3100011427886784e-05,
+      "CLAIM_GRAPH": 164.863280199992,
+      "VERIFICATION": 7.518678699998418,
+      "CONTRADICTION": 2.877258399996208,
+      "CROSS_LINGUAL": 0.000149500003317371,
+      "CALIBRATION": 2.4900000425986946e-05,
+      "SELECTIVE_VERIFICATION": 3.298044499999378,
+      "ANSWER_GENERATION": 4.602559999999357,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_mh_05",
+    "question_type": "MULTI_HOP",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.65,
+    "answer": "The 2016 Wikipedia dump was used in combination with 5 retrieved latent documents.",
+    "supporting_chunk_ids": [
+      "test_document_p018_c040",
+      "test_document_p008_c019"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p018_c040_claim_4",
+      "test_document_p008_c019_claim_4"
+    ],
+    "evidence_count": 4,
+    "evidence_hit": true,
+    "evidence_recall": 0.5,
+    "claim_count": 66,
+    "verified_claim_count": 7,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 190.89212659999612,
+    "stage_latencies": {
+      "PLANNING": 6.928808600001503,
+      "RETRIEVAL": 3.2201018999912776,
+      "COVERAGE": 5.250000685919076e-05,
+      "CLAIM_GRAPH": 165.0033192999981,
+      "VERIFICATION": 8.056730500000413,
+      "CONTRADICTION": 0.6924253000033787,
+      "CROSS_LINGUAL": 0.00014139999984763563,
+      "CALIBRATION": 2.19999928958714e-05,
+      "SELECTIVE_VERIFICATION": 2.5189061000128277,
+      "ANSWER_GENERATION": 4.470769899999141,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_meth_01",
+    "question_type": "METHOD",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The CT and WQ models are initialized with the NQ RAG model, using the same train/dev/test splits as prior work.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 1.0,
+    "claim_count": 51,
+    "verified_claim_count": 4,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 191.62600859999657,
+    "stage_latencies": {
+      "PLANNING": 6.057131699999445,
+      "RETRIEVAL": 12.517865400004666,
+      "COVERAGE": 8.569999772589654e-05,
+      "CLAIM_GRAPH": 161.496046500004,
+      "VERIFICATION": 3.818057900003623,
+      "CONTRADICTION": 0.689419899994391,
+      "CROSS_LINGUAL": 0.00010390000534243882,
+      "CALIBRATION": 1.6999998479150236e-05,
+      "SELECTIVE_VERIFICATION": 2.7433187999995425,
+      "ANSWER_GENERATION": 4.303323499989347,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_meth_02",
+    "question_type": "METHOD",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The system fuses dense and sparse retrieval by leveraging a retrieval module to augment pre-trained, generative language models.",
+    "supporting_chunk_ids": [
+      "test_document_p009_c020"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p009_c020_claim_5"
+    ],
+    "evidence_count": 5,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 74,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true,
+        "requirement_3_success": true
+      }
+    },
+    "total_latency": 78.95285299999523,
+    "stage_latencies": {
+      "PLANNING": 7.700473200005945,
+      "RETRIEVAL": 13.0263363999984,
+      "COVERAGE": 5.079999391455203e-05,
+      "CLAIM_GRAPH": 47.696598800001084,
+      "VERIFICATION": 3.588690400007181,
+      "CONTRADICTION": 0.002795799999148585,
+      "CROSS_LINGUAL": 0.00010580000525806099,
+      "CALIBRATION": 1.2899996363557875e-05,
+      "SELECTIVE_VERIFICATION": 2.9363615000038408,
+      "ANSWER_GENERATION": 4.000634700001683,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_meth_03",
+    "question_type": "METHOD",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The system avoids running additional forward passes by leveraging bi-directional attention in the encoder-decoder model, similar to BART and T5.",
+    "supporting_chunk_ids": [
+      "test_document_p009_c020"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p009_c020_claim_4"
+    ],
+    "evidence_count": 4,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 63,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 69.66270250000525,
+    "stage_latencies": {
+      "PLANNING": 6.383184899998014,
+      "RETRIEVAL": 8.993273900006898,
+      "COVERAGE": 5.220000457484275e-05,
+      "CLAIM_GRAPH": 43.91187090000312,
+      "VERIFICATION": 3.3701521000039065,
+      "CONTRADICTION": 0.002053199990768917,
+      "CROSS_LINGUAL": 9.429999045096338e-05,
+      "CALIBRATION": 1.1199997970834374e-05,
+      "SELECTIVE_VERIFICATION": 2.9324242000002414,
+      "ANSWER_GENERATION": 4.06878049999068,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_meth_04",
+    "question_type": "METHOD",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.65,
+    "answer": "Concurrent works handle entity embeddings by learning a document embedding for the null document, a static learnt bias term, or a neural network to predict the logit.",
+    "supporting_chunk_ids": [
+      "test_document_p018_c040"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p018_c040_claim_4"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 43,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 46.75290269999823,
+    "stage_latencies": {
+      "PLANNING": 6.110213699997985,
+      "RETRIEVAL": 3.2830264999938663,
+      "COVERAGE": 5.1000009989365935e-05,
+      "CLAIM_GRAPH": 31.63069039999391,
+      "VERIFICATION": 1.0353703999862773,
+      "CONTRADICTION": 0.0009585000079823658,
+      "CROSS_LINGUAL": 6.890000076964498e-05,
+      "CALIBRATION": 8.59999272506684e-06,
+      "SELECTIVE_VERIFICATION": 0.6654000999988057,
+      "ANSWER_GENERATION": 4.026510199997574,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_comp_01",
+    "question_type": "COMPARATIVE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "People generally prefer RAG over purely parametric BART due to its factual accuracy and specificity.",
+    "supporting_chunk_ids": [
+      "test_document_p006_c014",
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c014_claim_1",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 6,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 82,
+    "verified_claim_count": 4,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 2,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true,
+        "requirement_3_success": true
+      }
+    },
+    "total_latency": 79.70286320000014,
+    "stage_latencies": {
+      "PLANNING": 13.49660899999435,
+      "RETRIEVAL": 3.66631650000636,
+      "COVERAGE": 4.6200002543628216e-05,
+      "CLAIM_GRAPH": 48.48704930000531,
+      "VERIFICATION": 5.280658099989523,
+      "CONTRADICTION": 1.1837365999963367,
+      "CROSS_LINGUAL": 0.00012820000119972974,
+      "CALIBRATION": 2.4199995095841587e-05,
+      "SELECTIVE_VERIFICATION": 3.1947791000129655,
+      "ANSWER_GENERATION": 4.392867800008389,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_comp_02",
+    "question_type": "COMPARATIVE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "RAG hallucinates less compared to other models.",
+    "supporting_chunk_ids": [
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c014_claim_1",
+      "test_document_p006_c014_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 1.0,
+    "claim_count": 45,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true
+      }
+    },
+    "total_latency": 46.892275200007134,
+    "stage_latencies": {
+      "PLANNING": 6.551381999990554,
+      "RETRIEVAL": 3.3553048000030685,
+      "COVERAGE": 4.0099999750964344e-05,
+      "CLAIM_GRAPH": 26.449899700004607,
+      "VERIFICATION": 3.3198278000054415,
+      "CONTRADICTION": 0.0011197000130778179,
+      "CROSS_LINGUAL": 8.399999933317304e-05,
+      "CALIBRATION": 1.200000406242907e-05,
+      "SELECTIVE_VERIFICATION": 3.057597799997893,
+      "ANSWER_GENERATION": 4.15642059998936,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_comp_03",
+    "question_type": "COMPARATIVE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "FAISS on CPU is slower than exact search.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [],
+    "evidence_count": 5,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 104,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true,
+        "requirement_2_success": true,
+        "requirement_3_success": true
+      }
+    },
+    "total_latency": 88.52994940000644,
+    "stage_latencies": {
+      "PLANNING": 7.633888699987438,
+      "RETRIEVAL": 10.519447999991826,
+      "COVERAGE": 6.669999856967479e-05,
+      "CLAIM_GRAPH": 63.94983389999834,
+      "VERIFICATION": 1.4825726999988547,
+      "CONTRADICTION": 0.004784000004292466,
+      "CROSS_LINGUAL": 0.00010649999603629112,
+      "CALIBRATION": 9.399998816661537e-06,
+      "SELECTIVE_VERIFICATION": 1.1122180999955162,
+      "ANSWER_GENERATION": 3.82626529999834,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_quant_01",
+    "question_type": "QUANTITATIVE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 54,
+    "verified_claim_count": 0,
+    "selected_verification_count": 0,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 43.10904660000233,
+    "stage_latencies": {
+      "PLANNING": 5.062730999998166,
+      "RETRIEVAL": 2.6499862000055145,
+      "COVERAGE": 6.490001396741718e-05,
+      "CLAIM_GRAPH": 31.584527200000593,
+      "VERIFICATION": 6.200000643730164e-05,
+      "CONTRADICTION": 0.0016171000024769455,
+      "CROSS_LINGUAL": 5.049999163020402e-05,
+      "CALIBRATION": 2.5000044843181968e-06,
+      "SELECTIVE_VERIFICATION": 0.00048580000293441117,
+      "ANSWER_GENERATION": 3.8088662999944063,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_quant_02",
+    "question_type": "QUANTITATIVE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "5 or 10",
+    "supporting_chunk_ids": [
+      "test_document_p008_c019"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p008_c019_claim_3",
+      "test_document_p008_c019_claim_4"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 1.0,
+    "claim_count": 51,
+    "verified_claim_count": 9,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 56.28291940000781,
+    "stage_latencies": {
+      "PLANNING": 4.459264099990833,
+      "RETRIEVAL": 2.5664223000057973,
+      "COVERAGE": 3.700000524986535e-05,
+      "CLAIM_GRAPH": 30.25865230000636,
+      "VERIFICATION": 10.652603200011072,
+      "CONTRADICTION": 1.0683371000050101,
+      "CROSS_LINGUAL": 0.0001446999958716333,
+      "CALIBRATION": 2.8800001018680632e-05,
+      "SELECTIVE_VERIFICATION": 2.744947500003036,
+      "ANSWER_GENERATION": 4.531802400000743,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_quant_03",
+    "question_type": "QUANTITATIVE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The FEVER dataset contains 1,000 instances.",
+    "supporting_chunk_ids": [
+      "test_document_p015_c034"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p015_c034_claim_2"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 42,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 38.407271000003675,
+    "stage_latencies": {
+      "PLANNING": 4.671250700004748,
+      "RETRIEVAL": 2.631340799998725,
+      "COVERAGE": 4.350001108832657e-05,
+      "CLAIM_GRAPH": 25.155799000000115,
+      "VERIFICATION": 1.3165715000068303,
+      "CONTRADICTION": 0.0007475000020349398,
+      "CROSS_LINGUAL": 5.840000812895596e-05,
+      "CALIBRATION": 6.800008122809231e-06,
+      "SELECTIVE_VERIFICATION": 0.7706795999984024,
+      "ANSWER_GENERATION": 3.860267700001714,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_unans_01",
+    "question_type": "UNANSWERABLE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 60,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      }
+    },
+    "total_latency": 204.52030530000047,
+    "stage_latencies": {
+      "PLANNING": 4.382520600003772,
+      "RETRIEVAL": 27.49197180000192,
+      "COVERAGE": 3.600001218728721e-05,
+      "CLAIM_GRAPH": 161.1563935000013,
+      "VERIFICATION": 3.468096600001445,
+      "CONTRADICTION": 1.1537562000012258,
+      "CROSS_LINGUAL": 0.00017830000433605164,
+      "CALIBRATION": 2.6599998818710446e-05,
+      "SELECTIVE_VERIFICATION": 2.933194299999741,
+      "ANSWER_GENERATION": 3.933311799992225,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_unans_02",
+    "question_type": "UNANSWERABLE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG models were trained using the same hardware as the DPR model, as mentioned in the document.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 42,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 48.32872019999195,
+    "stage_latencies": {
+      "PLANNING": 4.58742800001346,
+      "RETRIEVAL": 2.5513461000082316,
+      "COVERAGE": 6.130000110715628e-05,
+      "CLAIM_GRAPH": 34.76247439999133,
+      "VERIFICATION": 1.4120780999946874,
+      "CONTRADICTION": 0.0008698999881744385,
+      "CROSS_LINGUAL": 8.38999985717237e-05,
+      "CALIBRATION": 7.599999662488699e-06,
+      "SELECTIVE_VERIFICATION": 1.0994829999981448,
+      "ANSWER_GENERATION": 3.914421900000889,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_unans_03",
+    "question_type": "UNANSWERABLE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Ernest Hemingway",
+    "supporting_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c015_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 35,
+    "verified_claim_count": 3,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 2,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 67.03611979998823,
+    "stage_latencies": {
+      "PLANNING": 4.547355200003949,
+      "RETRIEVAL": 28.35878209999646,
+      "COVERAGE": 3.499999002087861e-05,
+      "CLAIM_GRAPH": 22.815755100004026,
+      "VERIFICATION": 3.7516522999940207,
+      "CONTRADICTION": 0.0011621000012382865,
+      "CROSS_LINGUAL": 0.00010910000128205866,
+      "CALIBRATION": 1.9700004486367106e-05,
+      "SELECTIVE_VERIFICATION": 3.2351449000125285,
+      "ANSWER_GENERATION": 4.325609799998347,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_unans_04",
+    "question_type": "UNANSWERABLE",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": "FORCED_GUARDRAIL_NO_EVIDENCE",
+    "final_status": "INSUFFICIENT_EVIDENCE",
+    "final_confidence": 0.0,
+    "answer": "The document does not provide enough information to answer this question.",
+    "supporting_chunk_ids": [],
+    "supporting_claim_ids": [],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 48,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 43.25267590000294,
+    "stage_latencies": {
+      "PLANNING": 4.86824009999691,
+      "RETRIEVAL": 2.5762982000014745,
+      "COVERAGE": 3.060000017285347e-05,
+      "CLAIM_GRAPH": 30.11821550001332,
+      "VERIFICATION": 1.1225774999911664,
+      "CONTRADICTION": 0.0009962000040104613,
+      "CROSS_LINGUAL": 7.680000271648169e-05,
+      "CALIBRATION": 1.0499992640689015e-05,
+      "SELECTIVE_VERIFICATION": 0.6131651000032434,
+      "ANSWER_GENERATION": 3.95246010000119,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_contra_01",
+    "question_type": "CONTRADICTION",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "models hallucinate less",
+    "supporting_chunk_ids": [
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c014_claim_1"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 1.0,
+    "claim_count": 52,
+    "verified_claim_count": 2,
+    "selected_verification_count": 2,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 64.21779109998897,
+    "stage_latencies": {
+      "PLANNING": 6.573745200003032,
+      "RETRIEVAL": 6.497954100006609,
+      "COVERAGE": 3.99000127799809e-05,
+      "CLAIM_GRAPH": 43.23473229999945,
+      "VERIFICATION": 2.253508999987389,
+      "CONTRADICTION": 0.0013048000109847635,
+      "CROSS_LINGUAL": 7.79999973019585e-05,
+      "CALIBRATION": 9.900002623908222e-06,
+      "SELECTIVE_VERIFICATION": 1.9666274999908637,
+      "ANSWER_GENERATION": 3.6893835999944713,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_contra_02",
+    "question_type": "CONTRADICTION",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "5, 10, or 1000 documents",
+    "supporting_chunk_ids": [
+      "test_document_p008_c019"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p008_c019_claim_3",
+      "test_document_p008_c019_claim_4"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": true,
+    "evidence_recall": 0.5,
+    "claim_count": 58,
+    "verified_claim_count": 6,
+    "selected_verification_count": 3,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 56.941815000012866,
+    "stage_latencies": {
+      "PLANNING": 6.5850777000014205,
+      "RETRIEVAL": 2.5927833000023384,
+      "COVERAGE": 3.3199990866705775e-05,
+      "CLAIM_GRAPH": 34.31862579999142,
+      "VERIFICATION": 6.639754400006495,
+      "CONTRADICTION": 0.0022997000050963834,
+      "CROSS_LINGUAL": 0.00011279998579993844,
+      "CALIBRATION": 2.400000812485814e-05,
+      "SELECTIVE_VERIFICATION": 2.7546879000001354,
+      "ANSWER_GENERATION": 4.047716000000946,
+      "COMPLETED": 0.0
+    }
+  },
+  {
+    "question_id": "q_multi_01",
+    "question_type": "MULTILINGUAL",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "experiment_id": "exp_corrected224_20261004_210019",
+    "success": true,
+    "error": null,
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG paper evaluates on multilingual tasks.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": false,
+    "evidence_recall": 0.0,
+    "claim_count": 54,
+    "verified_claim_count": 1,
+    "selected_verification_count": 1,
+    "metadata": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      }
+    },
+    "total_latency": 49.4330142000108,
+    "stage_latencies": {
+      "PLANNING": 4.718692000009469,
+      "RETRIEVAL": 6.7473564999963855,
+      "COVERAGE": 3.510000533424318e-05,
+      "CLAIM_GRAPH": 31.62549420000869,
+      "VERIFICATION": 1.4382105999975465,
+      "CONTRADICTION": 0.001203700012410991,
+      "CROSS_LINGUAL": 6.979999307077378e-05,
+      "CALIBRATION": 6.800008122809231e-06,
+      "SELECTIVE_VERIFICATION": 1.1237053999939235,
+      "ANSWER_GENERATION": 3.7778298999910476,
+      "COMPLETED": 0.0
+    }
+  }
+]

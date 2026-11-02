@@ -1,0 +1,28 @@
+{
+  "experiment_id": "exp_final224_remediation_20261022_183626",
+  "timestamp": "2026-10-22T18:36:38.927375",
+  "model_name": "llama3.2:latest",
+  "benchmark_path": "data/benchmark/aeris_benchmark.json",
+  "benchmark_sha256": "ce9a86b6b4ea354217c54db4b23a5251e97065de53773cf154bb95daccc8e974",
+  "benchmark_question_count": 28,
+  "variant_list": [
+    "FULL_AERIS",
+    "NO_ADAPTIVE_RETRIEVAL",
+    "NO_QUERY_REFORMULATION",
+    "NO_RETRIEVAL_MEMORY",
+    "NO_CLAIM_VERIFICATION",
+    "NO_CONTRADICTION_ANALYSIS",
+    "NO_CROSSLINGUAL_AGREEMENT",
+    "NO_SELECTIVE_VERIFICATION"
+  ],
+  "expected_run_count": 224,
+  "experiment_configuration": {
+    "temperature": 0.0,
+    "total_variants": 8,
+    "total_questions": 28,
+    "provenance_guardrails": "enabled",
+    "decoupled_metrics": "enabled"
+  },
+  "output_path": "data/results/ablation_results_exp_final224_remediation_20261022_183626.json",
+  "diagnostics_path": "data/results/ablation_results_exp_final224_remediation_20261022_183626_diagnostics.jsonl"
+}

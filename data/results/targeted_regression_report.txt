@@ -1,0 +1,53 @@
+STEP 22C — TARGETED REGRESSION
+
+Total runs: 64
+Successful: 64
+Failed: 0
+Success rate: 100.00%
+
+Failures by variant:
+
+Failures by question:
+
+Failures by stage:
+
+Claim typing:
+Total claims: 3976
+Batches: 432
+Recovered omissions: 432
+Unrecovered omissions: 0
+Invented IDs: 0
+Duplicate indexes: 0
+Unknown indexes: 0
+
+Planner:
+Initial schema failures: 6
+Recovered: 3
+Unrecovered: 0
+
+Answer gating:
+High-confidence/no-evidence: 0
+Completed-without-evidence: 0
+Invalid evidence IDs: 0
+
+Latency:
+Mean: 64.40
+Median: 50.47
+P90: 63.17
+P95: 191.86
+P99: 260.65
+Max: 346.59
+Infrastructure outliers: None
+
+Structural integrity:
+PASS
+
+Primary success criterion:
+PASS
+
+Secondary correctness criteria:
+PASS
+
+FINAL DECISION:
+
+READY_FOR_CLEAN_224_ABLATION

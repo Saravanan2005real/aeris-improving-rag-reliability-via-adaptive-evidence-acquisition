@@ -1,0 +1,33 @@
+{
+  "total_runs": 64,
+  "successful_runs": 64,
+  "failed_runs": 0,
+  "final_success_rate": 100.0,
+  "failures_by_stage": {},
+  "failures_by_error": {},
+  "json_repair_count": 115,
+  "retry_count": 90,
+  "mean_latency": 22.12819118303551,
+  "median_latency": 2.3140463829040527,
+  "p95_latency": 152.87605720758435,
+  "per_question_success_count": {
+    "q_df_06": 8,
+    "q_mh_02": 8,
+    "q_mh_04": 8,
+    "q_meth_01": 8,
+    "q_comp_01": 8,
+    "q_comp_02": 8,
+    "q_quant_02": 8,
+    "q_contra_02": 8
+  },
+  "per_variant_success_count": {
+    "FULL_AERIS": 8,
+    "NO_ADAPTIVE_RETRIEVAL": 8,
+    "NO_QUERY_REFORMULATION": 8,
+    "NO_RETRIEVAL_MEMORY": 8,
+    "NO_CLAIM_VERIFICATION": 8,
+    "NO_CONTRADICTION_ANALYSIS": 8,
+    "NO_CROSSLINGUAL_AGREEMENT": 8,
+    "NO_SELECTIVE_VERIFICATION": 8
+  }
+}

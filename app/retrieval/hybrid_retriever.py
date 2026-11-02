@@ -90,6 +90,39 @@ class HybridRetriever:
 
         all_chunk_ids = set(dense_scores) | set(bm25_scores)
 
+        metadata_terms = (
+            "author", "authors", "affiliation", "affiliated", "institution",
+            "department", "university", "college", "who wrote", "writer",
+            "written by", "title", "first author", "lead author", "co-author",
+            "published", "journal", "conference", "email", "institute"
+        )
+        is_metadata_query = any(term in query.lower() for term in metadata_terms)
+
+        # In research papers, page 1 chunk 1 contains document title, authors, and affiliations.
+        # Ensure the document front-matter header is in candidate pool for metadata queries.
+        if is_metadata_query:
+            try:
+                doc_metadata = self.bm25_retriever._load_metadata(document_id)
+                if doc_metadata:
+                    header_meta = doc_metadata[0]
+                    header_id = header_meta["chunk_id"]
+                    if header_id not in metadata_by_chunk:
+                        from app.retrieval.bm25_retriever import BM25Result
+                        metadata_by_chunk[header_id] = BM25Result(
+                            rank=1,
+                            chunk_id=header_id,
+                            document_id=document_id,
+                            text=header_meta.get("text", ""),
+                            language=header_meta.get("language", "en"),
+                            pages=header_meta.get("pages", [1]),
+                            start_page=header_meta.get("start_page", 1),
+                            end_page=header_meta.get("end_page", 1),
+                            bm25_score=10.0,
+                        )
+                    all_chunk_ids.add(header_id)
+            except Exception:
+                pass
+
         combined = []
 
         for chunk_id in all_chunk_ids:
@@ -101,6 +134,9 @@ class HybridRetriever:
                 hybrid_score += 1.0 / (self.rrf_k + dense_ranks[chunk_id])
             if chunk_id in bm25_ranks:
                 hybrid_score += 1.0 / (self.rrf_k + bm25_ranks[chunk_id])
+
+            if is_metadata_query and (chunk_id.endswith("_p001_c001") or "c001" in chunk_id):
+                hybrid_score += 1.0
 
             base = metadata_by_chunk[chunk_id]
 

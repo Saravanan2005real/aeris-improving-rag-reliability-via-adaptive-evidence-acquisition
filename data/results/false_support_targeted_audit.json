@@ -1,0 +1,1597 @@
+[
+  {
+    "question_id": "q_unans_01",
+    "variant": "FULL_AERIS",
+    "question_text": "What is the capital of Japan?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 57,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 57
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_02",
+    "variant": "FULL_AERIS",
+    "question_text": "What hardware was used to train the RAG models?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG models were trained using the same hardware as the DPR model, as mentioned in the document.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 41,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 41
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_03",
+    "variant": "FULL_AERIS",
+    "question_text": "Who is the lead author of the purely parametric BART paper?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Ernest Hemingway",
+    "supporting_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c015_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 2,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 2,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 32,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 32
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_multi_01",
+    "variant": "FULL_AERIS",
+    "question_text": "Does the RAG paper evaluate on multilingual tasks?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG paper evaluates on multilingual tasks.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 53,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 53
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_01",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "question_text": "What is the capital of Japan?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 4,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 4,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 57,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 57
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_02",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "question_text": "What hardware was used to train the RAG models?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG models were trained using the same hardware as the DPR model, as mentioned in the document.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 41,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 41
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_03",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "question_text": "Who is the lead author of the purely parametric BART paper?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Ernest Hemingway",
+    "supporting_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c015_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 2,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 2,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 4,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 4,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 32,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 32
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_multi_01",
+    "variant": "NO_ADAPTIVE_RETRIEVAL",
+    "question_text": "Does the RAG paper evaluate on multilingual tasks?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG paper evaluates on multilingual tasks.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 53,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 53
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_01",
+    "variant": "NO_QUERY_REFORMULATION",
+    "question_text": "What is the capital of Japan?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 3,
+      "candidate_depth_expansions": 1,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 3,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 57,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 57
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_02",
+    "variant": "NO_QUERY_REFORMULATION",
+    "question_text": "What hardware was used to train the RAG models?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG models were trained using the same hardware as the DPR model, as mentioned in the document.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 41,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 41
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_03",
+    "variant": "NO_QUERY_REFORMULATION",
+    "question_text": "Who is the lead author of the purely parametric BART paper?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Ernest Hemingway",
+    "supporting_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c015_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 2,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 2,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 3,
+      "candidate_depth_expansions": 1,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 3,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 32,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 32
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_multi_01",
+    "variant": "NO_QUERY_REFORMULATION",
+    "question_text": "Does the RAG paper evaluate on multilingual tasks?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG paper evaluates on multilingual tasks.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 53,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 53
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_01",
+    "variant": "NO_RETRIEVAL_MEMORY",
+    "question_text": "What is the capital of Japan?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 0,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 57,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 57
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_02",
+    "variant": "NO_RETRIEVAL_MEMORY",
+    "question_text": "What hardware was used to train the RAG models?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG models were trained using the same hardware as the DPR model, as mentioned in the document.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 0,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 41,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 41
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_03",
+    "variant": "NO_RETRIEVAL_MEMORY",
+    "question_text": "Who is the lead author of the purely parametric BART paper?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Ernest Hemingway",
+    "supporting_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c015_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 2,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 2,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 0,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 32,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 32
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_multi_01",
+    "variant": "NO_RETRIEVAL_MEMORY",
+    "question_text": "Does the RAG paper evaluate on multilingual tasks?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG paper evaluates on multilingual tasks.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 0,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 53,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 53
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_01",
+    "variant": "NO_CLAIM_VERIFICATION",
+    "question_text": "What is the capital of Japan?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 1.0,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 0,
+    "selected_claims": 3,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 0,
+      "claims_verified": 0,
+      "verification_skipped_count": 0,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 57
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_02",
+    "variant": "NO_CLAIM_VERIFICATION",
+    "question_text": "What hardware was used to train the RAG models?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.5,
+    "answer": "The RAG models were initialized with the NQ RAG model and trained on the same train/dev/test splits as prior work.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 0,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 0,
+      "claims_verified": 0,
+      "verification_skipped_count": 0,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 41
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_03",
+    "variant": "NO_CLAIM_VERIFICATION",
+    "question_text": "Who is the lead author of the purely parametric BART paper?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 1.0,
+    "answer": "Ernest Hemingway",
+    "supporting_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c015_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 0,
+    "selected_claims": 3,
+    "contradiction_relations": 2,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 2,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 0,
+      "claims_verified": 0,
+      "verification_skipped_count": 0,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 32
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_01",
+    "variant": "NO_CONTRADICTION_ANALYSIS",
+    "question_text": "What is the capital of Japan?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 57,
+      "contradiction_call_count": 0,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 57
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_02",
+    "variant": "NO_CONTRADICTION_ANALYSIS",
+    "question_text": "What hardware was used to train the RAG models?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG models were trained using the same hardware as the DPR model, as mentioned in the document.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 41,
+      "contradiction_call_count": 0,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 41
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_03",
+    "variant": "NO_CONTRADICTION_ANALYSIS",
+    "question_text": "Who is the lead author of the purely parametric BART paper?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Ernest Hemingway",
+    "supporting_chunk_ids": [
+      "test_document_p006_c015"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c015_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 32,
+      "contradiction_call_count": 0,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 32
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_multi_01",
+    "variant": "NO_CONTRADICTION_ANALYSIS",
+    "question_text": "Does the RAG paper evaluate on multilingual tasks?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG paper evaluates on multilingual tasks.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 53,
+      "contradiction_call_count": 0,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 53
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_01",
+    "variant": "NO_CROSSLINGUAL_AGREEMENT",
+    "question_text": "What is the capital of Japan?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 57,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 0,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 57
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_02",
+    "variant": "NO_CROSSLINGUAL_AGREEMENT",
+    "question_text": "What hardware was used to train the RAG models?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG models were trained using the same hardware as the DPR model, as mentioned in the document.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 41,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 0,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 41
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_03",
+    "variant": "NO_CROSSLINGUAL_AGREEMENT",
+    "question_text": "Who is the lead author of the purely parametric BART paper?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Ernest Hemingway",
+    "supporting_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c015_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 3,
+    "contradiction_relations": 2,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 2,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 32,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 0,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 3,
+      "skipped_claim_count": 32
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_multi_01",
+    "variant": "NO_CROSSLINGUAL_AGREEMENT",
+    "question_text": "Does the RAG paper evaluate on multilingual tasks?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG paper evaluates on multilingual tasks.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 1,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 53,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 0,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 1,
+      "selected_claim_count": 1,
+      "skipped_claim_count": 53
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_01",
+    "variant": "NO_SELECTIVE_VERIFICATION",
+    "question_text": "What is the capital of Japan?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Tokyo",
+    "supporting_chunk_ids": [
+      "test_document_p011_c025"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p011_c025_claim_10"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 0,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 57,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 0,
+      "selected_claim_count": 0,
+      "skipped_claim_count": 0
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_02",
+    "variant": "NO_SELECTIVE_VERIFICATION",
+    "question_text": "What hardware was used to train the RAG models?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG models were trained using the same hardware as the DPR model, as mentioned in the document.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 0,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 41,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 0,
+      "selected_claim_count": 0,
+      "skipped_claim_count": 0
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_unans_03",
+    "variant": "NO_SELECTIVE_VERIFICATION",
+    "question_text": "Who is the lead author of the purely parametric BART paper?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "Ernest Hemingway",
+    "supporting_chunk_ids": [
+      "test_document_p006_c015",
+      "test_document_p006_c014"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p006_c015_claim_3",
+      "test_document_p006_c014_claim_3"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": false
+    },
+    "verified_claims": 3,
+    "selected_claims": 0,
+    "contradiction_relations": 2,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 2,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": false
+      },
+      "adaptive_retrieval_triggered": true,
+      "retrieval_attempt_count": 12,
+      "candidate_depth_expansions": 4,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 12,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 3,
+      "claims_verified": 3,
+      "verification_skipped_count": 32,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 2,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 0,
+      "selected_claim_count": 0,
+      "skipped_claim_count": 0
+    },
+    "error": null
+  },
+  {
+    "question_id": "q_multi_01",
+    "variant": "NO_SELECTIVE_VERIFICATION",
+    "question_text": "Does the RAG paper evaluate on multilingual tasks?",
+    "final_status": "SUPPORTED",
+    "final_confidence": 0.9,
+    "answer": "The RAG paper evaluates on multilingual tasks.",
+    "supporting_chunk_ids": [
+      "test_document_p004_c010"
+    ],
+    "supporting_claim_ids": [
+      "test_document_p004_c010_claim_6"
+    ],
+    "evidence_count": 3,
+    "evidence_hit": null,
+    "evidence_recall": null,
+    "coverage_result": {
+      "requirement_1_success": true
+    },
+    "verified_claims": 1,
+    "selected_claims": 0,
+    "contradiction_relations": 0,
+    "cross_lingual_relations": 0,
+    "telemetry": {
+      "contradiction_relations": 0,
+      "cross_lingual_relations": 0,
+      "calibrated_records": 0,
+      "coverage": {
+        "requirement_1_success": true
+      },
+      "adaptive_retrieval_triggered": false,
+      "retrieval_attempt_count": 1,
+      "candidate_depth_expansions": 0,
+      "reformulation_triggered": false,
+      "reformulation_attempt_count": 0,
+      "memory_lookup_count": 1,
+      "memory_hit_count": 0,
+      "memory_skip_count": 0,
+      "verification_call_count": 1,
+      "claims_verified": 1,
+      "verification_skipped_count": 53,
+      "contradiction_call_count": 1,
+      "contradiction_pairs_evaluated": 0,
+      "cross_lingual_call_count": 1,
+      "cross_lingual_pairs_evaluated": 0,
+      "selective_verification_call_count": 0,
+      "selected_claim_count": 0,
+      "skipped_claim_count": 0
+    },
+    "error": null
+  }
+]

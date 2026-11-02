@@ -1,7 +1,8 @@
 from enum import Enum
 
 from pydantic import BaseModel, Field
-from ollama import Client
+from app.config import settings
+from app.utils.model_client import get_ollama_client, timed_model_chat
 
 
 class CrossLingualAgreementLabel(str, Enum):
@@ -45,11 +46,14 @@ class CrossLingualEvidenceClassifier:
 
     def __init__(
         self,
-        host: str = "http://localhost:11434",
-        model: str = "llama3.2:latest",
+        host: str | None = None,
+        model: str | None = None,
+        timeout: float | None = None,
     ):
-        self.client = Client(host=host)
-        self.model = model
+        self.host = host or settings.ollama_host
+        self.model = model or settings.ollama_model
+        self.timeout = timeout or settings.ollama_timeout
+        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
 
     def classify(
         self,
@@ -167,7 +171,8 @@ Evidence B:
 {evidence_b}
 """
 
-        response = self.client.chat(
+        chat_res = timed_model_chat(
+            client=self.client,
             model=self.model,
             messages=[
                 {
@@ -179,9 +184,10 @@ Evidence B:
                 "temperature": 0,
             },
             format="json",
+            stage="Cross-Lingual",
         )
 
-        data = response["message"]["content"]
+        data = chat_res["content"]
 
         import json
 

@@ -1,4 +1,5 @@
 import json
+import time
 import re
 from typing import List, Optional
 
@@ -6,6 +7,8 @@ import ollama
 
 from app.config import settings
 from app.planning.schemas import InformationRequirement
+from app.utils.json_parser import extract_json
+from app.utils.model_client import get_ollama_client, timed_model_chat
 
 class QueryReformulator:
     """
@@ -15,10 +18,12 @@ class QueryReformulator:
         self,
         model: Optional[str] = None,
         host: Optional[str] = None,
+        timeout: Optional[float] = None,
     ):
         self.model = model or settings.ollama_model
         self.host = host or settings.ollama_host
-        self.client = ollama.Client(host=self.host)
+        self.timeout = timeout or settings.ollama_timeout
+        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
 
     def _build_prompt(
         self,
@@ -75,16 +80,6 @@ Use exactly this structure:
 }}
 """.strip()
 
-    @staticmethod
-    def _extract_json(text: str) -> str:
-        text = text.strip()
-        text = re.sub(r"^```(?:json)?\s*", "", text)
-        text = re.sub(r"\s*```$", "", text)
-        start = text.find("{")
-        end = text.rfind("}")
-        if start == -1 or end == -1 or end <= start:
-            raise ValueError("No valid JSON object found in model response.")
-        return text[start:end + 1]
 
     def reformulate(
         self,
@@ -96,18 +91,24 @@ Use exactly this structure:
         prompt = self._build_prompt(question, requirement, original_query, max_variants)
         
         try:
-            response = self.client.chat(
+            chat_res = timed_model_chat(
+                client=self.client,
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
                 format="json",
-                options={"temperature": 0},
+                options={"temperature": 0, "num_predict": 1024},
+                stage="Query Reformulation",
             )
-            raw_content = response["message"]["content"]
-            json_text = self._extract_json(raw_content)
+            raw_content = chat_res["content"]
+            elapsed = chat_res["elapsed_seconds"]
+            json_text = extract_json(raw_content)
             data = json.loads(json_text)
             queries = data.get("queries", [])
             if not isinstance(queries, list):
                 return []
             return [str(q).strip() for q in queries if str(q).strip()]
-        except Exception:
-            return []
+        except Exception as e:
+            elapsed = time.time() - start_time if 'start_time' in locals() else 0.0
+            ctx_size = len(prompt)
+            print(f"Error during query reformulation [Model: {self.model}, Stage: reformulator, Context: {ctx_size} chars, Time: {elapsed:.2f}s]: {e}")
+            raise e

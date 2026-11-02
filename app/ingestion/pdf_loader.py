@@ -1,11 +1,13 @@
 import os
 import pymupdf
-from langdetect import detect, DetectorFactory
+try:
+    from langdetect import detect, DetectorFactory
+    DetectorFactory.seed = 0
+except ImportError:
+    detect = None
+
 from pydantic import BaseModel
 from typing import List
-
-# Ensure consistent language detection
-DetectorFactory.seed = 0
 
 class Page(BaseModel):
     page_number: int
@@ -21,7 +23,7 @@ class Document(BaseModel):
     pages: List[Page]
 
 def detect_language(text: str) -> str:
-    if not text or len(text.strip()) < 10:
+    if not text or len(text.strip()) < 10 or detect is None:
         return "unknown"
     try:
         return detect(text)

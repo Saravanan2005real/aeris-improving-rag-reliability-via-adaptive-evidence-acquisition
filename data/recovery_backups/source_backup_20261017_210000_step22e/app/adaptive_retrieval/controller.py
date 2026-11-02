@@ -1,0 +1,481 @@
+from typing import Dict, List
+
+from app.coverage.evidence_coverage import (
+    EvidenceCoverageEstimator,
+    EvidenceItem,
+)
+from app.planning.schemas import InformationRequirement
+from app.retrieval.hybrid_retriever import HybridRetriever
+from app.retrieval.reranker import Reranker
+
+from app.adaptive_retrieval.schemas import (
+    AdaptiveRetrievalResult,
+    RetrievalAttempt,
+)
+from app.adaptive_retrieval.query_reformulator import QueryReformulator
+from app.retrieval_memory.memory import RetrievalMemory
+
+
+class AdaptiveRetrievalController:
+    """
+    Adaptive evidence acquisition controller.
+
+    Strategy:
+        1. Retrieve with an initial candidate pool.
+        2. Rerank the retrieved evidence.
+        3. Estimate evidence coverage.
+        4. Stop if the requirement is sufficiently supported.
+        5. Otherwise expand the candidate pool.
+        6. Repeat until the maximum retrieval depth is reached.
+
+    This first implementation intentionally keeps the adaptation policy
+    simple and deterministic. Query reformulation and evidence
+    diversification can be added as later extensions.
+    """
+
+    def __init__(
+        self,
+        hybrid_retriever: HybridRetriever,
+        reranker: Reranker,
+        coverage_estimator: EvidenceCoverageEstimator,
+        query_reformulator: QueryReformulator | None = None,
+        candidate_k_schedule: List[int] | None = None,
+        rerank_top_k: int = 5,
+        max_attempts_per_query: int | None = None,
+        max_query_variants: int = 3,
+        support_threshold: float = 0.70,
+        memory: RetrievalMemory | None = None,
+    ):
+        self.hybrid_retriever = hybrid_retriever
+        self.reranker = reranker
+        self.coverage_estimator = coverage_estimator
+        self.query_reformulator = query_reformulator or QueryReformulator()
+
+        self.candidate_k_schedule = (
+            candidate_k_schedule
+            if candidate_k_schedule is not None
+            else [10, 25, 50]
+        )
+
+        self.rerank_top_k = rerank_top_k
+
+        self.max_attempts_per_query = (
+            max_attempts_per_query
+            if max_attempts_per_query is not None
+            else len(self.candidate_k_schedule)
+        )
+        
+        self.max_query_variants = max_query_variants
+
+        self.support_threshold = support_threshold
+
+        self.memory = memory
+
+    def _is_sufficient(
+        self,
+        status: str | None,
+        score: float | None,
+    ) -> bool:
+        """
+        Determine whether the current evidence is sufficient to stop.
+        """
+
+        if status == "SUPPORTED":
+            return True
+
+        if score is not None and score >= self.support_threshold:
+            return True
+
+        return False
+
+    def _build_evidence_items(
+        self,
+        reranked_items,
+    ) -> List[EvidenceItem]:
+        """
+        Convert reranker results into EvidenceItem objects expected
+        by the Step 9 coverage estimator.
+        """
+
+        evidence_items = []
+
+        for item in reranked_items:
+            evidence_items.append(
+                EvidenceItem(
+                    chunk_id=item.chunk_id,
+                    document_id=item.document_id,
+                    text=item.text,
+                    language=item.language,
+                    pages=item.pages,
+                    start_page=item.start_page,
+                    end_page=item.end_page,
+                    retrieval_score=item.retrieval_score,
+                    rerank_score=item.rerank_score,
+                )
+            )
+
+        return evidence_items
+
+    def retrieve_for_requirement(
+        self,
+        document_id: str,
+        question: str,
+        requirement: InformationRequirement,
+        enable_adaptive_retrieval: bool = True,
+        enable_query_reformulation: bool = True,
+        enable_retrieval_memory: bool = True,
+        memory=None,
+    ) -> AdaptiveRetrievalResult:
+        """
+        Perform adaptive retrieval for one information requirement.
+        """
+
+        if not requirement.retrieval_queries:
+            return AdaptiveRetrievalResult(
+                requirement_id=requirement.requirement_id,
+                original_query=requirement.description,
+                final_query=requirement.description,
+                final_candidate_k=0,
+                total_unique_chunks=0,
+                final_coverage_status="UNSUPPORTED",
+                final_coverage_score=0.0,
+                success=False,
+                stop_reason="No retrieval queries available.",
+            )
+
+        original_query = requirement.retrieval_queries[0]
+        queries_to_try = [(original_query, "original")]
+
+        attempts: List[RetrievalAttempt] = []
+        all_evidence: Dict[str, EvidenceItem] = {}
+
+        final_status = "UNSUPPORTED"
+        final_score = 0.0
+        final_candidate_k = 0
+        stop_reason = "Maximum adaptive retrieval depth reached."
+        global_attempt_number = 1
+        success = False
+        final_query = original_query
+
+        for query_idx, (current_query, query_type) in enumerate(queries_to_try):
+            query_sufficient = False
+            
+            schedule = self.candidate_k_schedule[: self.max_attempts_per_query]
+            if not enable_adaptive_retrieval:
+                schedule = [self.candidate_k_schedule[0]] if self.candidate_k_schedule else [10]
+                
+            for attempt_number, candidate_k in enumerate(
+                schedule,
+                start=1,
+            ):
+
+                cached_attempt = None
+                cached_items = []
+                if enable_retrieval_memory and memory is not None:
+                    cached_attempt = memory.get_compatible_query_attempt(
+                        query=current_query,
+                        candidate_k=candidate_k,
+                        requirement_id=requirement.requirement_id,
+                        document_id=document_id,
+                        session_id=getattr(memory, "session_id", None),
+                        require_evidence=True,
+                    )
+                    if cached_attempt is not None:
+                        try:
+                            for item_data in cached_attempt.cached_evidence:
+                                if isinstance(item_data, EvidenceItem):
+                                    cached_items.append(item_data)
+                                elif isinstance(item_data, dict):
+                                    cached_items.append(EvidenceItem(**item_data))
+                            if not cached_items:
+                                memory.record_fallback("Cached evidence list was empty or unparseable")
+                                cached_attempt = None
+                        except Exception as parse_exc:
+                            memory.record_fallback(f"Failed to parse cached evidence: {parse_exc}")
+                            cached_attempt = None
+                            cached_items = []
+
+                if cached_attempt is not None and cached_items:
+                    # Valid memory hit with evidence!
+                    final_candidate_k = candidate_k
+                    final_query = current_query
+
+                    new_chunk_ids = []
+                    for evidence in cached_items:
+                        if evidence.chunk_id not in all_evidence:
+                            all_evidence[evidence.chunk_id] = evidence
+                            new_chunk_ids.append(evidence.chunk_id)
+
+                    memory.record_cache_hit_delivery(count=len(cached_items))
+
+                    coverage_evidence = sorted(
+                        all_evidence.values(),
+                        key=lambda item: (
+                            item.rerank_score
+                            if item.rerank_score is not None
+                            else float("-inf")
+                        ),
+                        reverse=True,
+                    )[: self.rerank_top_k]
+
+                    coverage_signature = (
+                        requirement.requirement_id,
+                        tuple(item.chunk_id for item in coverage_evidence),
+                    )
+
+                    if (
+                        getattr(self, "_last_coverage_signature", None) == coverage_signature
+                        and getattr(self, "_last_coverage_result", None) is not None
+                    ):
+                        coverage_result = self._last_coverage_result
+                    else:
+                        coverage_result = self.coverage_estimator.estimate(
+                            question=question,
+                            requirements=[requirement],
+                            requirement_evidence={
+                                requirement.requirement_id: coverage_evidence
+                            },
+                        )
+                        self._last_coverage_signature = coverage_signature
+                        self._last_coverage_result = coverage_result
+
+                    requirement_coverage = coverage_result.requirement_coverages[0]
+                    final_status = requirement_coverage.coverage_status
+                    final_score = requirement_coverage.coverage_score
+
+                    sufficient = self._is_sufficient(final_status, final_score)
+
+                    attempt = RetrievalAttempt(
+                        attempt_number=global_attempt_number,
+                        requirement_id=requirement.requirement_id,
+                        query=current_query,
+                        query_type=query_type,
+                        candidate_k=candidate_k,
+                        rerank_top_k=candidate_k,
+                        retrieved_chunk_ids=[item.chunk_id for item in cached_items],
+                        new_chunk_ids=new_chunk_ids,
+                        coverage_status=final_status,
+                        coverage_score=final_score,
+                        stopped=sufficient,
+                        stop_reason=(
+                            "Evidence requirement sufficiently supported."
+                            if sufficient
+                            else None
+                        ),
+                    )
+                    attempts.append(attempt)
+                    global_attempt_number += 1
+
+                    if sufficient:
+                        stop_reason = "Evidence requirement sufficiently supported."
+                        query_sufficient = True
+                        success = True
+                        break
+                    else:
+                        continue
+
+                final_candidate_k = candidate_k
+                final_query = current_query
+
+                # ---------------------------------------------------------
+                # 1. Hybrid retrieval
+                # ---------------------------------------------------------
+
+                candidates = self.hybrid_retriever.retrieve(
+                    document_id=document_id,
+                    query=current_query,
+                    top_k=candidate_k,
+                    candidate_k=candidate_k,
+                )
+
+                # ---------------------------------------------------------
+                # 2. Cross-encoder reranking
+                # ---------------------------------------------------------
+
+                reranked = self.reranker.rerank(
+                    current_query,
+                    candidates,
+                    top_k=candidate_k,
+                )
+
+                # ---------------------------------------------------------
+                # 3. Convert evidence
+                # ---------------------------------------------------------
+
+                evidence_items = self._build_evidence_items(
+                    reranked
+                )
+
+                if memory is not None:
+                    for evidence in evidence_items:
+                        memory.record_evidence(
+                            chunk_id=evidence.chunk_id,
+                            document_id=evidence.document_id,
+                            requirement_id=requirement.requirement_id,
+                            source_query=current_query,
+                            retrieval_depth=candidate_k,
+                            coverage_score=None,
+                            coverage_status=None,
+                            payload=evidence.model_dump() if hasattr(evidence, "model_dump") else (evidence.dict() if hasattr(evidence, "dict") else None),
+                        )
+
+                # ---------------------------------------------------------
+                # 4. Add newly discovered evidence
+                # ---------------------------------------------------------
+
+                new_chunk_ids = []
+
+                for evidence in evidence_items:
+                    if evidence.chunk_id not in all_evidence:
+                        all_evidence[evidence.chunk_id] = evidence
+                        new_chunk_ids.append(evidence.chunk_id)
+
+                # ---------------------------------------------------------
+                # 5. Evaluate coverage
+                # ---------------------------------------------------------
+
+                # Avoid repeating the same expensive LLM coverage evaluation
+                # when adaptive retrieval produces the same strongest evidence.
+                coverage_evidence = sorted(
+                    all_evidence.values(),
+                    key=lambda item: (
+                        item.rerank_score
+                        if item.rerank_score is not None
+                        else float("-inf")
+                    ),
+                    reverse=True,
+                )[: self.rerank_top_k]
+
+                coverage_signature = (
+                    requirement.requirement_id,
+                    tuple(item.chunk_id for item in coverage_evidence),
+                )
+
+                if (
+                    getattr(self, "_last_coverage_signature", None)
+                    == coverage_signature
+                    and getattr(self, "_last_coverage_result", None) is not None
+                ):
+                    coverage_result = self._last_coverage_result
+                else:
+                    coverage_result = self.coverage_estimator.estimate(
+                        question=question,
+                        requirements=[requirement],
+                        requirement_evidence={
+                            requirement.requirement_id: coverage_evidence
+                        },
+                    )
+
+                    self._last_coverage_signature = coverage_signature
+                    self._last_coverage_result = coverage_result
+
+                requirement_coverage = (
+                    coverage_result.requirement_coverages[0]
+                )
+
+                final_status = requirement_coverage.coverage_status
+                final_score = requirement_coverage.coverage_score
+
+                if memory is not None:
+                    for evidence in evidence_items:
+                        memory.record_evidence(
+                            chunk_id=evidence.chunk_id,
+                            document_id=evidence.document_id,
+                            requirement_id=requirement.requirement_id,
+                            source_query=current_query,
+                            retrieval_depth=candidate_k,
+                            coverage_score=requirement_coverage.coverage_score,
+                            coverage_status=requirement_coverage.coverage_status,
+                            payload=evidence.model_dump() if hasattr(evidence, "model_dump") else (evidence.dict() if hasattr(evidence, "dict") else None),
+                        )
+
+                # ---------------------------------------------------------
+                # 6. Determine stopping condition
+                # ---------------------------------------------------------
+
+                sufficient = self._is_sufficient(
+                    final_status,
+                    final_score,
+                )
+
+                if memory is not None:
+                    memory.record_query(
+                        query=current_query,
+                        query_type=query_type,
+                        requirement_id=requirement.requirement_id,
+                        candidate_k=candidate_k,
+                        rerank_top_k=candidate_k,
+                        retrieved_chunk_ids=[
+                            item.chunk_id
+                            for item in reranked
+                        ],
+                        cached_evidence=[
+                            evidence.model_dump() if hasattr(evidence, "model_dump") else (evidence.dict() if hasattr(evidence, "dict") else dict(evidence))
+                            for evidence in evidence_items
+                        ],
+                        coverage_status=final_status,
+                        coverage_score=final_score,
+                        successful=sufficient,
+                    )
+
+                attempt = RetrievalAttempt(
+                    attempt_number=global_attempt_number,
+                    requirement_id=requirement.requirement_id,
+                    query=current_query,
+                    query_type=query_type,
+                    candidate_k=candidate_k,
+                    rerank_top_k=candidate_k,
+                    retrieved_chunk_ids=[
+                        item.chunk_id for item in reranked
+                    ],
+                    new_chunk_ids=new_chunk_ids,
+                    coverage_status=final_status,
+                    coverage_score=final_score,
+                    stopped=sufficient,
+                    stop_reason=(
+                        "Evidence requirement sufficiently supported."
+                        if sufficient
+                        else None
+                    ),
+                )
+
+                attempts.append(attempt)
+                global_attempt_number += 1
+
+                if sufficient:
+                    stop_reason = (
+                        "Evidence requirement sufficiently supported."
+                    )
+                    query_sufficient = True
+                    success = True
+                    break
+
+            if query_sufficient:
+                break
+                
+            if enable_query_reformulation and query_type == "original" and not query_sufficient:
+                reformulated = self.query_reformulator.reformulate(
+                    question=question,
+                    requirement=requirement,
+                    original_query=original_query,
+                    max_variants=self.max_query_variants,
+                )
+                for i, r_query in enumerate(reformulated, start=1):
+                    queries_to_try.append((r_query, f"reformulation_{i}"))
+
+        all_chunk_ids = list(all_evidence.keys())
+
+        return AdaptiveRetrievalResult(
+            requirement_id=requirement.requirement_id,
+            original_query=requirement.description,
+            final_query=final_query,
+            attempts=attempts,
+            evidence=list(all_evidence.values()),
+            all_chunk_ids=all_chunk_ids,
+            final_candidate_k=final_candidate_k,
+            total_unique_chunks=len(all_chunk_ids),
+            final_coverage_status=final_status,
+            final_coverage_score=final_score,
+            success=success,
+            stop_reason=stop_reason,
+        )

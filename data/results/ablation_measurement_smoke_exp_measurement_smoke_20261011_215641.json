@@ -1,0 +1,182 @@
+{
+  "experiment_id": "exp_measurement_smoke_20261011_215641",
+  "audit_timestamp": "2026-10-11T22:10:30.565317",
+  "verdict": "PASS \u2014 READY FOR FULL RERUN",
+  "total_records_evaluated": 4,
+  "passed_records": 4,
+  "failed_runs": 0,
+  "guardrail_fixture_passed": true,
+  "aggregate_metrics": {
+    "answerable_count": 3,
+    "unanswerable_count": 1,
+    "retriever_hit_rate": 0.6666666666666666,
+    "retriever_recall": 0.3333333333333333,
+    "citation_hit_rate": 0.3333333333333333,
+    "citation_recall": 0.16666666666666666,
+    "false_support_rate": 0.0
+  },
+  "records": [
+    {
+      "question_id": "q_df_01",
+      "variant": "FULL_AERIS",
+      "category": "DIRECT_FACT",
+      "ground_truth_answerability": true,
+      "expected_answerability": true,
+      "is_answerable": true,
+      "answerability_preserved": true,
+      "final_status": "INSUFFICIENT_EVIDENCE",
+      "success": true,
+      "retrieved_chunk_count": 3,
+      "retrieved_chunk_ids": [
+        "test_document_p006_c015",
+        "test_document_p012_c029",
+        "test_document_p015_c034"
+      ],
+      "cited_chunk_count": 1,
+      "supporting_chunk_ids": [
+        "test_document_p015_c034"
+      ],
+      "provenance_defects": [],
+      "provenance_valid": true,
+      "runner_retriever_hit": false,
+      "runner_retriever_recall": 0.0,
+      "independent_retriever_hit": false,
+      "independent_retriever_recall": 0.0,
+      "runner_citation_hit": false,
+      "runner_citation_recall": 0.0,
+      "independent_citation_hit": false,
+      "independent_citation_recall": 0.0,
+      "metrics_match": true,
+      "telemetry": {
+        "adaptive_retrieval_triggered": false,
+        "candidate_depth_expansions": 0,
+        "reformulation_triggered": false,
+        "retrieval_attempt_count": 1,
+        "verification_call_count": 2
+      },
+      "record_verdict": "PASS"
+    },
+    {
+      "question_id": "q_mh_01",
+      "variant": "FULL_AERIS",
+      "category": "MULTI_HOP",
+      "ground_truth_answerability": true,
+      "expected_answerability": true,
+      "is_answerable": true,
+      "answerability_preserved": true,
+      "final_status": "INSUFFICIENT_EVIDENCE",
+      "success": true,
+      "retrieved_chunk_count": 5,
+      "retrieved_chunk_ids": [
+        "test_document_p017_c038",
+        "test_document_p009_c022",
+        "test_document_p003_c007",
+        "test_document_p006_c014",
+        "test_document_p004_c009"
+      ],
+      "cited_chunk_count": 0,
+      "supporting_chunk_ids": [],
+      "provenance_defects": [],
+      "provenance_valid": true,
+      "runner_retriever_hit": true,
+      "runner_retriever_recall": 0.5,
+      "independent_retriever_hit": true,
+      "independent_retriever_recall": 0.5,
+      "runner_citation_hit": false,
+      "runner_citation_recall": 0.0,
+      "independent_citation_hit": false,
+      "independent_citation_recall": 0.0,
+      "metrics_match": true,
+      "telemetry": {
+        "adaptive_retrieval_triggered": true,
+        "candidate_depth_expansions": 0,
+        "reformulation_triggered": false,
+        "retrieval_attempt_count": 3,
+        "verification_call_count": 2
+      },
+      "record_verdict": "PASS"
+    },
+    {
+      "question_id": "q_mh_03",
+      "variant": "FULL_AERIS",
+      "category": "MULTI_HOP",
+      "ground_truth_answerability": true,
+      "expected_answerability": true,
+      "is_answerable": true,
+      "answerability_preserved": true,
+      "final_status": "INSUFFICIENT_EVIDENCE",
+      "success": true,
+      "retrieved_chunk_count": 5,
+      "retrieved_chunk_ids": [
+        "test_document_p018_c040",
+        "test_document_p015_c034",
+        "test_document_p005_c011",
+        "test_document_p004_c010",
+        "test_document_p004_c009"
+      ],
+      "cited_chunk_count": 1,
+      "supporting_chunk_ids": [
+        "test_document_p018_c040"
+      ],
+      "provenance_defects": [],
+      "provenance_valid": true,
+      "runner_retriever_hit": true,
+      "runner_retriever_recall": 0.5,
+      "independent_retriever_hit": true,
+      "independent_retriever_recall": 0.5,
+      "runner_citation_hit": true,
+      "runner_citation_recall": 0.5,
+      "independent_citation_hit": true,
+      "independent_citation_recall": 0.5,
+      "metrics_match": true,
+      "telemetry": {
+        "adaptive_retrieval_triggered": false,
+        "candidate_depth_expansions": 0,
+        "reformulation_triggered": false,
+        "retrieval_attempt_count": 2,
+        "verification_call_count": 3
+      },
+      "record_verdict": "PASS"
+    },
+    {
+      "question_id": "q_unans_01",
+      "variant": "FULL_AERIS",
+      "category": "UNANSWERABLE",
+      "ground_truth_answerability": false,
+      "expected_answerability": false,
+      "is_answerable": false,
+      "answerability_preserved": true,
+      "final_status": "INSUFFICIENT_EVIDENCE",
+      "success": true,
+      "retrieved_chunk_count": 3,
+      "retrieved_chunk_ids": [
+        "test_document_p011_c025",
+        "test_document_p007_c018",
+        "test_document_p006_c014"
+      ],
+      "cited_chunk_count": 1,
+      "supporting_chunk_ids": [
+        "test_document_p006_c014"
+      ],
+      "provenance_defects": [],
+      "provenance_valid": true,
+      "runner_retriever_hit": false,
+      "runner_retriever_recall": 0.0,
+      "independent_retriever_hit": false,
+      "independent_retriever_recall": 0.0,
+      "runner_citation_hit": false,
+      "runner_citation_recall": 0.0,
+      "independent_citation_hit": false,
+      "independent_citation_recall": 0.0,
+      "metrics_match": true,
+      "telemetry": {
+        "adaptive_retrieval_triggered": true,
+        "candidate_depth_expansions": 4,
+        "reformulation_triggered": true,
+        "retrieval_attempt_count": 12,
+        "verification_call_count": 2
+      },
+      "record_verdict": "PASS"
+    }
+  ]
+}

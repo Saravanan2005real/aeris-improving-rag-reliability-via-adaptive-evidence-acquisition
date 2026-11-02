@@ -1,0 +1,35 @@
+{
+  "variant_performance": {
+    "FULL_AERIS": {
+      "count": 4,
+      "successful_runs": 4,
+      "failed_runs": 0,
+      "mean_latency": 182.03806245326996,
+      "median_latency": 205.05144143104553,
+      "p90_latency": 241.20452387332918,
+      "p95_latency": 245.04515281915664,
+      "max_latency": 248.88578176498413,
+      "json_repairs": 0,
+      "schema_retries": 0,
+      "per_stage_mean_latency": {
+        "PLANNING": 5.454446224990534,
+        "RETRIEVAL": 20.234079675006797,
+        "COVERAGE": 3.214996831957251e-05,
+        "CLAIM_GRAPH": 143.4405480499845,
+        "VERIFICATION": 2.996389200008707,
+        "CONTRADICTION": 0.8559898250096012,
+        "CROSS_LINGUAL": 9.07749927137047e-05,
+        "CALIBRATION": 1.2400007108226418e-05,
+        "SELECTIVE_VERIFICATION": 2.383261474984465,
+        "ANSWER_GENERATION": 6.672484524984611
+      },
+      "retriever_hit_rate": 0.6666666666666666,
+      "retriever_recall": 0.3333333333333333,
+      "citation_hit_rate": 0.3333333333333333,
+      "citation_recall": 0.16666666666666666,
+      "evidence_hit_rate": 0.6666666666666666,
+      "evidence_recall": 0.3333333333333333
+    }
+  },
+  "deltas_vs_full_aeris": {}
+}

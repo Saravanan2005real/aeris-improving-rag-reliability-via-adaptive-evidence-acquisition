@@ -1,0 +1,33 @@
+{
+  "variant_telemetry": {
+    "FULL_AERIS": {
+      "adaptive_retrieval_attempts": 18,
+      "candidate_depth_expansions": 4,
+      "adaptive_retrieval_triggered_runs": 2,
+      "reformulation_attempts": 9,
+      "reformulation_triggered_runs": 1,
+      "memory_lookups": 18,
+      "memory_hits": 0,
+      "memory_skips": 0,
+      "verification_calls": 9,
+      "claims_verified": 9,
+      "verification_skipped": 212,
+      "contradiction_calls": 4,
+      "contradiction_pairs": 4,
+      "cross_lingual_calls": 4,
+      "cross_lingual_pairs": 0,
+      "selective_verification_calls": 4,
+      "selected_claims": 9
+    }
+  },
+  "bypass_verifications": {
+    "NO_ADAPTIVE_RETRIEVAL": true,
+    "NO_QUERY_REFORMULATION": true,
+    "NO_RETRIEVAL_MEMORY": true,
+    "NO_CLAIM_VERIFICATION": true,
+    "NO_CONTRADICTION_ANALYSIS": true,
+    "NO_CROSSLINGUAL_AGREEMENT": true,
+    "NO_SELECTIVE_VERIFICATION": true
+  },
+  "gate": "PASS"
+}

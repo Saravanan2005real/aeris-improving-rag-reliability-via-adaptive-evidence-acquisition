@@ -1,0 +1,412 @@
+[
+  {
+    "chunk_id": "plant_paper_p001_c001",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      1
+    ],
+    "start_page": 1,
+    "end_page": 1,
+    "character_count": 1767,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "A Multi-Stage Deep Learning Framework for\nReal-Time Plant Leaf Disease Detection and\nSeverity Analysis*\n1st Saravanan Sathishkumar\nDepartment of Computing Technologies\nSRM Institute of Science and Technology\nChennai, India\nss4091@srmist.edu.in\n2nd Dinesh .S\nDepartment of Information Technology\nRajalakshmi Engineering College\nChennai, India\n231001040@rajalakshmi.edu.in\n3rdDivyaa S\nDepartment of Computer Application\nSCLAS\nChennai, India\ndivyaasiva0015.sclas@saveetha.com\n4th Dr. G. Venkatesan\nDepartment of Computing Technologies\nSRM Institute of Science and Technology\nChennai, India\nvenkateg3@srmist.edu.in\n5th Daiwakshya Choudhury\nDepartment of Computing Technologies\nSRM Institute of Science and Technology\nChennai, India\ndc0800@srmist.edu.in\n6thVaishnavi .D\nDepartment of AI-DS\nSri Venkateswara College of Engineering\nChennai, India\n2023ad0675@svce.ac.in\nAbstract\u2014Growing rates of crop disease and insect infestations\nare threatening the overall health of the agricultural industry\nas well as food production worldwide, and traditional methods\nfor monitoring crops through visual inspection are often too\ntime-consuming, subjective, and difficult to scale up. This paper\npresents an AI-based system capable of diagnosing crop leaf\nhealth in real-time using state-of-the-art computer vision and\ndeep learning technologies. The framework implemented uses\na multi-step pipeline composed of an object detection model, a\nclassification model and a vision-based reasoning system; where\nthe object detection portion of the workflow uses a YOLOv8\nmodel to determine the location of infected areas, an automated\nregion-of-interest extraction tool is then used to extract from\nthe image the regions of interest so as to improve the overall\naccuracy of disease detection."
+  },
+  {
+    "chunk_id": "plant_paper_p001_c002",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      1
+    ],
+    "start_page": 1,
+    "end_page": 1,
+    "character_count": 1761,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "A second EfficientNet based model\nis then used to estimate the severity of the disease found in\nthe infected area, while an additional vision-based reasoning\nmodule is added that looks for visual patterns associated with pest\ninfestations in order to provide contextual information to assist\nwith the diagnosis process. The methodology used to develop this\nframework includes (1) preprocessing image datasets, (2) training\nthe models on agricultural datasets and (3) deploying an end-\nto-end inference pipeline that can process user provided inputs\nthrough the detection, feature extraction, and diagnosis phases. Preliminary experimental results show high levels of accuracy in\nthe detection of disease and classification of severity, in addition\nto the implementation of multiple models in a single frame-\nwork resulting in greater problem-solving capabilities overall.The\nproposed system provides a scalable and efficient solution for\nintelligent crop monitoring, enabling early disease detection and\nsupporting data-driven decision making in agricultural practices. Index Terms\u2014Artificial Intelligence, Plant Disease Detection,\nYOLOv8, EfficientNet, Computer Vision, Deep Learning, Preci-\nsion Agriculture\nI. INTRODUCTION\nAgriculture is the foundation in providing food security\nand economic sustainability across the globe, but diseases\nlike plant disease, pests are key factors of crop loss (yield\n& quality). Good crop management is built on early disease\ndetection and a correct diagnosis of the pathogen involved. Ironically, actual inspection by experts is time-consuming,\nbiased and extremely difficult to scale in large-scale farmland\n[1], [5]. These restrictions render real time diagnosis an urgent\nnecessity for intelligent and automated systems."
+  },
+  {
+    "chunk_id": "plant_paper_p001_c003",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      1
+    ],
+    "start_page": 1,
+    "end_page": 1,
+    "character_count": 1300,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "In recent years, artificial intelligence (AI) has made great\nstrides in the fields of computer vision and deep learning,\nwhich has resulted in promising progress in image-based plant\ndisease detection. Convolutional neural networks (CNNs) have\nshown great ability in extracting complex visual features and\nhigh classification accuracy in many agricultural datasets [10],\n[13] . The availability of large annotated datasets and the use\nof transfer learning techniques have further accelerated the\ndevelopment of automated plant health monitoring systems\n[11], [12] . However, despite these advances, most of the\nexisting methods are limited to the task of image classification\nand do not provide spatial localization of infected regions,\nwhich reduces interpretability and practical usability in real\nworld scenarios [6], [18]. Real-time localization of regions in images affected by\ndisease has been facilitated by object detection frameworks\nsuch as YOLO, improving accuracy and interpretability [7],\n[8]. However, some existing systems lack combination of\ndetection with advanced diagnosis features such as severity\nestimation and contextual analysis [2]. In addition, traditional\nimage processing techniques are not robust to complicated\nenvironmental conditions, e.g. lighting changes, background"
+  },
+  {
+    "chunk_id": "plant_paper_p002_c004",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1658,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "noise and occlusions [20] . These challenges call for the\ndevelopment of more comprehensive and robust diagnostic\nframeworks. In this context, the integration of several deep learning\nmodels into a single pipeline has become a promising tech-\nnique to improve the diagnostic performance. More sophisti-\ncated architectures like EfficientNet offer better accuracy and\ncomputational efficiency for real-time applications [9]. Hybrid\nmodels combining convolutional models with advanced learn-\ning techniques have shown improved performance for complex\nrecognition tasks [3], [4]. The combination of spatial detection,\nfeature extraction, and contextual reasoning can be utilized to\nconstruct a more robust and scalable system for plant disease\ndiagnostics. An AI system was developed to improve the accuracy and\nspeed of recognising how healthy a plant\u2019s leaf is. This system\nhas four main features: an object detector for determining\nwhere to find the leaf, a classifier using deep learning to assess\nhow bad the leaf is, and two other methods to help improve\ndiagnostic reliability. Each feature can be used separately or\ncombined for a modular configuration for scalability and field\ndeployment. These features are the result of some new, novel\napproaches to developing a multi-model diagnostic system,\nachieving greater accuracy as a result of using multiple algo-\nrithms together, and a scalable solution to enable intelligent\nagricultural decision making. II. LITERATURE REVIEW\nMany researchers have looked into detecting plant diseases\nthrough various ways ranging from traditional approaches\ninvolving image processing to applying deep learning methods."
+  },
+  {
+    "chunk_id": "plant_paper_p002_c005",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1727,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The earlier methods focused mainly on handcrafted feature\nextraction methods where color, texture and shape were the\ncommonly used features, thus allowing researchers to find\npatterns of disease development based on visible character-\nistics in plant leaves. Traditional methods provide the ability\nto process images quickly; however, traditional methodologies\ndo not perform well, due to illumination changes, background\ninterference and large-scale variability characteristics, result-\ning in poor performance in terms of generalisation [20]. With the advent of deep learning, in particular convolutional\nneural networks (CNN), the field of plant disease classification\ntasks has witnessed remarkable progress. Foundational works\ndemonstrated that deep CNN architectures are effective in\nimage recognition, enabling automated feature extraction and\nhigher classification accuracy [10], [16]. The same models\nwere used in later studies on agricultural datasets where\npromising results were reported in terms of disease identifica-\ntion in various types of crops [11], [13] . Transfer learning was\nused to boost model performance using pre-trained networks,\nreducing the dependence on massive labeled datasets [6], [17]. Recent studies are aimed at developing architectures that\ncan increase efficiency and accuracy in existing models. The\nintroduction of compound scaling by EfficientNet have estab-\nlished a new paradigm of optimizing depth as well as width &\nresolution; leading to superior performance with reduced num-\nber of overall parameters for each model [9]. Research using\nEfficientNet for classification of plant diseases have yielded\ngreater levels of generalization and accuracy than traditional\nCNN models [3] ."
+  },
+  {
+    "chunk_id": "plant_paper_p002_c006",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1620,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Convolutional Neural Network models\npaired with vision transformers have also shown greater ability\nto capture local & global features leading to improvements in\nrecognition performance as well [4]. Overall, comprehensive\nreviews show increased adoption of deep learning methods in\nagriculture while identifying many opportunities including but\nnot limited to implementation scalability and interpretability\n[1], [5] issues. There are a lot of object detection frameworks now that try\nto fix the problems with models that only do classification. Methods like R-CNN that look at parts of an image have\ngiven us the location of objects in images but they took a long\ntime to work [14]. The YOLO framework has changed object\ndetection by giving us image processing and correct detection\nwhich makes it useful for real life [7]. The new versions of\nYOLO like YOLOv5 and YOLOv8 have made object detection\nfaster and more precise, which is really helpful for farmers\nwho want to detect crop diseases in their fields using YOLO. YOLO has really helped farmers use YOLO for crop disease\ndetection, in their fields [2], [8]. Current models have made great progress; however most\ncurrent models are limited to one function (either detection or\nclassification), and most lack integration of various diagnostic\ncapabilities. Many current models do not include either sever-\nity estimation or contextual analysis needed to make effective,\nwell-informed decisions in agricultural settings. Various issues\npersist in the form of changing conditions, occlusions, and\nlimitations in data sets that continue to affect model perfor-\nmance."
+  },
+  {
+    "chunk_id": "plant_paper_p002_c007",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1205,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "As such, a multi-stage, comprehensive framework that\nincludes detection, classification, and higher-order reasoning\nis necessary for developing reliable, valid, and interpretable\nplant health diagnosis. TABLE I\nCOMPARISON OF EXISTING METHODS\nMethod\nTechnique\nLimitation\nTraditional\nMethods\n[20]\nColor and texture feature\nextraction\nSensitive to noise and illu-\nmination variations\nCNN-based\nModels\n[11], [13]\nDeep convolutional neural\nnetworks\nLack of spatial or region-\nlevel localization\nEfficientNet Models [3],\n[9]\nScaled convolutional neural\narchitecture\nLimited\nmodel\ninterpretability\nYOLO-based Detection\n[2], [7], [8]\nReal-time object detection\nframework\nDoes not estimate severity\nof detected regions\nExisting\nAI\nSystems\n[1], [5]\nEnd-to-end\ndeep\nlearning\npipelines\nLack of multi-stage analyt-\nical capability\nIII. PROPOSED SYSTEM OVERVIEW\nThis new system is a multi-stage deep learning system to\nassist in the diagnosis of plant leaf disease and offers an\nalternative to the traditional single model approach. Many\ncurrent models rely on using convolutional neural networks\n(CNN) to conduct image-level classification; while CNNs are\ngood at classifying images they do not take into consideration"
+  },
+  {
+    "chunk_id": "plant_paper_p003_c008",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      3
+    ],
+    "start_page": 3,
+    "end_page": 3,
+    "character_count": 1777,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "any form of spatial context and struggle when trying to\nidentify localized patterns of disease [6], [18]. There are\nmany examples of deep learning based models reaching a\nhigh level of classification accuracy [1], [5], however, as they\ndo not facilitate region-based analysis they may offer limited\nobjectivity and reliability for diagnosis when looking at single\nimages. The system has been designed to combine detection and\nidentification into one process in order to address the chal-\nlenges associated with this type of analysis. Using object\ndetection models like YOLO, it is possible to provide real-\ntime identification of areas of interest (i.e., affected) within\na given image [7], [8]. In conjunction, using EfficientNet-\nbased architectures for classification [3], [9] can provide a\nhighly accurate representation of the identified areas and\ntherefore combine both spatial and semantic knowledge about\nthe disease-affected plants being analyzed. Sequential options for processing an input image include\npreprocessing, detection, region extraction, and classification. Each stage transforms the data representation for the next\nstage and strengthens the final result\u2019s robustness and features. The multi-stage model corresponds to newly developed hybrid\ndeep learning systems with better performance through inte-\ngration of models [4]. The modular framework for the system\nprovides scalability and deployment to real-world settings (as\ndetailed in Table II). A. System Description\nThe proposed system is an end-to-end pipeline transforming\nthe original input images into structured diagnostic output. At the beginning of the pipeline, the input images will be\npreprocessed so that they can be normalized and resized to\ncreate an image set with consistent dimensions."
+  },
+  {
+    "chunk_id": "plant_paper_p003_c009",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      3
+    ],
+    "start_page": 3,
+    "end_page": 3,
+    "character_count": 1785,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Once the\nimages are preprocessed and normalized, they will be passed\nto the real-time object detection model, which will localize\ninfected areas by locating them within the overall image of\nthe leaf. This type of region-aware analysis is the primary\nshortcoming of most current CNN models, which process\nwhole images without regard to their spatial distributions. [11],\n[13]. Once the localised areas have been identified; the areas\nare separated using an automatic crop process that removes\nnoise (from the background). This reduces background noise\nand improves the relevance of identifying features used in the\nclassification process. The analysis of the areas; is done using\nan EfficientNet-based deep learning model, which produces\npredictions for the season type and severity of the diseases. The EfficientNet model uses a compound scaling algorithm\nthat improves accuracy while improving calculation efficiency.\n[9]. Ultimately the outputs coming from the detection and\nclassification will be combined to form an overall diagnostic\noutput. The overall accuracy of the system is improved by\nintegrating the outputs from several processing stages instead\nof doing them in a single step approach. The use of both\ntransfer learning and/or pre-trained models can also further\nenhance its accuracy in conditions where agricultural datasets\nare scarce. [6], [17]. B. Key Features\nThe system suggested here has a multi-stage processing\npipeline to implement object detection and classification to\nmanage the entire process of diagnosing plant diseases. With\nthis multi-stage, region-aware analysis, it is possible to locate\ninfected areas accurately and significantly increase the inter-\npretability and accuracy of the diagnosis, unlike conventional\nimage-based classification methods."
+  },
+  {
+    "chunk_id": "plant_paper_p003_c010",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      3
+    ],
+    "start_page": 3,
+    "end_page": 3,
+    "character_count": 1636,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The main element of the design is an automatic mechanism\nto extract regions of interest so as to classify only the areas\nwhere disease exists. Thus, greatly reducing the impact of\nbackground noise and irrelevant characteristics, which has\nbeen a common limitation of most \u201dclassic\u201d deep learning\nsystems trained on full images. [11], [13]. This system significantly benefits from the power of con-\ntemporary deep learning systems by using two distinct yet\ncomplementary parts - YOLO-based real-time object detection\n[2], [8] and EfficientNet-based classification models [3], [9]. The combination of both provides the capability to achieve\nboth high levels of precision and outstanding computational\nefficiency in order to enable real-time agricultural applications. The Independence of each component allows for greater\nease in both scaling and updating each component, allowing\nnew technologies and processing methods as they become\navailable (ex. transformers, multimodal processing, and hybrid\nDL systems) to be adopted into the system because they\nrepresent improvements in their respective areas through the\ncourse of time. [4]. C. Novelty\nA new unified multi-stage diagnostic framework is proposed\nthat integrates regional detection and classification in order to\nsolve some of the major limitations of current plant disease\ndetection technologies. Unlike traditional methods which clas-\nsify an entire image and then make a prediction based on this\nglobal classification [10], [13], the new method incorporates\nanalysis of specific regions of interest so that predictions are\nmade based on localised characteristics of a disease."
+  },
+  {
+    "chunk_id": "plant_paper_p003_c011",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      3,
+      4
+    ],
+    "start_page": 3,
+    "end_page": 4,
+    "character_count": 1366,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Utilizing an automatic method for isolating (extracting)\ninfected areas from the entire scanned image through region-\nof-interest extraction significantly improves feature quality (by\nisolating the infected areas) which provides for better overall\nclassification accuracy and fewer false predictions, especially\nin more complicated areas with much variability in the back-\nground when compared to what would normally occur with\nnon-complex (non-variability) and/or clean (uncontaminated\nwith background clutter). The framework offers both spatial and semantic capabilities\nby utilizing a dual-modal based approach with object detection\nfor classification of data. Most of the available YOLO type\ndetection only cover detection [2] capabilities. The proposed\nexpansion will further help to determine disease severity and improve diagnostic evaluations through the addition of an\nestimation process to the detection process. The proposed design ultimately focuses on modularity and\nthe potential for increased scalability, offering the flexibility\nof adding various types of models to be deployed in real-time. Combining region-aware processing, multi-model integration,\nand extensible architecture makes our system unique compared\nto current solutions. This combination provides a more reliable\nand thorough method for the intelligent diagnosis of diseases\nin plants."
+  },
+  {
+    "chunk_id": "plant_paper_p004_c012",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      4
+    ],
+    "start_page": 4,
+    "end_page": 4,
+    "character_count": 1590,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "TABLE II\nSYSTEM COMPONENTS\nModule\nDescription\nInput Interface\nAccepts user image input and manages data\nflow\nPreprocessing Module\nPerforms normalization, resizing, and noise\nreduction\nDetection Module\nLocalizes infected regions using YOLO-\nbased models\nRegion Extraction Module\nExtracts relevant regions for focused anal-\nysis\nClassification Module\nPredicts disease type and severity using\nEfficientNet\nDiagnostic Aggregation Module\nCombines outputs from multiple process-\ning stages\nOutput Interface\nDisplays final diagnostic results\nIV. SYSTEM ARCHITECTURE\nThe architecture of this system is built as a systematic\nmultistage pipeline with the ability to combine preprocessing,\nspatial feature detect, and diagnostic analysis into one com-\nplete real time system for the identification of disease in plants. This proposed architecture provides for the combination of\nthe two processes within one workflow, as opposed to most\ntraditional architectures which view detection and classifica-\ntion as independent functions, leading to better diagnostic\naccuracy and interpretability. By using an object detection\nsystem model for localization and a DCNN for classification,\nthe architecture achieves the needed degree of both spatial and\nsemantic understanding of plant disease occurrences. [2], [3],\n[8]. The architectural design uses a modular approach whereby\nevery module performs a distinct operation and communicates\neffortlessly with all other modules. Modularity provides the\ncapability to scale up or down to accommodate a variety of\ndifferent data sets as well as deployment settings."
+  },
+  {
+    "chunk_id": "plant_paper_p004_c013",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      4
+    ],
+    "start_page": 4,
+    "end_page": 4,
+    "character_count": 1693,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Integration\nof processing focused on multiple regions of interest (ROI)\nand multi-model integration offers an alternative to classic\nconvolutional neural networks (CNN), which treat an entire\nimage as one unit without considering spatial context. [6],\n[18]. The complete structure of the system is illustrated in\nFig. 1. A. Architecture Overview\nThere are three main levels of architecture: the in-\nput/preprocessing level, the detection level and the diagnostic\nlevel. The input level has responsibility for obtaining the\nleaf picture as well as conducting initial preprocessing of\nthat image (e.g., resizing and normalising). This is done to\nensure that all of the images being processed have similar\nappearance when used in model training, in order to provide\nbetter consistency in the data when being used, therefore\nimproving the performance of the model. By using a YOLO-based model for real-time object de-\ntection, the detection layer provides spatial awareness to the\nsystem and allows it to zone in on the pertinent parts of an\nimage [7], [8] instead of processing the full image as one large\nblock of data. The result is that infected areas are identified\nand isolated to improve the overall quality of the features that\nare extracted and reduce the amount of background noise from\nthe image. The extracted areas go through a classification and analysis\nprocess in the diagnostic section. A deep convulutional model\nbased on EfficientNet, with optimised scaling and high predic-\ntion accuracy [3], [9], was used to determine how severe the\ndisease is, as well as what type of disease the patient has. An\noverall diagnostic result is created by merging outputs from\ndifferent levels."
+  },
+  {
+    "chunk_id": "plant_paper_p004_c014",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      4
+    ],
+    "start_page": 4,
+    "end_page": 4,
+    "character_count": 1661,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The separate levels work together while being\nindependent of one another and also integrate with one another\nso that data can flow through all levels efficiently and in real-\ntime. Multi-Stage Feature Fusion\nFfusion = \u03bbFY OLO + (1 \u2212\u03bb)FEfficientNet\n(1)\nB. Workflow Explanation\nA user interface (UI) enables you to take a photo of a leaf. We send the photo to our processing backend server. The photo\nundergoes preprocessing, which ensures it has the same size\nand quality. By allowing the model to be tested with different\ninput conditions, we guarantee that these will not introduce\nvariance in the model\u2019s ability to predict the expected outcome. Following a picture being taken by the camera, it will be\nsent to a machine that can identify diseased portions of the\npicture with a YOLO model to help locate the infection. This\nis an important part of making a correct diagnosis. After\ndetermining where the infected area is, the machine can then\nremove the infected portions of the picture. The camera is\nused to capture an image and the YOLO-based model is used\nto assist the machine in identifying the infected portion of the\nimage. The classification module then analyses the extracted re-\ngions, predicting the disease category and the degree of\nseverity. For this stage, it uses deep convolutional networks\n(DCN) to extract high-level features from the region images\nand provide accurate predictions based on these features. The\npredicted outputs from both detection/identification (DAI) and\nclassification (CL) form the basis for making a final diagnosis\nin the diagnostic module, which integrates the two previous\nsteps\u2019 results into one single outcome."
+  },
+  {
+    "chunk_id": "plant_paper_p004_c015",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      4,
+      5
+    ],
+    "start_page": 4,
+    "end_page": 5,
+    "character_count": 1760,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The processed output\nis then received by the user\u2019s interface as useful means of\nactionable and informative insight regarding the health of the\nplants. The structured data processing workflow maximizes ef-\nficiency by reducing the occurrence of false predictive outputs, and therefore increasing the overall reliability of the real-time\nagricultural systems. Fig. 1. Overall System Architecture\nV. METHODOLOGY\nMethodology consists of a structured multi-step pipeline\nfor plant leaf disease detection and assessment. It consists of\ndata preparation, spatial detection, region-oriented processing,\nand classification. The proposed system is created to main-\ntain robustness across many different input datasets. This is\ndone by using a standardised set of preprocessing techniques\nin conjunction with advanced deep learning models. The\nmethodology focuses on refining the input data sequentially\nto enhance feature quality and predictive accuracy. A. Data Collection\nTo ensure diversity and generalization when training mod-\nels, a range of publically available agriculture datasets is used\nby the system. The principal data sets used are the PlantVillage\ndata set, which contains labeled photos of diseased and healthy\nplant leaves that were taken under controlled environments;\nand the PlantWild data set that has real world photos of plants\ntaken under different natural environments including different\ntypes of lighting, occlusion and diverse backgrounds. The\nability of the model to learn both patterns in structure and\npatterns in randomness will give it the robustness necessary\nfor practical use. The importance of using diverse datasets to\nprevent overfitting and enhance model generalization has been\nwell documented in recent literature. [1], [5]. B."
+  },
+  {
+    "chunk_id": "plant_paper_p005_c016",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      5
+    ],
+    "start_page": 5,
+    "end_page": 5,
+    "character_count": 1795,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Data Preprocessing\nHaving quality input data helps increase model performance\nthrough model improvement processes. Collecting quality data\nis important in that it helps create datasets of uniform images\nand eliminates unnecessary data. Before using images for\ntraining, the images must be preprocessed to increase prob-\nability of being compared with other images when measuring\noutcome. Next, the images must be cleaned so the training\ndoes not fail due to low-quality images. Model performance\nwill be improved if the number of images available for training\nincrease than the total number of images available for use in\ntraining. Normalization is used to adjust pixel values so they are all\non an equal range and help to provide consistent convergence\nwhile training a model. In deep learning this is especially\nbeneficial because it helps alleviate the effects of different\nlighting conditions on the variations in pixel values. Also,\nformatting procedures are performed to properly organize the\ndata base into the training and validation before the model can\nbe run for the purposes of evaluation. Rotation, flipping, and scaling, some augmentation tech-\nniques that simulate the real world to help apply more variance\nto the model and help generalize better on data that was never\npresented to the model in its training set, further improve the\nrobustness of the model. C. Model Design\nThe multi-stage design model\u2019s architecture consists of\ndetection and classification components that are separated\ninto multiple tiers. The first tier is made up of the object-\ndetection module using the YOLO architecture. This module\nfinds and locates disease-affected areas inside an input image,\nand YOLO was chosen because of its high accuracy rate and\nability to provide real-time results. [7], [8]."
+  },
+  {
+    "chunk_id": "plant_paper_p005_c017",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      5,
+      6
+    ],
+    "start_page": 5,
+    "end_page": 6,
+    "character_count": 1471,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Multi-Task Learning Loss\nLtotal = Ldet + \u03bbLcls\n(2)\nwhere\n\u2022 Ldet = YOLO detection loss\n\u2022 Lcls = EfficientNet classification loss\n\u2022 \u03bb = balancing parameter\nIn the second phase of the extraction process, a region\nextraction system extracts all of the isolated regions so there is\nonly an area of interest within the image to perform any further\nanalysis. This greatly improves the quality of any features\nbecause it eliminates any background noise. The last module is a classification module that uses Ef-\nficientNet architecture to predict disease type and severity. EfficientNet is the chosen model for its optimized scaling\nstrategy, and EfficientNet has superior performance levels\ncompared to all other choices in image classification tasks [3], [9]. The ability to integrate both detection and classifi-\ncation models allows the system to capture both spatial and\nsemantic information thus increasing the overall accuracy of\nthe diagnosis. The outputs of each stage are aggregated using a diagnostic\naggregation procedure to produce a single output that contains\nboth localization and classification information. D. Feature Extraction\nDeep learning models provide implicit feature extraction,\nas they automatically generate hierarchical representations of\ninput data. During the detection phase, convolutional layers\nextract spatial features (e.g., boundaries of regions, object\nlocalization) used to determine the location of any infected\nareas on an image of a leaf."
+  },
+  {
+    "chunk_id": "plant_paper_p006_c018",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      6
+    ],
+    "start_page": 6,
+    "end_page": 6,
+    "character_count": 1792,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Convolution Feature Extraction\nFk(x, y) =\nm\nX\ni=1\nn\nX\nj=1\nKk(i, j) \u00b7 I(x + i, y + j) + bk\n(3)\nwhere\n\u2022 Fk = kth feature map\n\u2022 Kk = convolution kernel\n\u2022 bk = bias\nThe Classification stage involves the extraction of charac-\nteristics of diseases from those high-order features such as\nchanges in colour, texture and distortion of structures that\nallow for differentiation between different disease classes and\ndegrees of severity. Utilizing a combination of spatial and semantic extraction\nof features provides greater accuracy and interpretability by\nutilizing a combination of multitasked level feature learning\nthrough modern deep learning methods for plant disease\ndetection using images. [4], [13]. TABLE III\nEXTRACTED FEATURES\nFeature\nDescription\nColor Features\nPixel intensity variations indicating discol-\noration\nTexture Features\nLocal patterns such as spots, lesions, and\nsurface roughness\nEdge Features\nBoundaries of infected regions and irregular\nstructural patterns\nShape Features\nStructural\ndeformation\nand\nmorphological\nchanges in leaf geometry\nSpatial Features\nLocation and distribution of infected regions\nacross the leaf\nArea Features\nProportion of affected region relative to total\nleaf area\nSeverity Indicators\nDegree of infection based on spread, density,\nand intensity\nVI. IMPLEMENTATION DETAILS\nThe proposal involves a modular real-time inference system\nthat combines a deep learning algorithm with an API for\nefficient plant disease diagnosis. Low latency processing,\nscalability, and smooth interactions between components are\nthe key design considerations for this system. Each step\nin the process (feeder operation, pre-processing, detection,\nclassification and final result generation) will be developed as\nindividual components using a service-oriented architecture."
+  },
+  {
+    "chunk_id": "plant_paper_p006_c019",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      6
+    ],
+    "start_page": 6,
+    "end_page": 6,
+    "character_count": 1738,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "A lightweight RESTful API Framework Develops the Back-\nend to Allow Core Communication between the User Interface\nand the Model Pipeline (i.e., the processing unit) via API\nEndpoints That Transmit Input Images from the User Interface\nto the API endpoints for Processing & Validation and Prepro-\ncessing prior to Inference Modules Receiving the Images. This\nDesign Provides Both Flexibility and Compatibility Across\nMultiple Deployment Environments such as Web-Based Sys-\ntems and Edge Systems. Infected Areas are located through a process called De-\ntection. To do this, a Real Time infection detection method\nuses a YOLO-based Detection Method for the localization\nof the location of Infected Areas. The YOLO Architecture\nhas been established as a leading objective detection method\n[7], [8], and new architectures like YOLOv8 also provide\nhigher accuracy for agricultural detection applications [2]. The\nDetection Method outputs bounding boxes around infected\nareas with a probability score which is later filtered for low\nconfidence probabilities using a filter based on predetermined\nthresholds. Once the detected areas of interest have been identified, a\nmechanism will allow for the extraction of regions associated\nwith each of those areas, so that only these regions\u2014i.e., those\nthat relate to diseases\u2014are used in future processing. This step\nremoves any background interference and enhances the quality\nof features in comparison to traditional classification models\nthat operate over the entire image space. [11], [13]. The classification phase uses a convolution neural network\nbased on EfficientNet which is known for its scaled efficiency\nand for being a high performing model for image classification\napplications [3], [9] ."
+  },
+  {
+    "chunk_id": "plant_paper_p006_c020",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      6,
+      7
+    ],
+    "start_page": 6,
+    "end_page": 7,
+    "character_count": 1656,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Using transfer learning, the EfficientNet\nModel is trained with pre-trained features and adjusted appro-\npriately for agricultural data sets in order to generate class\nprobabilities to assist with confidence decision making [6],\n[17]. The second (or intermediate) evaluation layer receives out-\nput from each of the previous detection and classification lay-\ners. Confirmation of prediction reliability takes place through\nthe review of confidence levels and consistency checks; there-\nfore, predicted severity of disease is representative of the size\nof the areas detected as infected, i.e., logical consistency of\nfinal output. Compared to the approach that uses only one\nmodel, this process provides greater assurance of prediction\nreliability using multiple stages of validation. [1], [5]. In addition to a reasoning module that allows the interpreta-\ntion of model outputs and generation of structured diagnostic\ninsights, there is an added benefit of mapping the predicted\noutput of the model to domain-related knowns to improve the\ninterpretability of the model and support real world decision\nmaking for agricultural applications. The system has been designed to load models and utilize\nthem effectively. The system loads models once and then\nrepeatedly uses them to save time as well. A computer can\nutilize a specific component known as a graphics processing\nunit (GPU) to work at a faster rate. If your computer is weak or\nnot very powerful, it can run on CPU as well. The system has\nalso been designed using flexibility so future ideas or models\nwill be able to run; examples include joint use of convolutional\nand transformer model types. [4]."
+  },
+  {
+    "chunk_id": "plant_paper_p007_c021",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      7
+    ],
+    "start_page": 7,
+    "end_page": 7,
+    "character_count": 1658,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "TABLE IV\nTECHNOLOGY STACK\nLayer\nComponent\nImplementation\nApplication\nLayer\nBackend Interface\nFastAPI-based REST API for\nrequest handling and pipeline\norchestration\nData Processing\nLayer\nImage Preprocess-\ning\nOpenCV and NumPy for resiz-\ning, normalization, and trans-\nformation\nDetection Layer\nObject\nDetection\nModel\nYOLOv8 for real-time local-\nization of infected regions\nClassification\nLayer\nDisease Classifica-\ntion Model\nEfficientNet\narchitecture\nfor\nfeature learning and severity\nprediction\nLearning\nFramework\nModel\nDevelopment\nPyTorch for training, optimiza-\ntion, and inference\nTraining\nStrategy\nModel\nOptimization\nTransfer\nlearning\nwith\nfine-\ntuned pre-trained weights\nData Layer\nDataset Sources\nPlantVillage (controlled) and\nPlantWild (real-world) datasets\nInference Layer\nExecution Engine\nPyTorch runtime for model in-\nference\nDeployment\nLayer\nSystem\nDeployment\nConfigurable\ndeployment\nacross local, server, and edge\nenvironments\nA. System Workflow\nThe system workflow consists of an ordered container\nfor processing raw image inputs and transforming them into\ntrustable diagnosis outputs via a series of processing phases\n(sequential processes). Each phase has an intended purpose\nof improving the input data through repeated processing so\nthat the resulting features are of high quality, making accurate\npredictions possible and resulting in efficient inference. Input Acquisition: The process of getting an image of a\nleaf starts with uploading it via a user interface. After being\nuploaded, the image is sent to the backend server via an API\ncall, where subsequent checks will be made on the base file\ntype, resolution and integrity of the file."
+  },
+  {
+    "chunk_id": "plant_paper_p007_c022",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      7
+    ],
+    "start_page": 7,
+    "end_page": 7,
+    "character_count": 1785,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Preprocessing: The acquired image undergoes preprocess-\ning operations, including resizing to a fixed resolution, nor-\nmalization of pixel values, and conversion into tensor format. These steps standardize the input data and reduce variability\ncaused by environmental factors such as illumination changes\nand background noise. Detection: We send the prepared image through the part\nof the system that will search for diseases. The tool used\nby this part of the system to identify and indicate where the\ninfection is found on the image is called YOLO. When YOLO\ndetermines an infection\u2019s location, it draws a box around the\narea on the image, gives a probability score of the likelihood\nof infection at that area, and identifies which areas do not\nhave a probability score (indicating we can trust YOLO\u2019s\ndetermination of that area as an infection site). YOLO is\nexcellent at identifying infection locations within the image. Region Extraction: The system uses the coordinates of\nthe bounding boxes to select the areas on the images that\nare related to infection. This means that we can remove the\nbackground, where there are no disease-related areas of the\nimage, and focus on those regions that have clarity of features,\nwith less interference from any background that is not related\nto the disease itself. Classification: An EfficientNet-based classification algo-\nrithm will process the regions extracted from the images and\nwill provide predictions on the disease classification as well\nas determines how severe it may be. This classification data\nis further utilized to create probability distributions for each\nof their respective disease classes and will allow for clinical\ndecision-making through utilizing probability distributions and\ntherefore improving diagnostic accuracy."
+  },
+  {
+    "chunk_id": "plant_paper_p007_c023",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      7
+    ],
+    "start_page": 7,
+    "end_page": 7,
+    "character_count": 1651,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Evaluation and Aggregation: At this point, detection\nand classification output are consolidated for a final output\nprediction that is consistent and reliable. Confidence thresholds\ncan be used, while spatial characteristics (in this case infected\narea size) can be correlated with severity predictions to estab-\nlish logical consistency among predictions. Validation in this\nmanner contributes to increase robustness and the elimination\nof false positives. Output Generation: The results from this stage are pack-\naged into a structured output that includes all the calculated\nmetrics and summarizes the total number of areas identified\nfor investigation, a corresponding predicted diagnosis with\nassociated severity level and associated level of certainty. The\nresults will be sent to the user interface as well as elaborate on\nthe nature of the findings in order to give clear and actionable\ninformation related to the diagnosis. VII. EXPERIMENTAL SETUP\nBy utilizing both an experimental and real-world environ-\nment to evaluate the performance of the newly developed\nmulti-phase diagnostic for detecting plant diseases, the centre\nlooks at detection accuracy, classification performance and\noverall reliability of prediction. Both the testing experiment\nwill use various agricultural datasets from standard databases\nand use the commonly used measures in computer vision and\ndeep learning methods. A. Dataset Description\nThe evaluation of the proposed system is conducted using\ntwo complementary datasets to ensure both robustness and\ngeneralization capability. PlantVillage Dataset: The PlantVillage dataset is utilized\nas a key benchmark dataset."
+  },
+  {
+    "chunk_id": "plant_paper_p007_c024",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      7,
+      8
+    ],
+    "start_page": 7,
+    "end_page": 8,
+    "character_count": 1669,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "It contains a large volume of\naccurate and labelled pictures of plants taken in a consistent\nenvironment and have a uniform background (i.e., they are all in the same lighting conditions, and are photographed at the\nsame angle). Having this kind of dataset means the model can\nlearn clear and well-defined disease patterns. The dataset is\ntherefore appropriate for initial training and validation. [11],\n[12]. PlantWild Dataset: The PlantWild dataset has been used\nfor evaluation purposes in order to test real-world application\nperformance of the computer vision system. The dataset con-\nsists of images taken in an uncontrolled natural environment. This includes variability in lighting, background complexity,\nocclusion, and leaf orientation. The addition of this variability\nproduces real-world challenges that allow the computer vision\nsystem to be evaluated for generalization and robustness in\npractical use. [1], [5]. Data Splitting and Augmentation: There are three sub-\nparts to the dataset; The Training set is for learning, and then\nvalidating by adjusting the settings in the validation set. Finally\nwe use the Test set to determine the actual performance of the\nmodel. Moreover, a technique to make the data exciting; is to\nrotate, flip and change the size of it either bigger or smaller\nwhich will help the model learn more about it\u2019s job from the\navailable data. B. Evaluation Metrics\nTThe proposed model is checked to see how well it works. This is done by using methods to test its ability to classify and\ndetect things. To check how well the model classifies we look\nat how accurate it\u2019s how precise it is how well it recalls things\nand its F1-score."
+  },
+  {
+    "chunk_id": "plant_paper_p008_c025",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      8
+    ],
+    "start_page": 8,
+    "end_page": 8,
+    "character_count": 1644,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "These things help us understand if the model\ncan make predictions and if it has a good balance, between\nfalse positives and false negatives. The proposed model is also\nchecked to see how well it detects things and this is done by\nlooking at the IoU and the mAP of the proposed model. Severity Formula:\nSeverity(%) = Areainfected\nArealeaf\n\u00d7 100\n(4)\nTABLE V\nEVALUATION METRICS\nMetric\nFormula\nPurpose\nAccuracy\n(TP + TN)/(TP + TN +\nFP + FN)\nOverall correctness of predic-\ntions\nPrecision\nTP/(TP + FP)\nMeasures proportion of false\npositives\nRecall\nTP/(TP + FN)\nMeasures detection complete-\nness\nF1-Score\n2PR/(P + R)\nBalances precision and recall\nIoU\nOverlap / Union\nMeasures localization accu-\nracy\nmAP\nMean(AP)\nEvaluates\noverall\ndetection\nperformance\nVIII. RESULTS AND ANALYSIS\nTo determine if the proposed approach performs getthedis-\nease diagnosed and detected at the regional level and produce\nbetter prediction reliability by concentrating on the area of\ninterest than just an image of the area of interest. The results\nproduced were obtained from a series of experiments with\nvarious patients using the proposed method and indicate that\nthrough the use of a system with multiple stages, improved\nperformance is achieved as compared to traditional systems\nthat were used as single-stage systems. A. Performance Results\nTo evaluate the classification, four popular metrics: accu-\nracy, precision, recall, and F1-score, are used. In comparison to\nbaseline CNN models, EfficientNet based models exhibit supe-\nrior classification performance. This is primarily attributed to\nimproved features being represented and a more efficient way\nof scaling."
+  },
+  {
+    "chunk_id": "plant_paper_p008_c026",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      8
+    ],
+    "start_page": 8,
+    "end_page": 8,
+    "character_count": 1503,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Further improvement can be attributed to the use of\na region focused processing pipeline where classifications are\nmade at the level of extracted regions instead of entire images\nthus reducing the ability to confuse the classifications due to\nthe presence of backgrounds. TABLE VI\nMODEL PERFORMANCE\nModel\nAccuracy\nPrecision\nRecall\nF1-Score\nBaseline CNN\n0.88\n0.86\n0.85\n0.85\nTransfer Learning Model\n0.91\n0.90\n0.89\n0.89\nProposed (EfficientNet +\nDetection)\n0.94\n0.93\n0.92\n0.92\nB. Comparative Analysis\nThe comparative assessment performed compares the vari-\nous methods available for identifying diseases affecting plants. Image processing systems based on traditional methods show\npoor identification performance due to their inability of being\nable to account for changes within the surrounding envi-\nronment. Methods that are based on Convolutional Neural\nNetworks provide greater accuracy than traditional methods;\nhowever, provide little spatial awareness. Detection-based sys-\ntems allow for some form of localization, but are not able\nto fully capture the features associated with different plant\ndiseases when utilized on their own. Combining detection with classification creates a single\nsystem; both spatial analysis and semantics can be performed\nusing this system. Because of this combination, the prediction\nresults will now be better than before, especially under condi-\ntions of complexity, such as varying amounts of background\nnoise and variability that are present in real-world scenarios."
+  },
+  {
+    "chunk_id": "plant_paper_p008_c027",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      8,
+      9
+    ],
+    "start_page": 8,
+    "end_page": 9,
+    "character_count": 1700,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "TABLE VII\nCOMPARISON WITH EXISTING SYSTEMS\nApproach\nMethodology\nAccuracy\nLimitation\nTraditional Methods\nFeature-based analysis\n0.72\u20130.80\nSensitive to noise and illu-\nmination\nCNN-based Models\nImage-level\nclassification\n0.85\u20130.90\nNo localization capability\nDetection-based Models\nObject\ndetection\n(YOLO)\n0.88\u20130.91\nLimited classification depth\nProposed System\nDetection + Classifica-\ntion\n0.94\n\u2013 C. Observations\nDetection of Regions Ahead of Classifying Helps Model\nPerformance by Improving Feature Relevance to Model Out-\nput; In Addition, The Training of this Model on Real World\nData Allows it to be More Robust to Environmental Variances\nin Terms of Region Where Detection Occurred. Also, The\nSimilarity Between Detection Output and Classifier Output\nIssues Reduces the Number of False Classifications, Demon-\nstrating the Benefit of A Multi-Stage Model Design. Therefore,\nThe System As A Whole Provides An Equal Improvement In\nThe Accuracy And Reliability Of The Models, And Is Ideal\nFor Use In An Agricultural Environment. IX. DISCUSSION\nExperimental findings indicate that the proposed multi-\nstage framework enhances diagnostic performance through a\ncombination of spatial detection and classification. By first\nlocalizing the area of the affected area before performing a\nclassification, it will enable feature extraction to focus on the\nrelevant sections of the image, thus avoiding any background\nnoise and therefore improving the prediction results. The\nregion-aware (localised) approach provides a direct resolution\nto one of the key limitations that are experienced with standard\n(classical) CNN models, which work with whole images\nwithout accounting for spatial relationships [6], [18]."
+  },
+  {
+    "chunk_id": "plant_paper_p009_c028",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      9
+    ],
+    "start_page": 9,
+    "end_page": 9,
+    "character_count": 1607,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The\noverall increase in accuracy provides strong evidence of the\neffectiveness of integrating detection with classification in a\nsingle pipeline. Detection and classification blocks are complementary to\none another. The detection block accurately locates infected\nareas, while the classification block extracts high-level seman-\ntic features to improve the accuracy of disease diagnosis [7],\n[8]. These two blocks work together to create both spatial\nand semantic awareness of plant diseases [3], [9]. The third\nevaluation block also works to enhance the reliability of\npredictions by filtering out low reliability predictions and\naligning predicted severity of infection with the actual infected\narea; this follows recent trends in deep learning integration [1],\n[5]. X. FUTURE SCOPE\nFuture studies might focus on implementing advanced deep\nlearning structures (transformer-style visual models or hybrid\narchitectures made up of convolutional neural networks and\ntransformers) to the system. Models with these types of\narchitectures seem to perform better than existing architec-\ntures in establishing complex feature relationships [4]. Future\nresearch will also incorporate multi-modal inputs, such as\nenvironmental conditions (e.g., temp, humidity, and soil),\nwhich will help improve diagnostic accuracy by providing ad-\nditional disease/pest contextual information, apart from visual\ncharacteristics of disease/pest features. The system may be adapted to allow for large-scale agricul-\ntural use by expanding its cloud infrastructure and distributed\nprocessing capabilities from a deployment standpoint."
+  },
+  {
+    "chunk_id": "plant_paper_p009_c029",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      9
+    ],
+    "start_page": 9,
+    "end_page": 9,
+    "character_count": 1686,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "By\nusing optimized models in an edge deployment, it is now\npossible to offer real-time diagnostic capabilities in resource-\nconstrained settings, consistent with recent trends toward using\nedge AI for agricultural systems [2]. In addition, developing\na dataset to include broader ranges of crop types and disease\ncategories will enhance the generalization of models, and using\nexplainable AI methods will improve users\u2019 understanding of\nand confidence in the predictions made. XI. CONCLUSION\nUsing a unified pipeline to combine detection of object to\nclassification with in one pipeline. The proposed approach\nhas resolved some of the key limitations found in the current\nmethods. By using regional analysis, the proposed methodol-\nogy allows the system to concentrate on regions with diseased\ntissue rather than having to process the entire image. The use\nof both YOLO for localisation of an object and EfficientNet\nfor accurate classification, provides improved overall diagnosis\nperformance base on both location and types of disease. Results from the experiment demonstrated that the proposed\nsystem meets all criteria for accuracy and reliability per all\nmeasures of evaluation used to assess it. In combination with\ndetection and classification, they contribute to the improve-\nment of prediction stability by diminishing the impact of noisy\nbackground on predictions and enhancing the significance of\nfeatures. Additionally, our results provide evidence of the\ngeneralization properties of the system, since it was able to\naccurately analyze both artificial and natural samples. These\nfactors indicate that the system is a viable tool for agricultural\nuse in a practical setting."
+  },
+  {
+    "chunk_id": "plant_paper_p009_c030",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      9
+    ],
+    "start_page": 9,
+    "end_page": 9,
+    "character_count": 1714,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Farmers can identify agricultural disease outbreaks prior\nto them causing significant agricultural damage by using our\nagricultural monitoring systems. You\u2019ll gain quicker, depend-\nable, easy-to-use forecasts to produce improved annual crop\nproduction and develop better cropping practices using the\ninformation provided by these systems. REFERENCES\n[1] J. Liu, Y. Wang, and Z. Zhang, \u201cDeep learning-based plant disease\ndetection: A review of recent advances,\u201d Computers and Electronics\nin Agriculture, vol. 216, 2024.\n[2] A. Kumar, S. Sharma, and R. Gupta, \u201cReal-time crop disease detection\nusing YOLOv8 and edge AI,\u201d IEEE Access, vol. 12, pp. 102345\u2013102357,\n2024.\n[3] M. Patel and D. Shah, \u201cEfficientNet-based plant disease classification\nwith improved generalization,\u201d Expert Systems with Applications, vol.\n235, 2024.\n[4] H. Li et al., \u201cVision transformer and CNN hybrid models for plant\ndisease recognition,\u201d Pattern Recognition Letters, vol. 180, 2023.\n[5] S. Ramesh and P. Vydeki, \u201cApplication of deep learning in plant disease\ndetection: A comprehensive survey,\u201d Artificial Intelligence Review, vol.\n56, no. 6, pp. 5123\u20135158, 2023.\n[6] K. Too, L. Yujian, S. Njuki, and L. Yingchun, \u201cA comparative study\nof fine-tuning deep learning models for plant disease identification,\u201d\nComputers and Electronics in Agriculture, vol. 172, 2020.\n[7] J. Redmon et al., \u201cYou Only Look Once: Unified, real-time object\ndetection,\u201d in Proc. IEEE CVPR, 2016.\n[8] G. Jocher et al., \u201cYOLOv5 and YOLOv8: State-of-the-art object detec-\ntion models,\u201d Ultralytics, 2023.\n[9] M. Tan and Q. Le, \u201cEfficientNet: Rethinking model scaling for convo-\nlutional neural networks,\u201d in Proc. ICML, 2019.\n[10] A. Krizhevsky, I. Sutskever, and G."
+  },
+  {
+    "chunk_id": "plant_paper_p009_c031",
+    "document_id": "plant_paper",
+    "language": "en",
+    "pages": [
+      9,
+      10
+    ],
+    "start_page": 9,
+    "end_page": 10,
+    "character_count": 1680,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Hinton, \u201cImageNet classification\nwith deep convolutional neural networks,\u201d Communications of the ACM,\nvol. 60, no. 6, pp. 84\u201390, 2017. [11] S. Mohanty, D. Hughes, and M. Salath\u00b4e, \u201cUsing deep learning for image-\nbased plant disease detection,\u201d Frontiers in Plant Science, vol. 7, 2016.\n[12] D. Hughes and M. Salath\u00b4e, \u201cAn open access repository of images on\nplant health to enable the development of mobile disease diagnostics,\u201d\narXiv preprint arXiv:1511.08060, 2015.\n[13] P. Ferentinos, \u201cDeep learning models for plant disease detection and\ndiagnosis,\u201d Computers and Electronics in Agriculture, vol. 145, pp. 311\u2013\n318, 2018.\n[14] R. Girshick et al., \u201cRich feature hierarchies for accurate object detection\nand semantic segmentation,\u201d in Proc. IEEE CVPR, 2014.\n[15] K. Simonyan and A. Zisserman, \u201cVery deep convolutional networks for\nlarge-scale image recognition,\u201d in Proc. ICLR, 2015.\n[16] O. Russakovsky et al., \u201cImageNet large scale visual recognition chal-\nlenge,\u201d International Journal of Computer Vision, vol. 115, no. 3, pp.\n211\u2013252, 2015.\n[17] T. Rahman et al., \u201cTransfer learning with deep CNN for plant disease\ndetection,\u201d in IEEE International Conference on Robotics, Automation,\nArtificial Intelligence, 2019.\n[18] B. Liu et al., \u201cIdentification of apple leaf diseases based on deep\nconvolutional neural networks,\u201d Symmetry, vol. 10, no. 1, 2018.\n[19] J. Amara, B. Bouaziz, and A. Algergawy, \u201cA deep learning-based\napproach for banana leaf disease classification,\u201d in IEEE Africon, 2017.\n[20] L. P. Singh and S. Chaudhary, \u201cTraditional image processing techniques\nfor plant disease detection,\u201d International Journal of Computer Appli-\ncations, vol. 124, no. 14, 2015."
+  }
+]

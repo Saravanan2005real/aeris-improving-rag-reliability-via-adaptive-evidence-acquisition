@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -16,6 +16,7 @@ class QueryMemory(BaseModel):
     rerank_top_k: int = Field(default=0, ge=0)
 
     retrieved_chunk_ids: List[str] = Field(default_factory=list)
+    cached_evidence: List[Dict[str, Any]] = Field(default_factory=list)
 
     coverage_status: Optional[str] = None
     coverage_score: Optional[float] = None
@@ -40,6 +41,7 @@ class EvidenceMemory(BaseModel):
     best_coverage_score: Optional[float] = None
 
     coverage_status: Optional[str] = None
+    payload: Optional[Dict[str, Any]] = None
 
 
 class RetrievalMemoryState(BaseModel):

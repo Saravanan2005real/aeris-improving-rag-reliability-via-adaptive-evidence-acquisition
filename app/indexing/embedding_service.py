@@ -1,10 +1,11 @@
 import ollama
 from typing import List
 from app.config import settings
+from app.utils.model_client import get_ollama_client
 
 class EmbeddingService:
     def __init__(self):
-        self.client = ollama.Client(host=settings.ollama_host)
+        self.client = get_ollama_client(host=settings.ollama_host, timeout=settings.ollama_timeout)
         self.model = settings.embedding_model
         
     def embed_text(self, text: str) -> List[float]:

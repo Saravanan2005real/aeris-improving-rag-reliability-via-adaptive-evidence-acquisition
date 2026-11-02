@@ -1,6 +1,9 @@
 from __future__ import annotations
+import time
 
 from typing import Any, Callable, Dict, Iterable, List, Optional
+from app.retrieval_memory.memory import RetrievalMemory, RetrievalMemoryRegistry
+from app.verification.requirement_support import RequirementSupportValidator
 
 from app.controller.schemas import (
     ControllerConfig,
@@ -37,6 +40,7 @@ class AERISController:
         calibrator=None,
         selective_verification_executor=None,
         answer_generator=None,
+        requirement_validator=None,
     ):
         self.planner = planner
         self.adaptive_retrieval_controller = adaptive_retrieval_controller
@@ -57,6 +61,7 @@ class AERISController:
         self.calibrator = calibrator
         self.selective_verification_executor = selective_verification_executor
         self.answer_generator = answer_generator
+        self.requirement_validator = requirement_validator or RequirementSupportValidator()
 
     # ------------------------------------------------------------------
     # Public API
@@ -69,8 +74,9 @@ class AERISController:
             # ----------------------------------------------------------
             # 1. PLANNING
             # ----------------------------------------------------------
-
+            t0 = time.perf_counter()
             plan = self.planner.plan(request.question)
+            t_plan = time.perf_counter() - t0
 
             stages.append(
                 self._stage(
@@ -78,6 +84,7 @@ class AERISController:
                     StageStatus.COMPLETED,
                     "Information requirements generated.",
                     len(plan.requirements),
+                    latency_seconds=t_plan,
                 )
             )
 
@@ -85,7 +92,24 @@ class AERISController:
             # 2. ADAPTIVE RETRIEVAL
             # ----------------------------------------------------------
 
+            t0 = time.perf_counter()
             retrieval_results = []
+            
+            if request.config.enable_retrieval_memory:
+                if getattr(request.config, "scoped_retrieval_memory", True):
+                    memory = RetrievalMemoryRegistry.get_scoped_memory(
+                        document_id=request.document_id,
+                        session_id=getattr(request.config, "session_id", None),
+                        question=request.question,
+                    )
+                else:
+                    memory = RetrievalMemory(
+                        document_id=request.document_id,
+                        question=request.question,
+                        session_id=getattr(request.config, "session_id", None),
+                    )
+            else:
+                memory = None
 
             for requirement in plan.requirements:
                 result = (
@@ -94,6 +118,10 @@ class AERISController:
                         document_id=request.document_id,
                         question=request.question,
                         requirement=requirement,
+                        enable_adaptive_retrieval=request.config.enable_adaptive_retrieval,
+                        enable_query_reformulation=request.config.enable_query_reformulation,
+                        enable_retrieval_memory=request.config.enable_retrieval_memory,
+                        memory=memory,
                     )
                 )
 
@@ -102,6 +130,24 @@ class AERISController:
             evidence_items = self._collect_evidence(
                 retrieval_results
             )
+            # Ordered, deterministic deduplication of retrieved chunk IDs
+            retrieved_chunk_ids = []
+            for item in evidence_items:
+                cid = item.get("chunk_id")
+                if cid and cid not in retrieved_chunk_ids:
+                    retrieved_chunk_ids.append(cid)
+
+            retrieval_attempts_history = []
+            for res in retrieval_results:
+                for att in res.attempts:
+                    if hasattr(att, "model_dump"):
+                        retrieval_attempts_history.append(att.model_dump())
+                    elif hasattr(att, "dict"):
+                        retrieval_attempts_history.append(att.dict())
+                    else:
+                        retrieval_attempts_history.append(dict(att))
+
+            t_retrieval = time.perf_counter() - t0
 
             stages.append(
                 self._stage(
@@ -109,6 +155,7 @@ class AERISController:
                     StageStatus.COMPLETED,
                     "Adaptive requirement-directed retrieval completed.",
                     len(evidence_items),
+                    latency_seconds=t_retrieval,
                 )
             )
 
@@ -121,9 +168,11 @@ class AERISController:
             # a second time.
             # ----------------------------------------------------------
 
+            t0 = time.perf_counter()
             coverage_metadata = self._collect_coverage_metadata(
                 retrieval_results
             )
+            t_coverage = time.perf_counter() - t0
 
             stages.append(
                 self._stage(
@@ -132,6 +181,7 @@ class AERISController:
                     "Evidence coverage evaluated during adaptive retrieval.",
                     len(evidence_items),
                     coverage_metadata,
+                    latency_seconds=t_coverage,
                 )
             )
 
@@ -139,6 +189,7 @@ class AERISController:
             # 4. CLAIM EXTRACTION
             # ----------------------------------------------------------
 
+            t0 = time.perf_counter()
             raw_claims = []
 
             for evidence in evidence_items:
@@ -193,6 +244,7 @@ class AERISController:
                 )
 
             graph_builder.auto_link_claims_to_evidence()
+            t_claim_graph = time.perf_counter() - t0
 
             stages.append(
                 self._stage(
@@ -200,6 +252,7 @@ class AERISController:
                     StageStatus.COMPLETED,
                     "Claim-evidence graph constructed.",
                     len(typed_claims),
+                    latency_seconds=t_claim_graph,
                 )
             )
 
@@ -207,35 +260,53 @@ class AERISController:
             # 8. INITIAL CLAIM VERIFICATION
             # ----------------------------------------------------------
 
+            t_start = time.perf_counter()
             verification_results = []
+            verified_count = 0
 
-            for claim in typed_claims:
-                if not graph_builder.get_claim_evidence(claim.claim_id):
-                    continue
+            if request.config.enable_claim_verification:
+                for claim in typed_claims:
+                    if not graph_builder.get_claim_evidence(claim.claim_id):
+                        continue
 
-                result = self.graph_verifier.verify_claim(
-                    graph_builder,
-                    claim.claim_id,
+                    result = self.graph_verifier.verify_claim(
+                        graph_builder,
+                        claim.claim_id,
+                    )
+
+                    verification_results.append(result)
+
+                verified_count = len(verification_results)
+                t_verify = time.perf_counter() - t_start
+
+                stages.append(
+                    self._stage(
+                        ControllerStage.VERIFICATION,
+                        StageStatus.COMPLETED,
+                        "Initial claim verification completed.",
+                        verified_count,
+                        latency_seconds=t_verify,
+                    )
                 )
-
-                verification_results.append(result)
-
-            verified_count = len(verification_results)
-
-            stages.append(
-                self._stage(
-                    ControllerStage.VERIFICATION,
-                    StageStatus.COMPLETED,
-                    "Initial claim verification completed.",
-                    verified_count,
+            else:
+                t_verify = time.perf_counter() - t_start
+                stages.append(
+                    self._stage(
+                        ControllerStage.VERIFICATION,
+                        StageStatus.SKIPPED,
+                        "Claim verification was disabled for ablation.",
+                        0,
+                        latency_seconds=t_verify,
+                    )
                 )
-            )
 
             # ----------------------------------------------------------
             # 9. CONTRADICTION ANALYSIS
             # ----------------------------------------------------------
 
+            t0 = time.perf_counter()
             contradiction_count = 0
+            contradiction_report = None
 
             if (
                 request.config.enable_contradiction_analysis
@@ -254,6 +325,7 @@ class AERISController:
                 contradiction_count = self._count_contradictions(
                     contradiction_report
                 )
+                t_contra = time.perf_counter() - t0
 
                 stages.append(
                     self._stage(
@@ -261,15 +333,18 @@ class AERISController:
                         StageStatus.COMPLETED,
                         "Contextual contradiction analysis completed.",
                         contradiction_count,
+                        latency_seconds=t_contra,
                     )
                 )
             else:
+                t_contra = time.perf_counter() - t0
                 stages.append(
                     self._stage(
                         ControllerStage.CONTRADICTION,
                         StageStatus.SKIPPED,
                         "Contradiction analysis was not configured.",
                         0,
+                        latency_seconds=t_contra,
                     )
                 )
 
@@ -277,6 +352,7 @@ class AERISController:
             # 10. CROSS-LINGUAL ANALYSIS
             # ----------------------------------------------------------
 
+            t0 = time.perf_counter()
             cross_lingual_count = 0
 
             if (
@@ -284,34 +360,61 @@ class AERISController:
                 and self.cross_lingual_analyzer is not None
                 and self.cross_lingual_integrator is not None
             ):
-                cross_lingual_results = (
-                    self.cross_lingual_analyzer(graph_builder)
-                )
-
-                for result, evidence_pairs in cross_lingual_results:
-                    self.cross_lingual_integrator.integrate(
-                        graph_builder,
-                        result,
-                        evidence_pairs,
+                try:
+                    cross_lingual_results = (
+                        self.cross_lingual_analyzer(graph_builder)
                     )
 
-                    cross_lingual_count += 1
+                    for result, evidence_pairs in cross_lingual_results:
+                        self.cross_lingual_integrator.integrate(
+                            graph_builder,
+                            result,
+                            evidence_pairs,
+                        )
 
-                stages.append(
-                    self._stage(
-                        ControllerStage.CROSS_LINGUAL,
-                        StageStatus.COMPLETED,
-                        "Cross-lingual evidence analysis completed.",
-                        cross_lingual_count,
+                        cross_lingual_count += 1
+                    t_cross = time.perf_counter() - t0
+
+                    if cross_lingual_count > 0:
+                        stages.append(
+                            self._stage(
+                                ControllerStage.CROSS_LINGUAL,
+                                StageStatus.COMPLETED,
+                                f"Cross-lingual evidence analysis completed ({cross_lingual_count} pairs evaluated).",
+                                cross_lingual_count,
+                                latency_seconds=t_cross,
+                            )
+                        )
+                    else:
+                        stages.append(
+                            self._stage(
+                                ControllerStage.CROSS_LINGUAL,
+                                StageStatus.SKIPPED,
+                                "SKIPPED (MONOLINGUAL): no cross-lingual evidence pairs found for analysis.",
+                                0,
+                                latency_seconds=t_cross,
+                            )
+                        )
+                except Exception as e:
+                    t_cross = time.perf_counter() - t0
+                    stages.append(
+                        self._stage(
+                            ControllerStage.CROSS_LINGUAL,
+                            StageStatus.FAILED,
+                            f"Cross-lingual analysis failed: {str(e)}",
+                            0,
+                            latency_seconds=t_cross,
+                        )
                     )
-                )
             else:
+                t_cross = time.perf_counter() - t0
                 stages.append(
                     self._stage(
                         ControllerStage.CROSS_LINGUAL,
                         StageStatus.SKIPPED,
                         "Cross-lingual analysis was not configured.",
                         0,
+                        latency_seconds=t_cross,
                     )
                 )
 
@@ -319,6 +422,7 @@ class AERISController:
             # 11. CALIBRATION
             # ----------------------------------------------------------
 
+            t0 = time.perf_counter()
             calibrated_count = 0
 
             if (
@@ -338,6 +442,7 @@ class AERISController:
                     calibrated_count = len(
                         calibration_records
                     )
+                    t_calib = time.perf_counter() - t0
 
                     stages.append(
                         self._stage(
@@ -345,24 +450,29 @@ class AERISController:
                             StageStatus.COMPLETED,
                             "Calibration applied to available records.",
                             calibrated_count,
+                            latency_seconds=t_calib,
                         )
                     )
                 else:
+                    t_calib = time.perf_counter() - t0
                     stages.append(
                         self._stage(
                             ControllerStage.CALIBRATION,
                             StageStatus.SKIPPED,
                             "No calibration records were available.",
                             0,
+                            latency_seconds=t_calib,
                         )
                     )
             else:
+                t_calib = time.perf_counter() - t0
                 stages.append(
                     self._stage(
                         ControllerStage.CALIBRATION,
                         StageStatus.SKIPPED,
                         "Calibration was not configured.",
                         0,
+                        latency_seconds=t_calib,
                     )
                 )
 
@@ -370,6 +480,7 @@ class AERISController:
             # 12. SELECTIVE VERIFICATION
             # ----------------------------------------------------------
 
+            t0 = time.perf_counter()
             selected_count = 0
 
             if (
@@ -395,6 +506,7 @@ class AERISController:
                     "selected_count",
                     0,
                 )
+                t_selective = time.perf_counter() - t0
 
                 stages.append(
                     self._stage(
@@ -402,15 +514,18 @@ class AERISController:
                         StageStatus.COMPLETED,
                         "Budget-aware selective verification completed.",
                         selected_count,
+                        latency_seconds=t_selective,
                     )
                 )
             else:
+                t_selective = time.perf_counter() - t0
                 stages.append(
                     self._stage(
                         ControllerStage.SELECTIVE_VERIFICATION,
                         StageStatus.SKIPPED,
                         "Selective verification was not configured.",
                         0,
+                        latency_seconds=t_selective,
                     )
                 )
 
@@ -418,6 +533,7 @@ class AERISController:
             # 13. ANSWER GENERATION
             # ----------------------------------------------------------
 
+            t0 = time.perf_counter()
             final_answer = None
             answer_status = None
             answer_confidence = None
@@ -426,6 +542,7 @@ class AERISController:
             provenance = []
             conflict_info = None
             insufficiency_info = None
+            downgrade_details = []
 
             if (
                 getattr(request.config, "answer_generation_enabled", True)
@@ -447,21 +564,165 @@ class AERISController:
                 conflict_info = answer_result.conflict_information
                 insufficiency_info = answer_result.insufficiency_reason
 
+                # Requirement-level support validation
+                if answer_status in ["SUPPORTED", "COMPLETED", "PARTIALLY_SUPPORTED"]:
+                    claims_texts = [graph_builder.claims[cid].text for cid in supporting_claim_ids if cid in graph_builder.claims]
+                    evidence_texts = [
+                        graph_builder.evidence[cid].text
+                        for cid in supporting_chunk_ids
+                        if cid in graph_builder.evidence and hasattr(graph_builder.evidence[cid], "text")
+                    ]
+                    
+                    if plan and plan.requirements:
+                        req_val_results = []
+                        for req in plan.requirements:
+                            val_res = self.requirement_validator.validate(
+                                question=request.question,
+                                requirement=req.description,
+                                answer=final_answer,
+                                claims=claims_texts,
+                                evidence_texts=evidence_texts,
+                                requirement_id=getattr(req, "id", None) or getattr(req, "requirement_id", None),
+                            )
+                            req_val_results.append((req, val_res))
+                        
+                        total_reqs = len(req_val_results)
+                        supported_count = sum(1 for _, res in req_val_results if res.is_supported)
+                        contradicted_count = sum(
+                            1 for _, res in req_val_results
+                            if getattr(res, "evidence_support_status", "") == "CONTRADICTED"
+                        )
+                        unsupported_reqs = [
+                            getattr(r, "requirement_id", None) or getattr(r, "id", None) or getattr(r, "description", "")
+                            for r, res in req_val_results if not res.is_supported
+                        ]
+
+                        # Essential requirements (priority == 1). If none tagged priority 1, all are essential.
+                        essential_reqs = [
+                            r for r, _ in req_val_results
+                            if getattr(r, "priority", 1) == 1
+                        ]
+                        if not essential_reqs:
+                            essential_reqs = [r for r, _ in req_val_results]
+
+                        essential_unsupported = [
+                            getattr(r, "requirement_id", None) or getattr(r, "id", None) or getattr(r, "description", "")
+                            for r, res in req_val_results
+                            if (r in essential_reqs) and not res.is_supported
+                        ]
+                        essential_contradicted = [
+                            getattr(r, "requirement_id", None) or getattr(r, "id", None) or getattr(r, "description", "")
+                            for r, res in req_val_results
+                            if (r in essential_reqs) and getattr(res, "evidence_support_status", "") == "CONTRADICTED"
+                        ]
+
+                        reasons = [res.rationale for _, res in req_val_results if getattr(res, "rationale", None)]
+                        categories = list({
+                            str(getattr(res, "downgrade_category", None) or getattr(res, "category", "UNSUPPORTED"))
+                            for _, res in req_val_results
+                            if getattr(res, "downgrade_category", None) or getattr(res, "category", None)
+                        })
+
+                        # B4 Aggregation Semantics:
+                        # 1. Contradiction: If any requirement is contradicted by evidence
+                        if contradicted_count > 0:
+                            answer_status = "CONFLICTED" if answer_status != "INSUFFICIENT_EVIDENCE" else "INSUFFICIENT_EVIDENCE"
+                            downgrade_details.append({
+                                "downgrade_type": "REQUIREMENT_CONTRADICTED",
+                                "categories": categories,
+                                "unsupported_requirements": unsupported_reqs,
+                                "essential_unsupported": essential_unsupported,
+                                "essential_contradicted": essential_contradicted,
+                                "supporting_claim_ids": supporting_claim_ids,
+                                "supporting_chunk_ids": supporting_chunk_ids,
+                                "validator_rationales": reasons,
+                            })
+                            defect_msg = f"Requirement contradiction detected: {'; '.join(reasons)}"
+                            insufficiency_info = f"{insufficiency_info} | {defect_msg}" if insufficiency_info else defect_msg
+
+                        # 2. Complete evidence failure: none supported -> INSUFFICIENT_EVIDENCE
+                        elif supported_count == 0:
+                            answer_status = "INSUFFICIENT_EVIDENCE"
+                            downgrade_details.append({
+                                "downgrade_type": "REQUIREMENT_UNSUPPORTED",
+                                "categories": categories,
+                                "unsupported_requirements": unsupported_reqs,
+                                "essential_unsupported": essential_unsupported,
+                                "supporting_claim_ids": list(supporting_claim_ids),
+                                "supporting_chunk_ids": list(supporting_chunk_ids),
+                                "validator_rationales": reasons,
+                            })
+                            defect_msg = f"Requirement support validation failed: {'; '.join(reasons) if reasons else 'No requirements satisfied.'}"
+                            insufficiency_info = f"{insufficiency_info} | {defect_msg}" if insufficiency_info else defect_msg
+                            final_answer = "The retrieved document evidence does not provide sufficient support to answer this question."
+                            supporting_claim_ids = []
+                            supporting_chunk_ids = []
+                            provenance = []
+
+                        # 3. Partial support: some supported, but some sub-requirements unsupported
+                        elif supported_count < total_reqs:
+                            # Missing essential requirements strictly prevent classification as fully SUPPORTED
+                            if answer_status in ["SUPPORTED", "COMPLETED"]:
+                                answer_status = "PARTIALLY_SUPPORTED"
+                            downgrade_details.append({
+                                "downgrade_type": "REQUIREMENT_PARTIALLY_UNSUPPORTED",
+                                "categories": categories,
+                                "supported_count": supported_count,
+                                "total_requirements": total_reqs,
+                                "unsupported_requirements": unsupported_reqs,
+                                "essential_unsupported": essential_unsupported,
+                                "supporting_claim_ids": supporting_claim_ids,
+                                "supporting_chunk_ids": supporting_chunk_ids,
+                                "validator_rationales": reasons,
+                            })
+                            defect_msg = f"Partial requirement support: {supported_count}/{total_reqs} requirements established ({'; '.join(unsupported_reqs)} unsupported; essential missing: {'; '.join(essential_unsupported) if essential_unsupported else 'none'})."
+                            insufficiency_info = f"{insufficiency_info} | {defect_msg}" if insufficiency_info else defect_msg
+
+                # Enforce citation provenance validation: every cited chunk must belong to retrieved_chunk_ids
+                provenance_defects = [
+                    cid for cid in supporting_chunk_ids if cid not in retrieved_chunk_ids
+                ]
+                if provenance_defects:
+                    defect_msg = f"Provenance defect: cited chunk(s) {provenance_defects} not in retrieved evidence pool."
+                    insufficiency_info = f"{insufficiency_info} | {defect_msg}" if insufficiency_info else defect_msg
+                    downgrade_details.append({
+                        "downgrade_type": "PROVENANCE_DEFECT",
+                        "unretrieved_chunk_ids": provenance_defects,
+                        "supporting_chunk_ids": list(supporting_chunk_ids),
+                    })
+                    if answer_status in ["SUPPORTED", "COMPLETED", "PARTIALLY_SUPPORTED"]:
+                        answer_status = "INSUFFICIENT_EVIDENCE"
+                        final_answer = "The retrieved document evidence does not provide sufficient support to answer this question."
+                        supporting_claim_ids = []
+                        supporting_chunk_ids = []
+                        provenance = []
+
+                t_ans = time.perf_counter() - t0
+
                 stages.append(
                     self._stage(
                         ControllerStage.ANSWER_GENERATION,
                         StageStatus.COMPLETED,
                         "Grounded answer generation completed.",
                         1,
+                        latency_seconds=t_ans,
                     )
                 )
             else:
+                provenance_defects = []
+                supporting_claim_ids = []
+                supporting_chunk_ids = []
+                provenance = []
+                conflict_info = None
+                insufficiency_info = "Answer generation was not configured or missing generator."
+                t_ans = time.perf_counter() - t0
                 stages.append(
                     self._stage(
                         ControllerStage.ANSWER_GENERATION,
                         StageStatus.SKIPPED,
                         "Answer generation was not configured or missing generator.",
                         0,
+                        latency_seconds=t_ans,
                     )
                 )
 
@@ -480,6 +741,49 @@ class AERISController:
 
             graph = graph_builder.build()
 
+            # Telemetry Tracking
+            base_k = (
+                self.adaptive_retrieval_controller.candidate_k_schedule[0]
+                if (
+                    hasattr(self, "adaptive_retrieval_controller")
+                    and self.adaptive_retrieval_controller
+                    and hasattr(self.adaptive_retrieval_controller, "candidate_k_schedule")
+                    and isinstance(self.adaptive_retrieval_controller.candidate_k_schedule, (list, tuple))
+                    and len(self.adaptive_retrieval_controller.candidate_k_schedule) > 0
+                    and isinstance(self.adaptive_retrieval_controller.candidate_k_schedule[0], (int, float))
+                )
+                else getattr(request.config, "candidate_k", 10)
+            )
+
+            ar_calls = 0
+            cand_expansions = 0
+            ref_calls = 0
+
+            for res in retrieval_results:
+                ar_calls += len(res.attempts)
+                for att in res.attempts:
+                    if att.candidate_k > base_k:
+                        cand_expansions += 1
+                    if att.query_type == "reformulated" or str(att.query_type).startswith("reformulation"):
+                        ref_calls += 1
+
+            # Only mark adaptive_retrieval_triggered if adaptive retrieval is ENABLED and candidate depth actually expanded
+            ar_triggered = (cand_expansions > 0) if request.config.enable_adaptive_retrieval else False
+
+            # Query reformulation is tracked independently
+            ref_triggered = (ref_calls > 0) if request.config.enable_query_reformulation else False
+
+            mem_hits = memory.hit_count if memory else 0
+            mem_lookups = memory.lookup_count if memory else 0
+            mem_skips = memory.skip_count if memory else 0
+            mem_misses = memory.miss_count if memory else 0
+            mem_cached_evidence = getattr(memory, "cached_evidence_count", 0) if memory else 0
+            mem_fallbacks = getattr(memory, "fallback_count", 0) if memory else 0
+            mem_incompatibilities = getattr(memory, "incompatibility_count", 0) if memory else 0
+
+            verification_call_count = len(verification_results) if request.config.enable_claim_verification else 0
+            verification_skipped_count = len(typed_claims) - verification_call_count if request.config.enable_claim_verification else 0
+
             return ControllerResult(
                 document_id=request.document_id,
                 question=request.question,
@@ -490,6 +794,9 @@ class AERISController:
                 answer_confidence=answer_confidence,
                 supporting_claim_ids=supporting_claim_ids,
                 supporting_chunk_ids=supporting_chunk_ids,
+                retrieved_chunk_ids=retrieved_chunk_ids,
+                retrieval_attempts_history=retrieval_attempts_history,
+                provenance_defects=provenance_defects,
                 provenance=provenance,
                 conflict_information=conflict_info,
                 insufficiency_information=insufficiency_info,
@@ -502,15 +809,49 @@ class AERISController:
                     "cross_lingual_relations": cross_lingual_count,
                     "calibrated_records": calibrated_count,
                     "coverage": coverage_metadata,
+                    "provenance_defects": provenance_defects,
+                    "downgrade_details": downgrade_details,
+                    "retrieved_chunk_count": len(retrieved_chunk_ids),
+
+                    "adaptive_retrieval_triggered": ar_triggered,
+                    "retrieval_attempt_count": ar_calls,
+                    "candidate_depth_expansions": cand_expansions,
+
+                    "reformulation_triggered": ref_triggered,
+                    "reformulation_attempt_count": ref_calls,
+
+                    "memory_lookup_count": mem_lookups,
+                    "memory_hit_count": mem_hits,
+                    "memory_miss_count": mem_misses,
+                    "memory_skip_count": mem_skips,
+                    "memory_cached_evidence_count": mem_cached_evidence,
+                    "memory_fallback_count": mem_fallbacks,
+                    "memory_incompatibility_count": mem_incompatibilities,
+
+                    "verification_call_count": verification_call_count,
+                    "claims_verified": verified_count,
+                    "verification_skipped_count": verification_skipped_count,
+
+                    "contradiction_call_count": 1 if (request.config.enable_contradiction_analysis and contradiction_report) else 0,
+                    "contradiction_pairs_evaluated": len(contradiction_report.conflicts) if contradiction_report and hasattr(contradiction_report, 'conflicts') else 0,
+
+                    "cross_lingual_call_count": 1 if request.config.enable_cross_lingual_analysis else 0,
+                    "cross_lingual_pairs_evaluated": cross_lingual_count,
+                    
+                    "selective_verification_call_count": 1 if (request.config.enable_selective_verification and selected_count > 0) else 0,
+                    "selected_claim_count": selected_count,
+                    "skipped_claim_count": len(typed_claims) - selected_count if request.config.enable_selective_verification else 0,
                 },
             )
 
         except Exception as exc:
+            import traceback
+            error_msg = f"{str(exc)}\n{traceback.format_exc()}"
             stages.append(
                 self._stage(
                     ControllerStage.FAILED,
                     StageStatus.FAILED,
-                    str(exc),
+                    error_msg,
                     0,
                 )
             )
@@ -521,6 +862,9 @@ class AERISController:
                 status=StageStatus.FAILED,
                 stages=stages,
                 final_answer=None,
+                retrieved_chunk_ids=[],
+                retrieval_attempts_history=[],
+                provenance_defects=[],
                 claim_count=0,
                 evidence_count=0,
                 verified_claim_count=0,
@@ -563,7 +907,7 @@ class AERISController:
                     candidates = value
                     break
 
-            for item in candidates:
+            for item in candidates[:5]:
                 chunk_id = getattr(item, "chunk_id", None)
 
                 if not chunk_id:
@@ -739,6 +1083,7 @@ class AERISController:
         message: str,
         output_count: int = 0,
         metadata: Optional[Dict[str, Any]] = None,
+        latency_seconds: float = 0.0,
     ) -> ControllerStageResult:
         return ControllerStageResult(
             stage=stage,
@@ -746,4 +1091,5 @@ class AERISController:
             message=message,
             output_count=output_count,
             metadata=metadata or {},
+            latency_seconds=latency_seconds,
         )

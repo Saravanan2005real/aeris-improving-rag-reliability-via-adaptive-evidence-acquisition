@@ -3,8 +3,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
-from sentence_transformers import CrossEncoder
-
 from app.retrieval.hybrid_retriever import HybridResult
 
 
@@ -37,6 +35,7 @@ class Reranker:
         model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2",
     ):
         self.model_name = model_name
+        from sentence_transformers import CrossEncoder
         self.model = CrossEncoder(model_name)
 
     def rerank(
@@ -62,9 +61,20 @@ class Reranker:
 
         scores = self.model.predict(pairs)
 
+        metadata_terms = (
+            "author", "authors", "affiliation", "affiliated", "institution",
+            "department", "university", "college", "who wrote", "writer",
+            "written by", "title", "first author", "lead author", "co-author",
+            "published", "journal", "conference", "email", "institute"
+        )
+        is_metadata = any(term in query.lower() for term in metadata_terms)
+
         results = []
 
         for candidate, score in zip(candidates, scores):
+            final_score = float(score)
+            if is_metadata and (candidate.chunk_id.endswith("_p001_c001") or (candidate.start_page == 1 and "c001" in candidate.chunk_id)):
+                final_score += 20.0
 
             results.append(
                 RerankResult(
@@ -79,7 +89,7 @@ class Reranker:
                     dense_score=candidate.dense_score,
                     bm25_score=candidate.bm25_score,
                     retrieval_score=candidate.hybrid_score,
-                    rerank_score=float(score),
+                    rerank_score=final_score,
                 )
             )
 

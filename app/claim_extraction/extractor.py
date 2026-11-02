@@ -1,10 +1,19 @@
 import os
 import json
 import re
+import time
+from typing import Optional
+from app.performance_cache import aeris_cache
 
 import ollama
 from app.config import settings
 from app.claim_extraction.schemas import ExtractedClaim, ClaimExtractionResult
+from app.utils.json_parser import extract_json
+from app.utils.model_client import get_ollama_client, timed_model_chat
+from app.utils.diagnostics import log_generation_attempt
+
+DEFAULT_EXTRACTION_TIMEOUT: float = 180.0
+
 
 class ClaimExtractor:
     """
@@ -12,25 +21,26 @@ class ClaimExtractor:
     using an LLM.
     """
 
-    def __init__(self, model: str = None, host: str = None):
+    def __init__(
+        self,
+        model: Optional[str] = None,
+        host: Optional[str] = None,
+        timeout: Optional[float] = None,
+        max_retries: int = 1,
+    ):
         self.model = model or settings.ollama_model
         self.host = host or settings.ollama_host
-        self.client = ollama.Client(host=self.host)
-
-    @staticmethod
-    def _extract_json(text: str) -> str:
-        text = text.strip()
-        text = re.sub(r"^```(?:json)?\s*", "", text)
-        text = re.sub(r"\s*```$", "", text)
-        start = text.find("{")
-        end = text.rfind("}")
-        if start == -1 or end == -1 or end <= start:
-            raise ValueError("No valid JSON object found in model response.")
-        return text[start : end + 1]
+        self.timeout = (
+            timeout
+            if timeout is not None
+            else getattr(settings, "ollama_claim_extraction_timeout", DEFAULT_EXTRACTION_TIMEOUT)
+        )
+        self.max_retries = max_retries
+        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
 
     def extract(self, chunk_id: str, document_id: str, text: str) -> ClaimExtractionResult:
         """
-        Extract claims from a single chunk of text.
+        Extract claims from a single chunk of text with telemetry and deliberate retry logic.
         """
         prompt = (
             "You are an expert fact extractor for a research-grade retrieval system.\n\n"
@@ -57,7 +67,9 @@ class ClaimExtractor:
             "explicitly stated in the source.\n"
             "9. Each claim should normally express one subject-predicate relationship "
             "or one independently testable proposition.\n"
-            "10. Do not explain, summarize, interpret, or evaluate the claims.\n\n"
+            "10. Do not explain, summarize, interpret, or evaluate the claims.\n"
+            "11. Do not repeat claims or output duplicate entries. Extract each factual assertion at most once.\n"
+            "12. When document headers, titles, author names, or affiliations are present in the text, extract them as factual claims (e.g., 'X is the first author', 'X is affiliated with Y').\n\n"
 
             "EXAMPLE:\n"
             "Input:\n"
@@ -73,50 +85,126 @@ class ClaimExtractor:
 
             "Return STRICTLY a JSON object with a single key 'claims'.\n"
             "The value of 'claims' must be a list of strings.\n"
-            "Do not include markdown, explanations, numbering, or any other fields.\n\n"
+            "Do not include markdown, explanations, numbering, or any other fields.\n"
+            "Respond ONLY with valid JSON. Do not include markdown blocks, preamble, or explanation outside the JSON.\n"
+            "Start your response exactly with { and end exactly with }.\n\n"
 
             f"TEXT TO ANALYZE:\n{text}"
         )
 
-        try:
-            response = self.client.chat(
-                model=self.model,
-                messages=[
-                    {"role": "user", "content": prompt}
-                ],
-                format="json",
-                options={
-                    "temperature": 0.0,
-                },
-            )
+        cache_key = {"chunk": chunk_id}
+        cached = aeris_cache.get("extraction", cache_key)
+        if cached:
+            return ClaimExtractionResult(**cached)
 
-            result_str = response["message"]["content"]
-            json_text = self._extract_json(result_str)
-            data = json.loads(json_text)
-            raw_claims = data.get("claims", [])
+        max_attempts = max(1, self.max_retries + 1)
+        last_exception = None
+        ctx_size = len(prompt)
 
-            extracted_claims = []
-            for i, claim_text in enumerate(raw_claims):
-                claim_id = f"{chunk_id}_claim_{i+1}"
-                extracted_claims.append(
-                    ExtractedClaim(
-                        claim_id=claim_id,
-                        text=claim_text.strip(),
-                        source_chunk_id=chunk_id,
-                        document_id=document_id
-                    )
+        for attempt in range(1, max_attempts + 1):
+            parse_success = False
+            schema_success = False
+            repair_invoked = False
+            retry_invoked = (attempt > 1)
+            elapsed = 0.0
+
+            try:
+                chat_res = timed_model_chat(
+                    client=self.client,
+                    model=self.model,
+                    messages=[
+                        {"role": "user", "content": prompt}
+                    ],
+                    format="json",
+                    options={
+                        "temperature": 0.0,
+                        "num_predict": 2048,
+                    },
+                    stage="Claim Extraction",
+                )
+                elapsed = chat_res["elapsed_seconds"]
+                result_str = chat_res["content"]
+
+                try:
+                    data = json.loads(result_str)
+                except Exception:
+                    repair_invoked = True
+                    json_text = extract_json(result_str)
+                    data = json.loads(json_text)
+
+                parse_success = True
+
+                if not isinstance(data, dict) or "claims" not in data:
+                    raise ValueError("Claim extraction output must be a JSON object with a 'claims' array.")
+
+                raw_claims = data.get("claims", [])
+                if not isinstance(raw_claims, list):
+                    raise ValueError("The 'claims' field must be a list of strings.")
+
+                schema_success = True
+
+                extracted_claims = []
+                seen_claim_texts = set()
+                for claim_text in raw_claims:
+                    if isinstance(claim_text, str) and claim_text.strip():
+                        cleaned = claim_text.strip()
+                        if cleaned not in seen_claim_texts:
+                            seen_claim_texts.add(cleaned)
+                            claim_id = f"{chunk_id}_claim_{len(extracted_claims) + 1}"
+                            extracted_claims.append(
+                                ExtractedClaim(
+                                    claim_id=claim_id,
+                                    text=cleaned,
+                                    source_chunk_id=chunk_id,
+                                    document_id=document_id
+                                )
+                            )
+
+                log_generation_attempt(
+                    stage="Claim Extraction",
+                    question_id="UNKNOWN",
+                    variant="UNKNOWN",
+                    attempt=attempt,
+                    model=self.model,
+                    context_size=ctx_size,
+                    latency=elapsed,
+                    parse_success=parse_success,
+                    schema_success=schema_success,
+                    repair_invoked=repair_invoked,
+                    retry_invoked=retry_invoked,
                 )
 
-            return ClaimExtractionResult(
-                chunk_id=chunk_id,
-                document_id=document_id,
-                claims=extracted_claims
-            )
+                res = ClaimExtractionResult(
+                    chunk_id=chunk_id,
+                    document_id=document_id,
+                    claims=extracted_claims
+                )
+                res_dict = {
+                    "chunk_id": res.chunk_id,
+                    "document_id": res.document_id,
+                    "claims": [c.model_dump() if hasattr(c, "model_dump") else c.dict() for c in res.claims],
+                }
+                aeris_cache.set("extraction", cache_key, res_dict)
+                return res
 
-        except Exception as e:
-            print(f"Error during claim extraction: {e}")
-            return ClaimExtractionResult(
-                chunk_id=chunk_id,
-                document_id=document_id,
-                claims=[]
-            )
+            except Exception as e:
+                last_exception = e
+                log_generation_attempt(
+                    stage="Claim Extraction",
+                    question_id="UNKNOWN",
+                    variant="UNKNOWN",
+                    attempt=attempt,
+                    model=self.model,
+                    context_size=ctx_size,
+                    latency=elapsed,
+                    parse_success=parse_success,
+                    schema_success=schema_success,
+                    repair_invoked=repair_invoked,
+                    retry_invoked=retry_invoked,
+                )
+                print(
+                    f"Error during claim extraction [Model: {self.model}, Attempt: {attempt}/{max_attempts}, "
+                    f"Context: {ctx_size} chars, Time: {elapsed:.2f}s]: {e}"
+                )
+                if attempt == max_attempts:
+                    raise last_exception

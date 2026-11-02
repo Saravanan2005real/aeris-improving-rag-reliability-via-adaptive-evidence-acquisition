@@ -1,0 +1,1571 @@
+{
+  "experiment_id": "exp_final224_20261011_113501",
+  "audit_timestamp": "2026-10-11T18:05:00",
+  "overall_status": "SCIENTIFICALLY_VALID",
+  "gates_summary": {
+    "Gate 1 - Structural Integrity": "PASS",
+    "Gate 2 - Cache Isolation": "PASS",
+    "Gate 3 - Answerability & False-Support Safety": "PASS",
+    "Gate 4 - Provenance Integrity": "PASS",
+    "Gate 5 - Evidence Metric Denominators": "PASS",
+    "Gate 6 - Ablation Activation": "PASS",
+    "Gate 7 - Latency Instrumentation": "PASS",
+    "Issue 1 - Failed-Run Denominator Accounting": "FAIL (Resolved via Correction in Audit)",
+    "Issue 2 - Retrieval Metric Independence": "PASS (Genuine Invariance Verified)",
+    "Issue 3 - Cross-Lingual Timing Precision": "PASS (Sub-millisecond Timing Verified)",
+    "Issue 4 - Latency Reconciliation": "PASS (100% Mathematically Reconciled)"
+  },
+  "issue_1_failed_run_denominator": {
+    "gate": "FAIL",
+    "description": "Original report silently classified failed record FULL_AERIS/q_mh_04 into answerable_questions_insufficient.",
+    "failed_record": {
+      "variant": "FULL_AERIS",
+      "question_id": "q_mh_04",
+      "error_type": "ClaimTypingError",
+      "error_message": "Claim typing failed after 3 attempts. Error: Invalid claim type 'COMPARE' for index 8.",
+      "status": "FAILED",
+      "raw_latency": 158.2165012359619
+    },
+    "original_reported_metrics": {
+      "answerable_questions_supported": 23,
+      "answerable_questions_insufficient": 137,
+      "answerable_evaluations_total": 160,
+      "unanswerable_evaluations_total": 64,
+      "unanswerable_correctly_rejected": 64,
+      "unanswerable_false_support": 0,
+      "false_support_rate": 0.0,
+      "overall_answerability_accuracy": 0.38839285714285715,
+      "full_aeris_evidence_hit_rate": 0.35,
+      "full_aeris_evidence_recall": 0.275
+    },
+    "corrected_metrics": {
+      "answerable_questions_supported": 23,
+      "answerable_questions_insufficient": 136,
+      "answerable_questions_failed": 1,
+      "unanswerable_questions_insufficient": 64,
+      "unanswerable_questions_supported": 0,
+      "false_support_rate": "0 / 64 (0.0000)",
+      "supported_rate_all_evaluations": {
+        "formula": "23 / 160",
+        "value": 0.14375
+      },
+      "supported_rate_completed_only": {
+        "formula": "23 / 159",
+        "value": 0.14465408805031446
+      },
+      "answerability_accuracy_all_evaluations": {
+        "formula": "(23 + 64) / 224",
+        "value": 0.38839285714285715
+      },
+      "answerability_accuracy_completed_only": {
+        "formula": "(23 + 64) / 223",
+        "value": 0.3901345291479821
+      },
+      "full_aeris_hit_rate_n20": {
+        "formula": "7 / 20",
+        "value": 0.35
+      },
+      "full_aeris_hit_rate_n19": {
+        "formula": "7 / 19",
+        "value": 0.3684210526315789
+      },
+      "full_aeris_recall_n20": {
+        "formula": "5.5 / 20",
+        "value": 0.275
+      },
+      "full_aeris_recall_n19": {
+        "formula": "5.5 / 19",
+        "value": 0.2894736842105263
+      }
+    }
+  },
+  "issue_2_identical_retrieval_metrics": {
+    "gate": "PASS",
+    "finding": "Retrieval metrics (35.0% Hit, 0.275 Recall) are genuinely identical across all 8 variants due to benchmark distribution and component boundaries.",
+    "detailed_reasons": [
+      "Cited chunk sets ACTUALLY DIFFER between variants on multiple questions (e.g. q_df_01, q_mh_03, q_mh_04, q_mh_05, q_comp_03, q_unans_03), proving caches were not shared.",
+      "Across all 20 answerable questions, exactly 7 questions yielded hits on the gold chunks (q_mh_03, q_mh_05, q_meth_01, q_comp_02, q_quant_02, q_contra_01, q_contra_02).",
+      "For all 7 hit questions, the initial retrieval (k=10/25) already contained the gold chunk; depth expansion (k=50) was unnecessary.",
+      "Downstream ablation components (NO_CLAIM_VERIFICATION, NO_CONTRADICTION_ANALYSIS, NO_CROSSLINGUAL_AGREEMENT, NO_SELECTIVE_VERIFICATION) run strictly AFTER retrieval and do not alter retrieved evidence chunks.",
+      "For the remaining 13 answerable questions, none of the variants retrieved the gold chunks, yielding hit=0 across all variants."
+    ],
+    "chunk_set_differences_vs_full_aeris": {
+      "NO_ADAPTIVE_RETRIEVAL": [
+        {
+          "question_id": "q_df_01",
+          "is_answerable": true,
+          "full_aeris_chunks": [
+            "test_document_p015_c034"
+          ],
+          "variant_chunks": [
+            "test_document_p012_c029"
+          ]
+        },
+        {
+          "question_id": "q_mh_04",
+          "is_answerable": true,
+          "full_aeris_chunks": [],
+          "variant_chunks": [
+            "test_document_p003_c006"
+          ]
+        },
+        {
+          "question_id": "q_unans_03",
+          "is_answerable": false,
+          "full_aeris_chunks": [
+            "test_document_p006_c014",
+            "test_document_p006_c015"
+          ],
+          "variant_chunks": []
+        }
+      ],
+      "NO_CLAIM_VERIFICATION": [
+        {
+          "question_id": "q_df_01",
+          "is_answerable": true,
+          "full_aeris_chunks": [
+            "test_document_p015_c034"
+          ],
+          "variant_chunks": [
+            "test_document_p012_c029"
+          ]
+        },
+        {
+          "question_id": "q_mh_03",
+          "is_answerable": true,
+          "full_aeris_chunks": [
+            "test_document_p018_c040"
+          ],
+          "variant_chunks": [
+            "test_document_p018_c040",
+            "test_document_p015_c034"
+          ]
+        },
+        {
+          "question_id": "q_mh_04",
+          "is_answerable": true,
+          "full_aeris_chunks": [],
+          "variant_chunks": [
+            "test_document_p003_c006",
+            "test_document_p006_c014"
+          ]
+        },
+        {
+          "question_id": "q_mh_05",
+          "is_answerable": true,
+          "full_aeris_chunks": [
+            "test_document_p018_c040",
+            "test_document_p008_c019"
+          ],
+          "variant_chunks": [
+            "test_document_p008_c019"
+          ]
+        },
+        {
+          "question_id": "q_comp_03",
+          "is_answerable": false,
+          "full_aeris_chunks": [
+            "test_document_p004_c010"
+          ],
+          "variant_chunks": []
+        },
+        {
+          "question_id": "q_unans_03",
+          "is_answerable": false,
+          "full_aeris_chunks": [
+            "test_document_p006_c014",
+            "test_document_p006_c015"
+          ],
+          "variant_chunks": []
+        }
+      ],
+      "NO_CONTRADICTION_ANALYSIS": [
+        {
+          "question_id": "q_df_01",
+          "is_answerable": true,
+          "full_aeris_chunks": [
+            "test_document_p015_c034"
+          ],
+          "variant_chunks": [
+            "test_document_p012_c029"
+          ]
+        },
+        {
+          "question_id": "q_mh_04",
+          "is_answerable": true,
+          "full_aeris_chunks": [],
+          "variant_chunks": [
+            "test_document_p003_c006",
+            "test_document_p006_c014"
+          ]
+        },
+        {
+          "question_id": "q_unans_03",
+          "is_answerable": false,
+          "full_aeris_chunks": [
+            "test_document_p006_c014",
+            "test_document_p006_c015"
+          ],
+          "variant_chunks": []
+        }
+      ],
+      "NO_CROSSLINGUAL_AGREEMENT": [
+        {
+          "question_id": "q_df_01",
+          "is_answerable": true,
+          "full_aeris_chunks": [
+            "test_document_p015_c034"
+          ],
+          "variant_chunks": [
+            "test_document_p012_c029"
+          ]
+        },
+        {
+          "question_id": "q_mh_04",
+          "is_answerable": true,
+          "full_aeris_chunks": [],
+          "variant_chunks": [
+            "test_document_p003_c006"
+          ]
+        },
+        {
+          "question_id": "q_unans_03",
+          "is_answerable": false,
+          "full_aeris_chunks": [
+            "test_document_p006_c014",
+            "test_document_p006_c015"
+          ],
+          "variant_chunks": []
+        }
+      ],
+      "NO_QUERY_REFORMULATION": [
+        {
+          "question_id": "q_df_01",
+          "is_answerable": true,
+          "full_aeris_chunks": [
+            "test_document_p015_c034"
+          ],
+          "variant_chunks": [
+            "test_document_p012_c029"
+          ]
+        },
+        {
+          "question_id": "q_mh_04",
+          "is_answerable": true,
+          "full_aeris_chunks": [],
+          "variant_chunks": [
+            "test_document_p003_c006"
+          ]
+        },
+        {
+          "question_id": "q_unans_03",
+          "is_answerable": false,
+          "full_aeris_chunks": [
+            "test_document_p006_c014",
+            "test_document_p006_c015"
+          ],
+          "variant_chunks": []
+        }
+      ],
+      "NO_RETRIEVAL_MEMORY": [
+        {
+          "question_id": "q_df_01",
+          "is_answerable": true,
+          "full_aeris_chunks": [
+            "test_document_p015_c034"
+          ],
+          "variant_chunks": [
+            "test_document_p012_c029"
+          ]
+        },
+        {
+          "question_id": "q_mh_04",
+          "is_answerable": true,
+          "full_aeris_chunks": [],
+          "variant_chunks": [
+            "test_document_p003_c006"
+          ]
+        },
+        {
+          "question_id": "q_unans_03",
+          "is_answerable": false,
+          "full_aeris_chunks": [
+            "test_document_p006_c014",
+            "test_document_p006_c015"
+          ],
+          "variant_chunks": []
+        }
+      ],
+      "NO_SELECTIVE_VERIFICATION": [
+        {
+          "question_id": "q_df_01",
+          "is_answerable": true,
+          "full_aeris_chunks": [
+            "test_document_p015_c034"
+          ],
+          "variant_chunks": [
+            "test_document_p012_c029"
+          ]
+        },
+        {
+          "question_id": "q_mh_04",
+          "is_answerable": true,
+          "full_aeris_chunks": [],
+          "variant_chunks": [
+            "test_document_p003_c006"
+          ]
+        },
+        {
+          "question_id": "q_unans_03",
+          "is_answerable": false,
+          "full_aeris_chunks": [
+            "test_document_p006_c014",
+            "test_document_p006_c015"
+          ],
+          "variant_chunks": []
+        }
+      ]
+    },
+    "per_question_metrics": {
+      "q_df_01": {
+        "gold_chunks": [
+          "test_document_p001_c001"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p015_c034"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p012_c029"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p012_c029"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p012_c029"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p012_c029"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p012_c029"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p012_c029"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p012_c029"
+            ],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_df_02": {
+        "gold_chunks": [
+          "test_document_p003_c007"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_df_03": {
+        "gold_chunks": [
+          "test_document_p018_c040",
+          "test_document_p002_c005",
+          "test_document_p019_c041"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_df_04": {
+        "gold_chunks": [
+          "test_document_p007_c018"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_df_05": {
+        "gold_chunks": [
+          "test_document_p018_c039"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_df_06": {
+        "gold_chunks": [
+          "test_document_p005_c011"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_mh_01": {
+        "gold_chunks": [
+          "test_document_p018_c039",
+          "test_document_p006_c014"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_mh_02": {
+        "gold_chunks": [
+          "test_document_p002_c004",
+          "test_document_p003_c007"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_mh_03": {
+        "gold_chunks": [
+          "test_document_p018_c040",
+          "test_document_p019_c041"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p018_c040",
+              "test_document_p015_c034"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": true,
+            "recall": 0.5
+          }
+        }
+      },
+      "q_mh_04": {
+        "gold_chunks": [
+          "test_document_p009_c022",
+          "test_document_p006_c015"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p003_c006"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p003_c006",
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p003_c006",
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p003_c006"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p003_c006"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p003_c006"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p003_c006"
+            ],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_mh_05": {
+        "gold_chunks": [
+          "test_document_p007_c018",
+          "test_document_p008_c019"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p018_c040",
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p018_c040",
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p018_c040",
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p018_c040",
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p018_c040",
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p018_c040",
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p018_c040",
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          }
+        }
+      },
+      "q_meth_01": {
+        "gold_chunks": [
+          "test_document_p004_c010"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p004_c010"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p004_c010"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p004_c010"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p004_c010"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p004_c010"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p004_c010"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p004_c010"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p004_c010"
+            ],
+            "hit": true,
+            "recall": 1.0
+          }
+        }
+      },
+      "q_meth_03": {
+        "gold_chunks": [
+          "test_document_p004_c008",
+          "test_document_p004_c009"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p009_c020"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p009_c020"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p009_c020"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p009_c020"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p009_c020"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p009_c020"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p009_c020"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p009_c020"
+            ],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_meth_04": {
+        "gold_chunks": [
+          "test_document_p009_c021"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p018_c040"
+            ],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_comp_01": {
+        "gold_chunks": [
+          "test_document_p009_c022"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_comp_02": {
+        "gold_chunks": [
+          "test_document_p006_c014"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          }
+        }
+      },
+      "q_quant_01": {
+        "gold_chunks": [
+          "test_document_p007_c017"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [],
+            "hit": false,
+            "recall": 0.0
+          }
+        }
+      },
+      "q_quant_02": {
+        "gold_chunks": [
+          "test_document_p008_c019"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 1.0
+          }
+        }
+      },
+      "q_contra_01": {
+        "gold_chunks": [
+          "test_document_p006_c014"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p006_c014"
+            ],
+            "hit": true,
+            "recall": 1.0
+          }
+        }
+      },
+      "q_contra_02": {
+        "gold_chunks": [
+          "test_document_p018_c039",
+          "test_document_p008_c019"
+        ],
+        "variants": {
+          "FULL_AERIS": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_ADAPTIVE_RETRIEVAL": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_CLAIM_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_CONTRADICTION_ANALYSIS": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_CROSSLINGUAL_AGREEMENT": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_QUERY_REFORMULATION": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_RETRIEVAL_MEMORY": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          },
+          "NO_SELECTIVE_VERIFICATION": {
+            "cited_chunks": [
+              "test_document_p008_c019"
+            ],
+            "hit": true,
+            "recall": 0.5
+          }
+        }
+      }
+    }
+  },
+  "issue_3_cross_lingual_latency": {
+    "gate": "PASS",
+    "finding": "Cross-lingual analysis was executed and accurately timed on all runs; latency appeared as 0.00s purely due to two-decimal-place rounding of sub-millisecond execution.",
+    "explanation": "ClaimCrossLingualAnalyzer inspected evidence chunk languages on every run. Because the benchmark document is 100% English, zero multilingual pairs were detected. The stage completed in ~82.8 microseconds (0.00008277 seconds) on average, which rounds to 0.00s under standard :.2f display formatting.",
+    "per_variant_cross_lingual_timing": {
+      "FULL_AERIS": {
+        "total_calls": 27,
+        "total_multilingual_pairs": 0,
+        "min_latency_seconds": 0.0,
+        "max_latency_seconds": 0.00016659998800605536,
+        "mean_latency_seconds": 8.27678564486892e-05,
+        "mean_latency_microseconds": 82.7678564486892
+      },
+      "NO_ADAPTIVE_RETRIEVAL": {
+        "total_calls": 28,
+        "total_multilingual_pairs": 0,
+        "min_latency_seconds": 3.850000211969018e-05,
+        "max_latency_seconds": 0.00017010001465678215,
+        "mean_latency_seconds": 8.969999908003956e-05,
+        "mean_latency_microseconds": 89.69999908003956
+      },
+      "NO_CLAIM_VERIFICATION": {
+        "total_calls": 28,
+        "total_multilingual_pairs": 0,
+        "min_latency_seconds": 4.3599982745945454e-05,
+        "max_latency_seconds": 0.0002052999916486442,
+        "mean_latency_seconds": 0.00011329285605045567,
+        "mean_latency_microseconds": 113.29285605045567
+      },
+      "NO_CONTRADICTION_ANALYSIS": {
+        "total_calls": 28,
+        "total_multilingual_pairs": 0,
+        "min_latency_seconds": 4.500002251006663e-05,
+        "max_latency_seconds": 0.00027990000671707094,
+        "mean_latency_seconds": 0.00013054643308610788,
+        "mean_latency_microseconds": 130.54643308610787
+      },
+      "NO_CROSSLINGUAL_AGREEMENT": {
+        "total_calls": 0,
+        "total_multilingual_pairs": 0,
+        "min_latency_seconds": 5.00003807246685e-07,
+        "max_latency_seconds": 2.800021320581436e-06,
+        "mean_latency_seconds": 1.3714265410921404e-06,
+        "mean_latency_microseconds": 1.3714265410921405
+      },
+      "NO_QUERY_REFORMULATION": {
+        "total_calls": 28,
+        "total_multilingual_pairs": 0,
+        "min_latency_seconds": 4.050001734867692e-05,
+        "max_latency_seconds": 0.00016029999824240804,
+        "mean_latency_seconds": 8.265714443820928e-05,
+        "mean_latency_microseconds": 82.65714443820929
+      },
+      "NO_RETRIEVAL_MEMORY": {
+        "total_calls": 28,
+        "total_multilingual_pairs": 0,
+        "min_latency_seconds": 3.819999983534217e-05,
+        "max_latency_seconds": 0.0001537000061944127,
+        "mean_latency_seconds": 8.521428597824914e-05,
+        "mean_latency_microseconds": 85.21428597824914
+      },
+      "NO_SELECTIVE_VERIFICATION": {
+        "total_calls": 28,
+        "total_multilingual_pairs": 0,
+        "min_latency_seconds": 4.290000651963055e-05,
+        "max_latency_seconds": 0.0003808000183198601,
+        "mean_latency_seconds": 0.00010596785640310762,
+        "mean_latency_microseconds": 105.96785640310762
+      }
+    }
+  },
+  "issue_4_latency_reconciliation": {
+    "gate": "PASS",
+    "finding": "The 5.32s discrepancy between FULL_AERIS mean E2E latency (101.93s) and the sum of stage means (96.61s) is 100% mathematically accounted for by the aborted claim-typing stage in failed run q_mh_04.",
+    "exact_mathematical_reconciliation": {
+      "all_28_runs_mean_e2e": 101.93225864853177,
+      "all_28_runs_sum_of_stage_means": 96.60816579285583,
+      "apparent_discrepancy": 5.324092855675943,
+      "failed_run_id": "FULL_AERIS / q_mh_04",
+      "failed_run_e2e_latency": 158.2165012359619,
+      "failed_run_recorded_stages_sum": 9.157436500041513,
+      "failed_run_unrecorded_claim_typing_duration": 149.0590647359204,
+      "unrecorded_duration_amortized_over_28_runs": 5.323538026282871,
+      "mathematical_reconciliation_residual": 0.0005548293930717207,
+      "successful_27_runs_mean_e2e": 99.84765707121954,
+      "successful_27_runs_sum_of_stage_means": 99.84708169258968,
+      "successful_27_runs_residual": 0.000575378629861234
+    },
+    "explanation": "On all 27 successful runs, end-to-end latency equals the sum of stages within 0.000575 seconds (sub-millisecond timer resolution). In the single failed run q_mh_04, claim typing attempted 3 retries over 149.0591 seconds before throwing ClaimTypingError. The exception was caught by controller.py before line 217 (stages.append for CLAIM_GRAPH), meaning this 149.06 seconds was included in the total run timer but never registered as an individual stage latency. Dividing 149.0591s by 28 yields exactly 5.3235s, reconciling the numbers completely."
+  }
+}

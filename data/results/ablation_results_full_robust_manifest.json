@@ -1,0 +1,18 @@
+{
+  "experiment_id": "exp_20261004_005757",
+  "timestamp": "2026-10-04T00:57:57.181814",
+  "model_name": "llama3.2",
+  "benchmark_path": "data/benchmark/aeris_benchmark.json",
+  "benchmark_question_count": 28,
+  "variant_list": [
+    "FULL_AERIS",
+    "NO_ADAPTIVE_RETRIEVAL",
+    "NO_QUERY_REFORMULATION",
+    "NO_RETRIEVAL_MEMORY",
+    "NO_CLAIM_VERIFICATION",
+    "NO_CONTRADICTION_ANALYSIS",
+    "NO_CROSSLINGUAL_AGREEMENT",
+    "NO_SELECTIVE_VERIFICATION"
+  ],
+  "expected_run_count": 224
+}

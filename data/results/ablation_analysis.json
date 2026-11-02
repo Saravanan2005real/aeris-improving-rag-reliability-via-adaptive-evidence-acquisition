@@ -1,0 +1,183 @@
+{
+  "overall": {
+    "total": 224,
+    "successful": 161,
+    "failed": 63,
+    "success_percentage": 71.875,
+    "failure_percentage": 28.125
+  },
+  "variant_stats": {
+    "FULL_AERIS": {
+      "total_runs": 28,
+      "successful_runs": 20,
+      "failed_runs": 8,
+      "success_rate": 71.42857142857143,
+      "evidence_hit_rate": 0.15,
+      "evidence_hit_denominator": 20,
+      "evidence_recall": 0.1,
+      "evidence_recall_denominator": 20,
+      "mean_latency": 90.11052029132843,
+      "median_latency": 57.88882076740265,
+      "p95_latency": 282.0372371673584,
+      "verified_claims_avg": 1.5,
+      "selected_claims_avg": 1.3,
+      "answer_status_distribution": {}
+    },
+    "NO_ADAPTIVE_RETRIEVAL": {
+      "total_runs": 28,
+      "successful_runs": 20,
+      "failed_runs": 8,
+      "success_rate": 71.42857142857143,
+      "evidence_hit_rate": 0.15,
+      "evidence_hit_denominator": 20,
+      "evidence_recall": 0.1,
+      "evidence_recall_denominator": 20,
+      "mean_latency": 34.66294269561767,
+      "median_latency": 31.010709047317505,
+      "p95_latency": 58.60697674751282,
+      "verified_claims_avg": 1.5,
+      "selected_claims_avg": 1.3,
+      "answer_status_distribution": {}
+    },
+    "NO_CLAIM_VERIFICATION": {
+      "total_runs": 28,
+      "successful_runs": 21,
+      "failed_runs": 7,
+      "success_rate": 75.0,
+      "evidence_hit_rate": 0.19047619047619047,
+      "evidence_hit_denominator": 21,
+      "evidence_recall": 0.14285714285714285,
+      "evidence_recall_denominator": 21,
+      "mean_latency": 34.91687323933556,
+      "median_latency": 29.843880891799927,
+      "p95_latency": 60.241716146469116,
+      "verified_claims_avg": 0.0,
+      "selected_claims_avg": 1.380952380952381,
+      "answer_status_distribution": {}
+    },
+    "NO_CONTRADICTION_ANALYSIS": {
+      "total_runs": 28,
+      "successful_runs": 20,
+      "failed_runs": 8,
+      "success_rate": 71.42857142857143,
+      "evidence_hit_rate": 0.1,
+      "evidence_hit_denominator": 20,
+      "evidence_recall": 0.075,
+      "evidence_recall_denominator": 20,
+      "mean_latency": 37.04447687864304,
+      "median_latency": 31.60253381729126,
+      "p95_latency": 66.04853391647339,
+      "verified_claims_avg": 1.5,
+      "selected_claims_avg": 1.3,
+      "answer_status_distribution": {}
+    },
+    "NO_CROSSLINGUAL_AGREEMENT": {
+      "total_runs": 28,
+      "successful_runs": 20,
+      "failed_runs": 8,
+      "success_rate": 71.42857142857143,
+      "evidence_hit_rate": 0.15,
+      "evidence_hit_denominator": 20,
+      "evidence_recall": 0.1,
+      "evidence_recall_denominator": 20,
+      "mean_latency": 37.12712243795395,
+      "median_latency": 31.420257687568665,
+      "p95_latency": 65.61514472961426,
+      "verified_claims_avg": 1.5,
+      "selected_claims_avg": 1.3,
+      "answer_status_distribution": {}
+    },
+    "NO_QUERY_REFORMULATION": {
+      "total_runs": 28,
+      "successful_runs": 20,
+      "failed_runs": 8,
+      "success_rate": 71.42857142857143,
+      "evidence_hit_rate": 0.15,
+      "evidence_hit_denominator": 20,
+      "evidence_recall": 0.1,
+      "evidence_recall_denominator": 20,
+      "mean_latency": 31.99658352136612,
+      "median_latency": 29.30959987640381,
+      "p95_latency": 46.12929582595825,
+      "verified_claims_avg": 1.5,
+      "selected_claims_avg": 1.3,
+      "answer_status_distribution": {}
+    },
+    "NO_RETRIEVAL_MEMORY": {
+      "total_runs": 28,
+      "successful_runs": 20,
+      "failed_runs": 8,
+      "success_rate": 71.42857142857143,
+      "evidence_hit_rate": 0.15,
+      "evidence_hit_denominator": 20,
+      "evidence_recall": 0.1,
+      "evidence_recall_denominator": 20,
+      "mean_latency": 36.26481291055679,
+      "median_latency": 30.77651298046112,
+      "p95_latency": 66.8336272239685,
+      "verified_claims_avg": 1.5,
+      "selected_claims_avg": 1.3,
+      "answer_status_distribution": {}
+    },
+    "NO_SELECTIVE_VERIFICATION": {
+      "total_runs": 28,
+      "successful_runs": 20,
+      "failed_runs": 8,
+      "success_rate": 71.42857142857143,
+      "evidence_hit_rate": 0.15,
+      "evidence_hit_denominator": 20,
+      "evidence_recall": 0.1,
+      "evidence_recall_denominator": 20,
+      "mean_latency": 36.18733414411545,
+      "median_latency": 31.657390117645264,
+      "p95_latency": 64.66380190849304,
+      "verified_claims_avg": 1.5,
+      "selected_claims_avg": 0.0,
+      "answer_status_distribution": {}
+    }
+  },
+  "failure_distribution": {
+    "by_variant": {
+      "FULL_AERIS": 8,
+      "NO_ADAPTIVE_RETRIEVAL": 8,
+      "NO_QUERY_REFORMULATION": 8,
+      "NO_RETRIEVAL_MEMORY": 8,
+      "NO_CLAIM_VERIFICATION": 7,
+      "NO_CONTRADICTION_ANALYSIS": 8,
+      "NO_CROSSLINGUAL_AGREEMENT": 8,
+      "NO_SELECTIVE_VERIFICATION": 8
+    },
+    "by_question": {
+      "q_df_06": 8,
+      "q_mh_02": 8,
+      "q_mh_04": 8,
+      "q_meth_01": 8,
+      "q_comp_01": 8,
+      "q_comp_02": 8,
+      "q_quant_02": 7,
+      "q_contra_02": 8
+    },
+    "by_category": {
+      "DIRECT_FACT": 8,
+      "MULTI_HOP": 16,
+      "METHOD": 8,
+      "COMPARATIVE": 16,
+      "QUANTITATIVE": 7,
+      "CONTRADICTION": 8
+    },
+    "by_stage": {
+      "FAILED": 63
+    },
+    "by_type": {
+      "JSON Parsing": 63
+    },
+    "counts": {
+      "json_parsing": 63,
+      "timeout": 0,
+      "model_api": 0,
+      "controller": 0,
+      "other": 0
+    }
+  },
+  "systematic_analysis": "The failures appear broadly distributed across all variants, primarily driven by JSON parsing or validation errors during LLM extraction rather than a specific algorithmic failure."
+}

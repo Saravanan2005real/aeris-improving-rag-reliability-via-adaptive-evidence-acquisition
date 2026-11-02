@@ -1,0 +1,43 @@
+{
+  "step": "Step 22D",
+  "timestamp_utc": "2026-10-15T14:14:23.063900+00:00",
+  "evaluated_target": "exp_final224_repaired_20261011_222000 remediation",
+  "gate_status": "FAIL",
+  "checks": {
+    "adaptive_retrieval_ablation_isolated": {
+      "status": "FAIL",
+      "details": "Ablation isolation failed: 'types.SimpleNamespace' object has no attribute 'language'"
+    },
+    "known_supported_cases_accepted": {
+      "status": "FAIL",
+      "details": "Support validation failed: Case 'Method' incorrectly rejected"
+    },
+    "genuinely_unsupported_cases_rejected": {
+      "status": "PASS",
+      "details": "Genuinely ungrounded claim strictly rejected; structured downgrade category EVIDENCE_UNSUPPORTED returned."
+    },
+    "retrieval_memory_produces_valid_hit": {
+      "status": "PASS",
+      "details": "Valid cache hit verified under intended usage; candidate depth incompatibility and document/session isolation strictly enforced."
+    },
+    "eligible_cross_lingual_pairs_evaluated": {
+      "status": "PASS",
+      "details": "Eligible bilingual pairs evaluated; monolingual pairs bypassed as SKIPPED (MONOLINGUAL) rather than falsely counted."
+    },
+    "model_timeouts_and_monotonic_timing_enforced": {
+      "status": "PASS",
+      "details": "Explicit HTTP timeouts enforced with ModelTimeoutError; sleep/suspension drift detected and flagged with LatencyContaminationError."
+    },
+    "telemetry_distinguishes_execution_bypass_skip_failure": {
+      "status": "PASS",
+      "details": "Telemetry cleanly records execution vs bypass vs skip vs failure; downgrade_details captures structured defect categories."
+    }
+  },
+  "summary": {
+    "total_checks": 7,
+    "passed": 5,
+    "failed": 2,
+    "unresolved": 0,
+    "overall_gate_status": "FAIL"
+  }
+}

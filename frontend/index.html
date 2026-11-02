@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AERIS-RAG — Research Demonstration Dashboard</title>
+  <meta name="description" content="Interactive research demonstration dashboard for AERIS-RAG: Adaptive Evidence Acquisition and Grounded Answer Verification.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-branding">
+        <div class="logo-group">
+          <div class="logo-mark">AERIS</div>
+          <div>
+            <h1 class="system-title">AERIS-RAG <span class="prototype-badge">RESEARCH DEMO</span></h1>
+            <p class="system-tagline">Adaptive Evidence Acquisition &amp; Answer Verification Pipeline</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-status-group">
+        <!-- Live Backend Status -->
+        <div id="backendStatusPill" class="status-pill status-connecting" title="Checking backend health...">
+          <span class="status-dot"></span>
+          <span id="backendStatusText">Connecting...</span>
+        </div>
+        <!-- Model Indicator -->
+        <div id="modelStatusPill" class="status-pill pill-subtle" title="Local LLM Model">
+          <span class="pill-label">LLM:</span>
+          <span id="modelNameText" class="pill-val">llama3.2</span>
+        </div>
+        <!-- Document Indicator -->
+        <div id="activeDocPill" class="status-pill pill-subtle" title="Active Index">
+          <span class="pill-label">DOC:</span>
+          <span id="activeDocText" class="pill-val">test_document</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Research Safety / Governance Notice -->
+    <div class="disclaimer-banner">
+      <span class="disclaimer-icon">&#x26A0;</span>
+      <span class="disclaimer-text">
+        <strong>Academic Research Prototype:</strong> Real-time inference using local LLM models (Ollama). 
+        This demonstration evaluates adaptive retrieval and evidence grounding. 
+        Not certified for clinical, medical, legal, or production safety-critical decisions.
+      </span>
+    </div>
+
+    <!-- Main Workspace Grid -->
+    <main class="dashboard-grid">
+      <!-- Left Column: Query Workspace -->
+      <section class="workspace-column">
+        <!-- Document Selector & Ingestion Card -->
+        <div class="card doc-card">
+          <div class="card-header space-between">
+            <div class="card-title-group">
+              <span class="card-title-icon">&#x1F4DA;</span>
+              <h2 class="card-title">Indexed Research Document</h2>
+            </div>
+            <button id="toggleUploadBtn" class="btn btn-secondary btn-sm" title="Upload and index a new PDF research document">
+              <span>+ Upload PDF</span>
+            </button>
+          </div>
+          <div class="doc-selector-wrapper">
+            <select id="documentSelect" class="form-select" aria-label="Select Indexed Document">
+              <option value="test_document" selected>test_document (Lewis et al., 2020)</option>
+            </select>
+          </div>
+          <div id="docMetadataBox" class="doc-metadata-strip">
+            <span class="meta-tag">Loading document metadata...</span>
+          </div>
+
+          <!-- Document Upload Drawer / Ingestion Zone -->
+          <div id="uploadDrawer" class="upload-drawer" style="display: none;">
+            <div class="upload-zone" id="uploadDropZone">
+              <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;">
+              <span class="upload-zone-icon">&#x1F4C1;</span>
+              <div class="upload-zone-text">
+                <span class="upload-primary-text">Click to choose or drag &amp; drop a PDF document</span>
+                <span class="upload-sub-text">Extracts text via PyMuPDF, chunks semantically, and builds dense index</span>
+              </div>
+              <button type="button" id="browseFileBtn" class="btn btn-secondary btn-xs">Choose PDF</button>
+            </div>
+            <div id="selectedFileInfo" class="selected-file-info" style="display: none;">
+              <span id="selectedFileName" class="file-name-text"></span>
+              <button id="indexDocBtn" class="btn btn-primary btn-sm">
+                <span class="btn-spinner" id="indexSpinner" style="display: none;"></span>
+                <span id="indexBtnText">Build Index</span>
+              </button>
+            </div>
+            <div id="uploadStatusBox" class="upload-status-box" style="display: none;"></div>
+          </div>
+        </div>
+
+        <!-- Question Formulation Card -->
+        <div class="card query-card">
+          <div class="card-header space-between">
+            <div class="card-title-group">
+              <span class="card-title-icon">&#x2753;</span>
+              <h2 class="card-title">Question Input</h2>
+            </div>
+            <div class="char-counter"><span id="charCount">0</span> / 1000</div>
+          </div>
+
+          <!-- Sample Queries Filter & Buttons -->
+          <div class="samples-container">
+            <div class="samples-header">
+              <span class="samples-title">Demonstration Presets (Verified on Document):</span>
+              <span class="samples-legend"><span class="badge-verified">&#x2713; Verified</span></span>
+            </div>
+            <div id="sampleButtons" class="sample-buttons-grid">
+              <!-- Dynamically populated from /api/sample_queries -->
+              <button class="sample-btn skeleton-btn" disabled>Loading presets...</button>
+            </div>
+          </div>
+
+          <!-- Input Textarea -->
+          <div class="input-wrapper">
+            <textarea
+              id="questionInput"
+              class="form-textarea"
+              placeholder="Enter a research question or select one of the verified sample presets above..."
+              rows="4"
+              maxlength="1000"
+            ></textarea>
+          </div>
+
+          <!-- Actions Bar -->
+          <div class="query-actions-bar">
+            <button id="clearBtn" class="btn btn-secondary" title="Clear input question">Clear</button>
+            <div class="exec-info-group">
+              <span id="timerDisplay" class="timer-display" style="display: none;">00:00</span>
+              <button id="submitBtn" class="btn btn-primary">
+                <span class="btn-spinner" id="btnSpinner" style="display: none;"></span>
+                <span id="btnText">Execute AERIS Pipeline</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline Execution Loading State -->
+        <div id="loadingState" class="card loading-card" style="display: none;">
+          <div class="loading-spinner"></div>
+          <div class="loading-content">
+            <h3 class="loading-title">AERIS Controller Executing</h3>
+            <p class="loading-desc" id="loadingDesc">
+              Running full 10-stage research pipeline on local Ollama GPU. 
+              Execution typically completes in ~40–75 seconds depending on claim density.
+            </p>
+            <div class="loading-stages-pulse">
+              <span class="pulse-stage">Planning</span> &rarr;
+              <span class="pulse-stage">Adaptive Retrieval</span> &rarr;
+              <span class="pulse-stage">Claim Extraction</span> &rarr;
+              <span class="pulse-stage">Verification</span> &rarr;
+              <span class="pulse-stage">Answer Gen</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Card -->
+        <div id="errorCard" class="card error-card" style="display: none;">
+          <div class="error-header">
+            <span class="error-icon">&#x26A0;</span>
+            <h3 class="error-title">Pipeline Execution Error</h3>
+          </div>
+          <p id="errorMessage" class="error-body"></p>
+        </div>
+
+        <!-- Grounded Answer Card -->
+        <div id="answerCard" class="card answer-card" style="display: none;">
+          <div class="card-header space-between">
+            <div class="card-title-group">
+              <span class="card-title-icon">&#x1F4DD;</span>
+              <h2 class="card-title">Grounded Answer Result</h2>
+            </div>
+            <div class="answer-badges-group">
+              <span id="answerStatusBadge" class="badge badge-unknown">UNKNOWN</span>
+              <span id="confidenceBadge" class="badge badge-confidence" style="display: none;"></span>
+              <span id="execDurationBadge" class="badge badge-subtle"></span>
+            </div>
+          </div>
+
+          <!-- Final Answer Text Body -->
+          <div class="answer-body-wrapper">
+            <div id="answerText" class="answer-text-content"></div>
+          </div>
+
+          <!-- Insufficiency / Refusal Callout -->
+          <div id="insufficiencyBox" class="callout callout-insufficiency" style="display: none;">
+            <div class="callout-header">
+              <span class="callout-icon">&#x2139;</span>
+              <strong>Conservative Insufficiency Rationale:</strong>
+            </div>
+            <p id="insufficiencyText" class="callout-body"></p>
+          </div>
+
+          <!-- Downgrade Explanation Box -->
+          <div id="downgradeBox" class="callout callout-downgrade" style="display: none;">
+            <div class="callout-header">
+              <span class="callout-icon">&#x26A0;</span>
+              <strong>Requirement Support Downgrade Notice:</strong>
+            </div>
+            <ul id="downgradeReasonsList" class="callout-list"></ul>
+          </div>
+
+          <!-- Citations Strip -->
+          <div class="citations-strip">
+            <span class="citations-label">Supporting Citations:</span>
+            <div id="citationsPills" class="citations-pills-container">
+              <span class="no-citations-text">No citations cited in answer.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Inspector & Telemetry Tabs -->
+      <section class="inspector-column">
+        <div class="card inspector-card">
+          <!-- Tab Headers -->
+          <div class="tabs-header">
+            <button id="tabBtnEvidence" class="tab-btn active" data-tab="evidenceTab">
+              &#x1F50D; Evidence Inspector <span id="evidenceCountBadge" class="tab-badge">0</span>
+            </button>
+            <button id="tabBtnRequirements" class="tab-btn" data-tab="requirementsTab">
+              &#x1F4CB; Requirement Support <span id="reqBadge" class="tab-badge">0</span>
+            </button>
+            <button id="tabBtnTelemetry" class="tab-btn" data-tab="telemetryTab">
+              &#x23F1; Pipeline Telemetry <span id="telemetryBadge" class="tab-badge">10</span>
+            </button>
+          </div>
+
+          <!-- Tab 1: Evidence Inspector -->
+          <div id="evidenceTab" class="tab-content active">
+            <div class="tab-toolbar">
+              <div class="filter-btn-group">
+                <button id="filterCitedOnly" class="filter-pill active">Cited Passages Only (<span id="citedCountText">0</span>)</button>
+                <button id="filterAllCandidates" class="filter-pill">All Retrieved Pool (<span id="allCandidateCountText">0</span>)</button>
+              </div>
+              <span class="evidence-hint">Click a passage to expand text. Click citation pills in the answer to highlight.</span>
+            </div>
+            <div id="evidenceList" class="evidence-items-list">
+              <div class="empty-tab-state">
+                <span class="empty-icon">&#x1F4C4;</span>
+                <p>Submit a question to inspect retrieved and cited evidence chunks.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Requirement Support & Validation -->
+          <div id="requirementsTab" class="tab-content">
+            <div class="tab-toolbar">
+              <span class="toolbar-title">Information Requirement Grounding Status</span>
+            </div>
+            <div id="requirementsContent" class="requirements-container">
+              <div class="empty-tab-state">
+                <span class="empty-icon">&#x2705;</span>
+                <p>Submit a question to view requirement-level validation and downgrade analysis.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Pipeline Telemetry -->
+          <div id="telemetryTab" class="tab-content">
+            <div class="tab-toolbar">
+              <span class="toolbar-title">Completed Stage Execution Trace</span>
+              <span id="telemetryTotalTime" class="telemetry-total-pill">Total: --</span>
+            </div>
+            <div id="telemetryContent" class="telemetry-container">
+              <div class="empty-tab-state">
+                <span class="empty-icon">&#x2699;</span>
+                <p>Submit a query to inspect real stage-by-stage latencies and output counts.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        AERIS-RAG Research Demo &bull; Adaptive Evidence Acquisition &bull; Target Index: <code id="footerDoc">test_document</code>
+      </div>
+      <div class="footer-right">
+        Branch: <span class="footer-code">demo/interactive-web-app</span> &bull; Port: <span class="footer-code">8000</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

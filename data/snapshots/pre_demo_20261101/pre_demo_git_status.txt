@@ -1,0 +1,332 @@
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   app/adaptive_retrieval/controller.py
+	modified:   app/adaptive_retrieval/query_reformulator.py
+	modified:   app/adaptive_retrieval/schemas.py
+	modified:   app/answer_generation/answer_generator.py
+	modified:   app/answer_generation/schemas.py
+	modified:   app/claim_extraction/extractor.py
+	modified:   app/claim_extraction/normalizer.py
+	modified:   app/claim_extraction/typer.py
+	modified:   app/claim_graph/graph.py
+	modified:   app/config.py
+	modified:   app/controller/controller.py
+	modified:   app/controller/schemas.py
+	modified:   app/coverage/evidence_coverage.py
+	modified:   app/indexing/embedding_service.py
+	modified:   app/planning/requirement_planner.py
+	modified:   app/retrieval/reranker.py
+	modified:   app/retrieval_memory/memory.py
+	modified:   app/retrieval_memory/schemas.py
+	modified:   app/verification/claim_verifier.py
+	modified:   app/verification/contradiction_classifier.py
+	modified:   app/verification/cross_claim_contradiction.py
+	modified:   app/verification/cross_lingual_agreement.py
+	modified:   app/verification/cross_lingual_claim.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	app/ablation/
+	app/performance_cache.py
+	app/utils/
+	app/verification/requirement_support.py
+	audit_output.md
+	audit_output.txt
+	audit_output_utf8.md
+	create_test_script.py
+	data/aeris_cache.json
+	data/aeris_cache_FULL_AERIS.json
+	data/aeris_cache_FULL_AERIS_full_robust.json
+	data/aeris_cache_NO_ADAPTIVE_RETRIEVAL.json
+	data/aeris_cache_NO_ADAPTIVE_RETRIEVAL_full_robust.json
+	data/aeris_cache_robustness_test.json
+	data/cache_exp_corrected224_20261004_210019_FULL_AERIS.json
+	data/cache_exp_corrected224_20261004_210019_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_corrected224_20261004_210019_NO_QUERY_REFORMULATION.json
+	data/cache_exp_corrected224_20261006_103614_FULL_AERIS.json
+	data/cache_exp_corrected224_20261006_103614_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_corrected224_20261006_103614_NO_CLAIM_VERIFICATION.json
+	data/cache_exp_corrected224_20261006_103614_NO_CONTRADICTION_ANALYSIS.json
+	data/cache_exp_corrected224_20261006_103614_NO_CROSSLINGUAL_AGREEMENT.json
+	data/cache_exp_corrected224_20261006_103614_NO_QUERY_REFORMULATION.json
+	data/cache_exp_corrected224_20261006_103614_NO_RETRIEVAL_MEMORY.json
+	data/cache_exp_corrected224_20261006_103614_NO_SELECTIVE_VERIFICATION.json
+	data/cache_exp_final224_20261011_113501_FULL_AERIS.json
+	data/cache_exp_final224_20261011_113501_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_final224_20261011_113501_NO_CLAIM_VERIFICATION.json
+	data/cache_exp_final224_20261011_113501_NO_CONTRADICTION_ANALYSIS.json
+	data/cache_exp_final224_20261011_113501_NO_CROSSLINGUAL_AGREEMENT.json
+	data/cache_exp_final224_20261011_113501_NO_QUERY_REFORMULATION.json
+	data/cache_exp_final224_20261011_113501_NO_RETRIEVAL_MEMORY.json
+	data/cache_exp_final224_20261011_113501_NO_SELECTIVE_VERIFICATION.json
+	data/cache_exp_final224_remediation_20261017_142200_FULL_AERIS.json
+	data/cache_exp_final224_remediation_20261017_142200_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_final224_remediation_20261017_142200_NO_CLAIM_VERIFICATION.json
+	data/cache_exp_final224_remediation_20261017_142200_NO_CONTRADICTION_ANALYSIS.json
+	data/cache_exp_final224_remediation_20261017_142200_NO_CROSSLINGUAL_AGREEMENT.json
+	data/cache_exp_final224_remediation_20261017_142200_NO_QUERY_REFORMULATION.json
+	data/cache_exp_final224_remediation_20261017_142200_NO_RETRIEVAL_MEMORY.json
+	data/cache_exp_final224_remediation_20261017_142200_NO_SELECTIVE_VERIFICATION.json
+	data/cache_exp_final224_remediation_20261022_183626_FULL_AERIS.json
+	data/cache_exp_final224_remediation_20261022_183626_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_final224_remediation_20261022_183626_NO_CLAIM_VERIFICATION.json
+	data/cache_exp_final224_remediation_20261022_183626_NO_CONTRADICTION_ANALYSIS.json
+	data/cache_exp_final224_remediation_20261022_183626_NO_CROSSLINGUAL_AGREEMENT.json
+	data/cache_exp_final224_remediation_20261022_183626_NO_QUERY_REFORMULATION.json
+	data/cache_exp_final224_remediation_20261022_183626_NO_RETRIEVAL_MEMORY.json
+	data/cache_exp_final224_remediation_20261022_183626_NO_SELECTIVE_VERIFICATION.json
+	data/cache_exp_final224_repaired_20261011_222000_FULL_AERIS.json
+	data/cache_exp_final224_repaired_20261011_222000_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_final224_repaired_20261011_222000_NO_CLAIM_VERIFICATION.json
+	data/cache_exp_final224_repaired_20261011_222000_NO_CONTRADICTION_ANALYSIS.json
+	data/cache_exp_final224_repaired_20261011_222000_NO_CROSSLINGUAL_AGREEMENT.json
+	data/cache_exp_final224_repaired_20261011_222000_NO_QUERY_REFORMULATION.json
+	data/cache_exp_final224_repaired_20261011_222000_NO_RETRIEVAL_MEMORY.json
+	data/cache_exp_final224_repaired_20261011_222000_NO_SELECTIVE_VERIFICATION.json
+	data/cache_exp_final224_step22e_20261020_160000_FULL_AERIS.json
+	data/cache_exp_final224_step22e_20261020_160000_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_final224_step22e_20261020_160000_NO_CLAIM_VERIFICATION.json
+	data/cache_exp_final224_step22e_20261020_160000_NO_CONTRADICTION_ANALYSIS.json
+	data/cache_exp_final224_step22e_20261020_160000_NO_CROSSLINGUAL_AGREEMENT.json
+	data/cache_exp_final224_step22e_20261020_160000_NO_QUERY_REFORMULATION.json
+	data/cache_exp_final224_step22e_20261020_160000_NO_RETRIEVAL_MEMORY.json
+	data/cache_exp_final224_step22e_20261020_160000_NO_SELECTIVE_VERIFICATION.json
+	data/cache_exp_final224_step22e_remediation_20261021_125813_FULL_AERIS.json
+	data/cache_exp_final224_step22e_remediation_20261021_125813_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_final224_step22e_remediation_20261021_125813_NO_CLAIM_VERIFICATION.json
+	data/cache_exp_final224_step22e_remediation_20261021_125813_NO_CONTRADICTION_ANALYSIS.json
+	data/cache_exp_final224_step22e_remediation_20261021_125813_NO_CROSSLINGUAL_AGREEMENT.json
+	data/cache_exp_final224_step22e_remediation_20261021_125813_NO_QUERY_REFORMULATION.json
+	data/cache_exp_final224_step22e_remediation_20261021_125813_NO_RETRIEVAL_MEMORY.json
+	data/cache_exp_final224_step22e_remediation_20261021_125813_NO_SELECTIVE_VERIFICATION.json
+	data/cache_exp_final224_step22e_remediation_20261021_223514_FULL_AERIS.json
+	data/cache_exp_measurement_smoke_20261011_215641_FULL_AERIS.json
+	data/cache_exp_smoke_test_single_180_FULL_AERIS.json
+	data/cache_exp_smoke_test_single_FULL_AERIS.json
+	data/cache_exp_targeted_20261006_174101_FULL_AERIS.json
+	data/cache_exp_targeted_20261006_174101_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_targeted_20261006_174101_NO_CLAIM_VERIFICATION.json
+	data/cache_exp_targeted_20261006_174101_NO_CONTRADICTION_ANALYSIS.json
+	data/cache_exp_targeted_20261006_174101_NO_CROSSLINGUAL_AGREEMENT.json
+	data/cache_exp_targeted_20261006_174101_NO_QUERY_REFORMULATION.json
+	data/cache_exp_targeted_20261006_174101_NO_RETRIEVAL_MEMORY.json
+	data/cache_exp_targeted_20261006_174101_NO_SELECTIVE_VERIFICATION.json
+	data/cache_exp_targeted_20261006_234631_FULL_AERIS.json
+	data/cache_exp_targeted_20261006_234631_NO_ADAPTIVE_RETRIEVAL.json
+	data/cache_exp_targeted_20261006_234631_NO_CLAIM_VERIFICATION.json
+	data/cache_exp_targeted_20261006_234631_NO_CONTRADICTION_ANALYSIS.json
+	data/cache_exp_targeted_20261006_234631_NO_CROSSLINGUAL_AGREEMENT.json
+	data/cache_exp_targeted_20261006_234631_NO_QUERY_REFORMULATION.json
+	data/cache_exp_targeted_20261006_234631_NO_RETRIEVAL_MEMORY.json
+	data/cache_exp_targeted_20261006_234631_NO_SELECTIVE_VERIFICATION.json
+	data/clean_full_ablation_cache_FULL_AERIS.json
+	data/clean_full_ablation_cache_NO_ADAPTIVE_RETRIEVAL.json
+	data/recovery_backups/
+	data/results/ablation_analysis.json
+	data/results/ablation_analysis.md
+	data/results/ablation_analysis.txt
+	data/results/ablation_audit_clean224.md
+	data/results/ablation_audit_clean224_matrix.json
+	data/results/ablation_exp_final224_remediation_20261017_142200_activation_audit.json
+	data/results/ablation_exp_final224_remediation_20261017_142200_metrics.json
+	data/results/ablation_exp_final224_remediation_20261017_142200_scientific_audit.json
+	data/results/ablation_exp_final224_remediation_20261017_142200_structural_audit.json
+	data/results/ablation_exp_final224_remediation_20261022_183626_activation_audit.json
+	data/results/ablation_exp_final224_remediation_20261022_183626_metrics.json
+	data/results/ablation_exp_final224_remediation_20261022_183626_scientific_audit.json
+	data/results/ablation_exp_final224_remediation_20261022_183626_structural_audit.json
+	data/results/ablation_exp_final224_repaired_20261011_222000_activation_audit.json
+	data/results/ablation_exp_final224_repaired_20261011_222000_independent_scientific_audit.md
+	data/results/ablation_exp_final224_repaired_20261011_222000_metrics.json
+	data/results/ablation_exp_final224_repaired_20261011_222000_scientific_audit.json
+	data/results/ablation_exp_final224_repaired_20261011_222000_structural_audit.json
+	data/results/ablation_exp_final224_step22e_20261020_160000_activation_audit.json
+	data/results/ablation_exp_final224_step22e_20261020_160000_metrics.json
+	data/results/ablation_exp_final224_step22e_20261020_160000_scientific_audit.json
+	data/results/ablation_exp_final224_step22e_20261020_160000_structural_audit.json
+	data/results/ablation_exp_final224_step22e_remediation_20261021_125813_activation_audit.json
+	data/results/ablation_exp_final224_step22e_remediation_20261021_125813_metrics.json
+	data/results/ablation_exp_final224_step22e_remediation_20261021_125813_scientific_audit.json
+	data/results/ablation_exp_final224_step22e_remediation_20261021_125813_structural_audit.json
+	data/results/ablation_exp_measurement_smoke_20261011_215641_activation_audit.json
+	data/results/ablation_exp_measurement_smoke_20261011_215641_metrics.json
+	data/results/ablation_exp_measurement_smoke_20261011_215641_scientific_audit.json
+	data/results/ablation_exp_measurement_smoke_20261011_215641_structural_audit.json
+	data/results/ablation_failure_diagnosis.json
+	data/results/ablation_failure_diagnosis.md
+	data/results/ablation_final224_activation_audit.json
+	data/results/ablation_final224_final_gate_audit.json
+	data/results/ablation_final224_final_gate_audit.md
+	data/results/ablation_final224_independent_audit.json
+	data/results/ablation_final224_independent_audit.md
+	data/results/ablation_final224_measurement_repair_implementation.md
+	data/results/ablation_final224_measurement_repair_plan.md
+	data/results/ablation_final224_metrics.json
+	data/results/ablation_final224_pre_experiment_integrity_gate.md
+	data/results/ablation_final224_scientific_audit.json
+	data/results/ablation_final224_structural_audit.json
+	data/results/ablation_measurement_smoke_exp_measurement_smoke_20261011_215641.json
+	data/results/ablation_measurement_smoke_exp_measurement_smoke_20261011_215641.md
+	data/results/ablation_results.json
+	data/results/ablation_results_corrected224.json
+	data/results/ablation_results_corrected224.json.old
+	data/results/ablation_results_corrected224.md
+	data/results/ablation_results_corrected224_diagnostics.jsonl
+	data/results/ablation_results_corrected224_diagnostics.jsonl.old
+	data/results/ablation_results_exp_final224_remediation_20261017_142200.json
+	data/results/ablation_results_exp_final224_remediation_20261017_142200.md
+	data/results/ablation_results_exp_final224_remediation_20261017_142200_diagnostics.jsonl
+	data/results/ablation_results_exp_final224_remediation_20261017_142200_manifest.json
+	data/results/ablation_results_exp_final224_remediation_20261022_183626.json
+	data/results/ablation_results_exp_final224_remediation_20261022_183626.md
+	data/results/ablation_results_exp_final224_remediation_20261022_183626_diagnostics.jsonl
+	data/results/ablation_results_exp_final224_remediation_20261022_183626_manifest.json
+	data/results/ablation_results_exp_final224_repaired_20261011_222000.json
+	data/results/ablation_results_exp_final224_repaired_20261011_222000.md
+	data/results/ablation_results_exp_final224_repaired_20261011_222000_diagnostics.jsonl
+	data/results/ablation_results_exp_final224_repaired_20261011_222000_manifest.json
+	data/results/ablation_results_exp_final224_step22e_20261020_160000.json
+	data/results/ablation_results_exp_final224_step22e_20261020_160000.md
+	data/results/ablation_results_exp_final224_step22e_20261020_160000_diagnostics.jsonl
+	data/results/ablation_results_exp_final224_step22e_20261020_160000_manifest.json
+	data/results/ablation_results_exp_final224_step22e_remediation_20261021_125813.json
+	data/results/ablation_results_exp_final224_step22e_remediation_20261021_125813.md
+	data/results/ablation_results_exp_final224_step22e_remediation_20261021_125813_diagnostics.jsonl
+	data/results/ablation_results_exp_final224_step22e_remediation_20261021_125813_manifest.json
+	data/results/ablation_results_exp_final224_step22e_remediation_20261021_223514.json
+	data/results/ablation_results_exp_final224_step22e_remediation_20261021_223514_diagnostics.jsonl
+	data/results/ablation_results_exp_final224_step22e_remediation_20261021_223514_manifest.json
+	data/results/ablation_results_exp_measurement_smoke_20261011_215641.json
+	data/results/ablation_results_exp_measurement_smoke_20261011_215641.md
+	data/results/ablation_results_exp_measurement_smoke_20261011_215641_diagnostics.jsonl
+	data/results/ablation_results_exp_measurement_smoke_20261011_215641_manifest.json
+	data/results/ablation_results_final224.json
+	data/results/ablation_results_final224.md
+	data/results/ablation_results_final224_diagnostics.jsonl
+	data/results/ablation_results_final224_manifest.json
+	data/results/ablation_results_full.json
+	data/results/ablation_results_full.json.bak
+	data/results/ablation_results_full_manifest.json
+	data/results/ablation_results_full_manifest.json.bak
+	data/results/ablation_results_full_robust.json
+	data/results/ablation_results_full_robust_manifest.json
+	data/results/ablation_robustness_regression.json
+	data/results/ablation_robustness_regression.md
+	data/results/ablation_robustness_regression_manifest.json
+	data/results/ablation_smoke.json
+	data/results/ablation_smoke_manifest.json
+	data/results/aeris_profile_after.json
+	data/results/aeris_profile_before.json
+	data/results/aeris_rag_demo_readiness_report.md
+	data/results/clean_full_ablation.json
+	data/results/clean_full_ablation_diagnostics.jsonl
+	data/results/clean_full_ablation_report.md
+	data/results/exp_final224_remediation_20261017_142200_completion_review.md
+	data/results/exp_final224_remediation_20261017_142200_independent_scientific_audit.md
+	data/results/exp_final224_remediation_20261022_183626_claims_evidence_matrix.md
+	data/results/exp_final224_remediation_20261022_183626_final_closure_report.md
+	data/results/exp_final224_remediation_20261022_183626_final_independent_audit.md
+	data/results/exp_final224_remediation_20261022_183626_postrun_review.md
+	data/results/exp_final224_remediation_20261022_183626_reproducibility_package.md
+	data/results/exp_final224_step22e_20261020_160000_postrun_review.md
+	data/results/exp_final224_step22e_20261020_160000_recovery_inspection.md
+	data/results/exp_final224_step22e_20261020_160000_root_cause_investigation.md
+	data/results/exp_final224_step22e_remediation_20261021_125813_postrun_review.md
+	data/results/false_support_targeted_audit.json
+	data/results/generation_diagnostics.jsonl
+	data/results/generation_diagnostics_full_robust.jsonl
+	data/results/generation_diagnostics_robustness.jsonl
+	data/results/smoke_ablation_results.json
+	data/results/smoke_ablation_results_manifest.json
+	data/results/smoke_diagnostics.jsonl
+	data/results/step22d1_independent_audit_20261017_134500.md
+	data/results/step22d1_memory_repair_20261015_205800.md
+	data/results/step22d_independent_remediation_audit_20261015_202000.md
+	data/results/step22d_preflight_results_20261015_141423.json
+	data/results/step22d_preflight_results_20261015_141518.json
+	data/results/step22d_preflight_results_20261015_141833.json
+	data/results/step22d_preflight_results_20261015_152550.json
+	data/results/step22d_preflight_results_20261015_152740.json
+	data/results/step22d_preflight_results_20261017_084012.json
+	data/results/step22d_remediation_preflight_20261015_141423.md
+	data/results/step22d_remediation_preflight_20261015_141518.md
+	data/results/step22d_remediation_preflight_20261015_141833.md
+	data/results/step22d_remediation_preflight_20261015_152550.md
+	data/results/step22d_remediation_preflight_20261015_152740.md
+	data/results/step22d_remediation_preflight_20261017_084012.md
+	data/results/step22e_answer_support_remediation_20261018_010000.md
+	data/results/step22e_final_preflight.md
+	data/results/step22e_fresh_benchmark_preflight.md
+	data/results/step22e_independent_remediation_audit_20261020_155000.md
+	data/results/step22e_partial_support_remediation_independent_audit.md
+	data/results/step22e_partial_support_remediation_report.md
+	data/results/step22e_partial_support_verification_report.md
+	data/results/step22e_postrun_remediation_independent_audit.md
+	data/results/step22e_postrun_remediation_report.md
+	data/results/targeted_regression.json
+	data/results/targeted_regression_diagnostics.jsonl
+	data/results/targeted_regression_false_support_fix.json
+	data/results/targeted_regression_final_fix.json
+	data/results/targeted_regression_report.txt
+	data/results/targeted_regression_step23.json
+	data/smoke_test_cache.json
+	data/smoke_test_cache_part_h.json
+	data/snapshots/
+	data/targeted_regression_cache_FULL_AERIS.json
+	data/test1.json
+	log.txt
+	log_utf8.txt
+	out.txt
+	out_part_h.txt
+	patch.py
+	patch_script.py
+	scripts/analyze_ablation.py
+	scripts/analyze_failures.py
+	scripts/apply_optimizations.py
+	scripts/audit_ablation_robust.py
+	scripts/audit_ablation_scientific_validity.py
+	scripts/audit_clean224.py
+	scripts/audit_false_support.md
+	scripts/audit_final_224.py
+	scripts/clean_full_ablation.py
+	scripts/corrected_clean_full_ablation.py
+	scripts/create_pre_demo_snapshot.py
+	scripts/diagnose_failures.py
+	scripts/evaluate_ablation.py
+	scripts/evaluate_ablation_robustness.py
+	scripts/extract_false_support.py
+	scripts/generate_before_profile.py
+	scripts/generate_final_gate_audit.py
+	scripts/generate_full_ablation_report.py
+	scripts/generate_independent_audit.py
+	scripts/merge_ablation_results.py
+	scripts/patch_controller.py
+	scripts/patch_controller2.py
+	scripts/print_log.py
+	scripts/profile_aeris.py
+	scripts/profile_aeris_after.py
+	scripts/reconcile_latency.py
+	scripts/run_ablation.py
+	scripts/run_final_224_evaluation.py
+	scripts/run_full_ablation_robust.py
+	scripts/run_measurement_smoke_test.py
+	scripts/run_targeted_regression.py
+	scripts/run_targeted_regression_step23.py
+	scripts/smoke_test.py
+	scripts/step22d_preflight_gate.py
+	scripts/targeted_regression.py
+	scripts/test_claim_extractor_prompt.py
+	scripts/validate_measurement_smoke_test.py
+	scripts/verify_optimizations.py
+	smoke_log.txt
+	smoke_log2.txt
+	smoke_log3.txt
+	smoke_log4.txt
+	smoke_test_output.txt
+	tests/
+
+no changes added to commit (use "git add" and/or "git commit -a")

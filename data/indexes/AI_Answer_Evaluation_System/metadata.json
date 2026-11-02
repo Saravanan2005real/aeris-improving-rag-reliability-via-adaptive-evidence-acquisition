@@ -1,0 +1,225 @@
+[
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p001_c001",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      1
+    ],
+    "start_page": 1,
+    "end_page": 1,
+    "character_count": 1600,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "AI-Based Automated Evaluation of Handwritten\nDescriptive Answer Scripts Using Vision-Language\nOCR and Constraint-Aware LLM Grading\nS. Moshikhaa\nDept. of Computational Intelligence\nSRM Institute of Science and Technology\nChennai, Tamil Nadu\nms2690@srmist.edu.in\nDinesh S\nDept. of Information Technology\nRajalakshmi Engineering College\nChennai, Tamil Nadu\n231001040@rajalakshmi.edu.in\nSaravanan Sathishkumar\nDept. of Computing Technologies\nSRM Institute of Science and Technology\nChennai, Tamil Nadu\nss4091@srmist.edu.in\nDaiwakshya Choudhury\nDept. of Computing Technologies\nSRM Institute of Science and Technology\nChennai, Tamil Nadu\ndc0800@srmist.edu.in\nDivyaa S\nDept. of Computer Application\nSCLAS\nChennai, Tamil Nadu\ndivyaasiva0015.sclas@saveetha.com\nDr. Girirajan S\nDept. of Computing Technologies\nSRM Institute of Science and Technology\nChennai, Tamil Nadu\ngirirajs1@srmist.edu.in\nAbstract\u2014Evaluation of handwritten descriptive answer scripts\nhas always been considered difficult due to handwriting differ-\nences, OCR errors, semantics variability of students\u2019 answers,\nand specific rules for grading in the particular examination pro-\ncess. The existing approaches to automated assessments mainly\ninvolve using the clean digital version of text and lexical matching\ntechniques, restricting their application in real-life scenarios\nof handwritten examinations. This paper proposes an end-to-\nend AI-powered system that combines Vision-Language Optical\nCharacter Recognition (OCR) and constraint-aware Large Lan-\nguage Model (LLM) in order to provide semantic grading of\nhandwritten answer scripts."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p001_c002",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      1
+    ],
+    "start_page": 1,
+    "end_page": 1,
+    "character_count": 1674,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "A Florence-2 vision-language model\nthat was fine-tuned on the IAM Handwriting Database is used\nfor recognizing handwritten texts in a reliable way followed\nby an answer alignment algorithm that aligns the answers to\nquestions considering the peculiarities of the examination process\nstructure. The grading is performed by locally running Llama\n3 (8B) grading engine that evaluates the answers according to\nthe grading rubrics, including the marking scheme, optional\nquestions, and section-wise grading. Index Terms\u2014Automated Essay Scoring (AES), Handwritten\nText Recognition, Vision-Language Models, Florence-2, Large\nLanguage Models, Semantic Answer Assessment, Constraint-\nAware Grading, Educational AI. I. INTRODUCTION\nDescriptive tests through handwriting still form one of the\nmain methods of evaluating the students\u2019 conceptual knowl-\nedge, analytical skills, and problem-solving skills in education\ncenters. Nonetheless, manual assessment of such handwritten\nanswer papers involves intensive work, delays, and is always\nsubjective, leading to inconsistent scoring and late posting\nof the results. As the number of students keeps increasing,\nthere is an increased need for intelligent automated systems\nfor conducting assessments [1], [14], [16]. The latest developments in NLP, VLMs, and LLMs have\ngreatly enhanced Automated Essay Scoring and document\nunderstanding [5], [10], [18]. However, most AES tools are\ndesigned for digitally typed texts or make use of lexical\nmatching and thus do not apply to handwritten descriptive\nexams where variations in handwriting styles, OCR mistakes,\nand different ways of writing an answer continue to be a\nproblem [1], [9], [13]."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p001_c003",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      1
+    ],
+    "start_page": 1,
+    "end_page": 1,
+    "character_count": 1453,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "In addition, existing methods hardly\ncombine handwritten text recognition with semantic grading\nand take into account examination-specific marking criteria. In order to overcome such shortcomings, this paper presents\nan end-to-end AI-based framework that integrates a Florence-2\nVision-Language OCR model with a constraint-aware Llama 3\n(8B) grading engine for automated evaluation of handwritten\ndescriptive answers. In this way, Florence-2 will be trained\non the IAM Handwriting Database in order to increase the\nperformance of OCR of handwritten text regardless of the\ndiversity in writing style and conditions of documents. Au-\ntomatically aligned responses will be semantically evaluated\nagainst predefined answers set by instructors. Grading will\nalso take into account examination-related constraints such as\nmarking schemes and section-wise allocation of marks. The major contributions of this work are summarized as\nfollows:\n\u2022 An end-to-end framework integrating Florence-2 Vision-\nLanguage OCR with a constraint-aware Llama 3 grading\nengine for handwritten descriptive answer evaluation.\n\u2022 An automated answer-alignment mechanism capable of\nhandling complex examination layouts and optional-\nquestion structures.\n\u2022 A rubric-guided semantic grading strategy that combines\ncontextual reasoning with examination-specific grading\nconstraints.\n\u2022 Experimental\nevaluation\non\nthe\nIAM\nHandwriting\nDatabase and a curated handwritten examination dataset,"
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p002_c004",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1741,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "demonstrating the effectiveness of the proposed frame-\nwork for practical educational assessment. II. LITERATURE SURVEY\nThe automated evaluation of handwritten descriptive an-\nswer scripts is an important research topic that lies at the\nintersection of computer vision, natural language processing,\nand educational technology. In earlier Automated Essay Scor-\ning (AES) systems, the use of lexical features and manu-\nally crafted rules was predominant which prevented them\nfrom assessing semantic comprehension. Recent progress in\nVision-Language Models (VLMs), handwriting recognition,\nand Large Language Models (LLMs) has made it possible\nto improve document understanding and semantic evaluation\nsignificantly. However, current techniques do not integrate\nthe tasks of handwriting recognition and answer evaluation,\ntaking into account examination specific constraints and rubric\nbased evaluation. This work tries to overcome this problem by\nproviding an integrated system for the end-to-end evaluation\nof handwritten descriptive answer scripts. A. Automated Essay and Answer-Sheet Scoring with NLP and\nLLMs\nFirst-generation AES systems made use of lexical prop-\nerties, rules designed by humans, and keyword matching\nfor mimicking human evaluation [1], [14]. While efficient\nfrom the computational point of view, these methods did not\nhave the capacity to incorporate semantic comprehension and\nconceptual accuracy [13]. Syntactic and linguistic features\nused in machine learning algorithms enhanced consistency of\nscoring yet were task-specific and lacked generalizability [6],\n[15], [18]. The introduction of Transformer-based language models has\ngreatly contributed to the automation of assessment via contex-\ntual semantic reasoning."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p002_c005",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1648,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Transformer-based AES models have\nbeen shown to exhibit high agreement with human assessors\n[4], [10], [12], and the recent use of LLaMA-based models\nhas facilitated rubric-driven assessment via semantic analysis\nand explanation [2], [7], [8]. Nevertheless, existing grading systems based on LLMs\nmake use of digitized data [5], [16] and disregard problems\nassociated with handwriting. Errors in OCR adversely affect\nsubsequent analysis on the semantic level, thereby decreasing\nthe accuracy of grading. In spite of the fact that some recent\nworks have considered multi-modal handwritten answer sheet\nassessment [20], Vision-Language OCR with constraint-aware\nLLM grading has not been sufficiently studied yet. B. Vision-Language Models for Handwritten Document Un-\nderstanding\nAutomated comprehension of handwritten documents still\ncontinues to be a key problem in automated educational assess-\nment because of differences in handwriting, document quality,\nand page layout complexity. Traditional HTR systems yielded\nencouraging results on standard datasets such as the IAM\nHandwriting Database [13], [18], although their effectiveness\nTABLE I\nCOMPARISON OF EXISTING METHODS AND THE PROPOSED FRAMEWORK\nFeature\nExisting\nProposed\nSemantic Grading\nPartial\n\u2713\nHandwritten OCR\nPartial\n\u2713\nConstraint Handling\n\u00d7\n\u2713\nOffline Deployment\n\u00d7\n\u2713\nQueue Processing\n\u00d7\n\u2713\nHuman-in-the-loop OCR\n\u00d7\n\u2713\ndropped significantly in the case of handwritten examination\ndocuments with noise text and drawings [16]. The emergence of Vision-Language Models (VLMs) has led\nto an increased efficiency in document understanding owing to\nthe combined modeling of visual and textual data."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p002_c006",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1660,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "In contrast\nto the traditional OCR pipeline that separates these two types\nof data, vision-language models such as Florence-2 are capable\nof performing end-to-end text extraction through prompting\nand are more robust to variations in handwriting and document\nlayout [20]. Even with all these advancements, current literature mainly\nconcentrates on handwriting recognition technology instead of\nthe use of these technologies in AI-based marking solutions. The presented approach seeks to fill this gap by merging the\nVision-Language OCR system with the constraint-aware LLM\ngrading approach. C. Research Gap\nCurrent automated grading systems concentrate on either\none or the other of these two aspects, but hardly ever have\nan integrated approach. Furthermore, constraint-based grading,\noffline operation, and scalability in handwriting evaluation of\ndescriptive answers are not commonly supported [13], [16],\n[18]. III. PROPOSED FRAMEWORK\nIn the proposed framework, an end-to-end framework of AI-\ndriven approach to automate the assessment of handwritten\ndescriptive answer scripts is proposed based on the combi-\nnation of Vision-Language OCR, semantic reasoning using\nLarge Language Model (LLM), and asynchronous inference\nmanagement. Contrary to the traditional method where the\ntask of handwritten text recognition and answer assessment is\nperformed independently, the proposed framework creates an\nend-to-end processing pipeline to convert handwritten exami-\nnation documents to structured texts for semantic assessment. Evaluation is a multi-stage process that starts from scanning\nof question papers and handwritten answer sheets in PDF\nor image format."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p002_c007",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      2,
+      3
+    ],
+    "start_page": 2,
+    "end_page": 3,
+    "character_count": 1687,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Handwritten document understanding using\nthe Florence-2 Vision-Language OCR component involves\nextraction of the textual content while keeping the context\nand structure of the original document intact. Subsequently,\nthe extracted text goes through the Llama 3-based semantic\nevaluation engine that evaluates the conceptual similarity of\nthe answers provided by the students to the answers given Fig. 1. Overall architecture of the proposed evaluation framework.\nby the instructor. To facilitate the batch processing of a\nhigh number of answer scripts, the asynchronous queue-based\ninference mechanism is utilized for the orchestration of GPU-\nintensive OCR and LLM computations, with the help of the\nlight-weight SQLite database storing all extracted text, results\nof evaluation and metadata. A. Vision-Language OCR Module\nThe Vision-Language OCR module converts handwritten\nexamination papers into readable text format, which can be\nanalyzed semantically. The OCR module is not like regular\nOCRs since it uses the Florence-2 Vision-Language Model\nthat has both visual and linguistic components to interpret\nhandwritten text. Given an input handwritten document,\nI \u2208RH\u00d7W \u00d7C,\n(1)\nwhere H, W, and C denote the image height, width, and\ncolor channels, respectively. The first stage extracts meaning-\nful visual features from the input image,\nF = E(I),\n(2)\nwhere E(\u00b7) represents the Florence-2 visual encoder and\nF denotes the high-level visual feature representation. Rather\nthan identifying individual characters, the encoder learns hand-\nwriting strokes, word structures, spacing patterns, and docu-\nment layout, thereby generating a contextual representation of\nthe handwritten document."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p003_c008",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      3
+    ],
+    "start_page": 3,
+    "end_page": 3,
+    "character_count": 1710,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The extracted visual features are subsequently interpreted\nby the language decoder, which predicts the most probable\ntext sequence,\n\u02c6T = arg max\nT\nP(T | F),\n(3)\nwhere T = {t1, t2, . . . , tN} represents the generated text\nsequence. During decoding, each token is generated by con-\nsidering both the visual features and the previously predicted\ntokens,\nP(T|F) =\nN\nY\ni=1\nP(ti | t<i, F),\n(4)\nwhere t<i denotes the sequence of previously generated\ntokens. This autoregressive decoding strategy enables the\nmodel to preserve contextual consistency while recognizing\nhandwritten text. Consequently, the proposed module performs document-\nlevel understanding rather than isolated character recognition,\nmaking it robust to handwriting variations, noisy scans, and\ncomplex examination layouts. The extracted textual represen-\ntation is subsequently forwarded to the constraint-aware LLM\ngrading module for downstream semantic evaluation. B. Constraint-Aware LLM Grading Module\nThe Constraint Aware LLM Grading Module uses semantic\nevaluation where the student\u2019s answer is matched with the\nreference answer provided by the teacher. Unlike traditional\napproaches of keyword matching for grading, the suggested\napproach involves the use of Llama 3 for reasoning on the\nconceptual semantics of the answer texts. Let the extracted student response and reference answer be\nrepresented as\nS = {s1, s2, . . . , sn},\nR = {r1, r2, . . . , rm},\n(5)\nwhere S and R denote the token sequences of the student\nand reference answers, respectively. Together with the grading\nprompt P, they are combined to form the contextual input\nX = [P; R; S].\n(6)\nThe contextual input is first encoded into a semantic repre-\nsentation,\nH = E(X),\n(7)"
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p004_c009",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      4
+    ],
+    "start_page": 4,
+    "end_page": 4,
+    "character_count": 1784,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "where E(\u00b7) denotes the context encoding function of the\nLlama 3 model. The encoded representation is subsequently\nprocessed by the semantic decoder,\n\u03d5 = D(H),\n(8)\nwhere D(\u00b7) represents the semantic reasoning function and\n\u03d5 captures the conceptual similarity, contextual relevance,\nand completeness of the student response. Collectively, the\nsemantic reasoning process is expressed as\n\u03d5 = fLLM(S, R, P) = D(E([P; R; S])) .\n(9)\nThe final grading decision is obtained by\nG = g(\u03d5, C),\n(10)\nwhere C denotes the examination constraints and g(\u00b7)\nrepresents the constraint-aware grading function. By jointly\nconsidering semantic understanding and evaluation constraints,\nthe proposed module produces reliable and consistent grading\nresults for handwritten descriptive answer scripts. C. Asynchronous Inference and Data Management\nAsynchronous Inference and Data Management is used to\nensure efficient functioning of the proposed solution while\nensuring that the evaluation data remains stored reliably. Due\nto the computational resource needs of both Florence-2 Vision-\nLanguage OCR model and Llama 3 semantic grading model,\nprocessing multiple answer scripts at the same time may cause\nthe GPU resource conflicts. The solution to the problem is\nthe use of asynchronous queuing scheduling approach by the\nproposed framework which will process answer scripts one by\none. Every uploaded answer script is queued for evaluation and\ngraded independently using the OCR module and semantic\ngrading module. This sequential scheduling avoids any conflict\nin GPU inference, optimizes the usage of resources, and allows\nthe batch processing of handwritten answer scripts. Once the evaluation is completed, the output text, evaluation\noutcomes, and metadata are stored in a SQLite database per-\nmanently."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p004_c010",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      4
+    ],
+    "start_page": 4,
+    "end_page": 4,
+    "character_count": 1666,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "This database acts as a centralized storage medium\nfor maintaining evaluation information. This helps in retrieving\nthe results easily, auditing them and performing any future\nanalysis on them. By combining asynchronous inference with\npersistent storage, we propose an efficient approach to auto-\nmated evaluation of handwritten answers. IV. DATASET AND IMPLEMENTATION\nA. Dataset Preparation\nThe effectiveness of the developed Vision-Language OCR\nmodule relies on the recognition of varied handwriting samples\nencountered in the handwriting of handwritten exam papers. As a way of improving the recognition of handwritten texts,\nIAM Handwriting Database has been chosen to be used as\nthe main training database since it has been extensively used\nas the standard for HTR. In addition, multimodal document\nunderstanding has recently been introduced as an essential\npart of automatic assessment systems prompting the need to\ndevelop a Vision-Language OCR system [20]. IAM database consists of over 1,500 scanned handwritten\npages by 657 different writers, including around 13,000 la-\nbeled text lines and above 115,000 word images. There is\na high variability in handwriting styles, character spacing,\nstrokes, and handwriting quality in this database which enables\nlearning strong visual representations for practical handwritten\ndocuments. Before the training process, the handwriting samples along\nwith their ground truth transcriptions were prepared as image-\ntext pair data suitable for training with the Florence-2 system. Validation, preprocessing, and formatting of the data ensured\nthat the correlation between the handwritten data and the text\nwas maintained."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p004_c011",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      4
+    ],
+    "start_page": 4,
+    "end_page": 4,
+    "character_count": 1686,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Such preparation helps the Vision-Language\nmodel learn the mapping between the handwriting data and\nits corresponding text, providing valid text data for automated\nanswer evaluation using AI [16], [20]. B. Florence-2 Fine-Tuning\nThough the Florence-2 model is pretrained on the general\nvision-language understanding task, its capability of recogniz-\ning handwritten texts from the unconstrained exam scripts is\nconstrained. In order to increase the recognition accuracy of\nthe model, it was fine-tuned through the IAM Handwriting\nDatabase that had been prepared before [18], [20]. The training dataset consists of image-text pairs (I, T),\nwhere I represents the handwritten image and T denotes its\ncorresponding ground-truth transcription. During fine-tuning,\nthe model learns the optimal parameters by minimizing the\nOCR sequence prediction loss,\n\u03b8\u2217= arg min\n\u03b8\nLOCR(\u03b8),\n(11)\nwhere\nLOCR = \u2212\nN\nX\ni=1\nlog P(Ti | Ii; \u03b8).\n(12)\nHere, P(Ti | Ii; \u03b8) is defined as the likelihood of pro-\nducing the right transcription from the handwritten input. The optimization criterion allows the model to improve the\nrelationship between handwritten input and its corresponding\ntext representation, which results in better recognition of\ndifferent types of handwriting [13], [18]. The refined model is then incorporated into the Vision-\nLanguage OCR module proposed, making it possible to re-\nliably extract hand-written text from scanned examination pa-\npers. The incorporation makes the model resistant to handwrit-\ning styles, uneven letter spacing, document scanning issues,\namong other problems associated with handwriting recogni-\ntion, thus providing reliable input for semantic grading [16],\n[20]."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p005_c012",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      5
+    ],
+    "start_page": 5,
+    "end_page": 5,
+    "character_count": 1787,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "TABLE II\nOCR MODEL COMPARISON ON IAM HANDWRITING BENCHMARK\nModel\nCER (%)\nOffline\nMultimodal\nTesseract OCR\n12.5\nYes\nNo\nCRNN-CTC\n5.45\u20138.1\nYes\nNo\nTrOCR Base\n2.89\u20133.5\nYes\nNo\nGroq Vision API\n\u223c3.0\nNo\nPartial\nFlorence-2 (Proposed)\nCompetitive\nYes\nYes\nC. System Implementation\nThis framework was implemented in a modular and offline-\nfirst design to guarantee a reliable and scalable evaluation\nof handwritten descriptive answers scripts. The framework\nincorporates three main modules: Vision-Language OCR, se-\nmantic grading with constraints, and asynchronous inference\nmanagement [16], [20]. The backend was built with the use of Python and Flask,\ncoordinating the entire process from the preprocessing of the\ndocuments to OCR detection, semantic analysis, and the man-\nagement of the results using an execution pipeline. The model\nused for handwritten text extraction is called Florence-2. The\nlocal deployment of Llama 3, using Ollama, is responsible\nfor semantic analysis without the need for any cloud-based\nservices [19], [20]. The framework utilizes an asynchronous queue to schedule\nOCR and LLM inference tasks separately to ensure no GPU\ncontention occurs during simultaneous operations. Results, text\noutput, and metadata are permanently stored in an efficient\nand lightweight SQLite database for efficient retrieval, result\ntracking, and management. This makes the design flexible\nenough such that the different modules can work separately\nbut in a coherent manner to accommodate future incorporation\nof other OCR and LLM models or grading techniques [16]. V. EXPERIMENTAL RESULTS AND DISCUSSION\nA. OCR Performance Evaluation\nThe suggested module of Vision-Language OCR was tested\nusing the IAM Handwriting Database, a well-known dataset\nused in handwritten text recognition studies."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p005_c013",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      5
+    ],
+    "start_page": 5,
+    "end_page": 5,
+    "character_count": 1779,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "As OCR quality\ninfluences the quality of semantic grading, recognition quality\nwas examined in terms of handwriting style diversity and\nimplementation features [20]. The optimized Florence-2 system was benchmarked against\nTesseract OCR, CRNN-CTC, TrOCR Base, and Groq Vision\nAPI based on Character Error Rate (CER), off-line operation,\nand multimodal document understanding [16], [20]. The experimental results show that the suggested Florence-\n2 model exhibits comparable OCR accuracy, with the capacity\nto deploy in an offline setting and to process multimodal docu-\nments. This contrasts with traditional OCR systems that focus\non text recognition or cloud services that require connectivity,\nand it offers a secure and private solution for evaluating hand-\nwritten answers [13], [18], [20]. The quantitative comparison\nof the evaluated OCR models is presented in Table II. Table II demonstrates that Florence-2 is a multimodal docu-\nment understanding system which, at the same time, provides\nhigh recognition accuracy and offline operation. Although\nTesseract OCR, CRNN-CTC, and TrOCR Base offer offline\ninference but not multimodality, Groq Vision API offers mul-\ntimodal reasoning but requires cloud connectivity. Thus, the\nproposed Florence-2 system can be used effectively for offline\nhandwriting evaluation. B. Semantic Grading Performance\nTo test the semantic grading capabilities of the proposed\nframework, experiments were carried out by comparing the\nOCR-extracted answers of students with the answers provided\nby the instructor with the help of Llama 3 grading module. Un-\nlike traditional methods which work on the basis of keyword\nmatching, language models conduct semantic evaluation by\nevaluating the concepts instead of matching lexical forms [5],\n[10], [18]."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p005_c014",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      5
+    ],
+    "start_page": 5,
+    "end_page": 5,
+    "character_count": 1785,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Thus, the proposed framework conducts conceptual\nevaluation via semantic reasoning. Grading is conducted in an integrated way with respect\nto the grading question, reference answer, and the student\u2019s\nanswer, focusing on semantic similarity as opposed to lexical\nsimilarity. This method increases robustness for paraphrased\nanswers, synonyms, and differences in arrangement usually\nassociated with descriptive tests [7], [9], [11]. As per the experimental outcomes, it is shown that the\nsuggested semantic grading system is very much in accordance\nwith the expectation of instructors with respect to consistency\nin grading the handwritten answers. Moreover, inclusion of\nfine-tuned Vision-Language OCR system helps avoid the er-\nrors due to OCR in the subsequent semantic evaluations [16],\n[19], [20]. C. Novelty\nThis solution solves all the shortcomings in the following\nways: through the use of a refined version of Florence-2\nVision-Language OCR model along with a grading engine of\nLlama 3 with constraint awareness, asynchronous queue infer-\nence, and results management in SQLite database, providing\nan offline-first design. VI. CONCLUSION AND FUTURE WORK\nIn this paper, we proposed an AI-Based Automated Evalu-\nation Framework for Handwritten Descriptive Answer Scripts\nby leveraging a fine-tuned Florence-2 Vision-Language OCR\nmodel and a constraint-aware Llama 3 semantic grading\nengine. Our framework can automate the whole evaluation\nprocess in terms of extracting handwritten text, conducting\nsemantic evaluation, managing asynchronous inference, and\nstoring results within an offline-first system. Experimental\nevaluation proved that our fine-tuned Florence-2 model attains\ncomparable OCR accuracy while allowing for the seman-\ntic grading capability via context reasoning."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p005_c015",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      5,
+      6
+    ],
+    "start_page": 5,
+    "end_page": 6,
+    "character_count": 1796,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Moreover, the\nproposed approach is scalable, efficient in GPU usage, and\neasily integrates OCR and LLM evaluation into educational\nassessment. The future of our research will involve adapting the pro-\nposed framework to handle multilingual handwritten answer TABLE III\nPERFORMANCE COMPARISON OF OCR MODELS ON THE IAM HANDWRITING BENCHMARK\nModel\nCER\nWER\nPrecision (%)\nRecall (%)\nF1-Score (%)\nAvg. OCR Time (s/page)\nTesseract OCR\n0.615\n0.938\n66.67\n42.31\n51.76\n0.268\nCRNN-CTC\n0.519\n1.438\n61.11\n74.04\n66.96\n2.805\nTrOCR Base\n0.192\n0.563\n83.62\n93.27\n88.18\n8.221\nFlorence-2 (Proposed)\n0.019\n0.250\n100.00\n98.08\n99.03\n2.957\nsheets, mathematics equations, tabular answers, and diagrams\nby means of advanced multimodal reasoning. Another pos-\nsibility for scaling up our proposed framework is by using\nlarger Vision-Language models and domain-specific Large\nLanguage models to increase grading accuracy in various\nacademic subjects. Further research will also explore adaptive\nrubric learning, human-in-the-loop evaluations, and cross-\ninstitutional validation of such AI-driven assessments. REFERENCES\n[1] D. Ramesh and S. Kumar, \u201cAutomated Essay Scoring Systems: A\nSystematic Literature Review,\u201d IEEE Access, vol. 9, pp. 12345\u201312360,\n2021.\n[2] A. Sharma et al., \u201cAI-Based Automated Essay Grading System Using\nNLP,\u201d in Proc. Int. Conf. Artificial Intelligence, 2026, pp. 45\u201350.\n[3] H. Ghanta, \u201cAutomated Essay Evaluation Using Natural Language\nProcessing,\u201d M.S. thesis, Dept. Comput. Sci., Columbus State Univ.,\nUSA, 2019.\n[4] J. Lee and K. Park, \u201cAutomatic Scoring System for English Writing\nBased on NLP,\u201d IEEE Trans. Learning Technologies, vol. 17, no. 2, pp.\n210\u2013220, 2024.\n[5] S. Li et al., \u201cAutomated Essay Scoring: Recent Successes and Future\nDirections,\u201d in Proc. IJCAI, 2024, pp. 6578\u20136585.\n[6] M."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p006_c016",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      6
+    ],
+    "start_page": 6,
+    "end_page": 6,
+    "character_count": 1678,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Patel and R. Singh, \u201cAutomated Essay Evaluation System Using\nLSTM,\u201d Int. J. Adv. Comput. Sci., vol. 12, no. 3, pp. 101\u2013108, 2023.\n[7] R. Kumar et al., \u201cAutomated Grading Using NLP and AI,\u201d IEEE Access,\nvol. 13, pp. 56789\u201356800, 2025.\n[8] S. Verma and P. Gupta, \u201cAI-Powered Automated Essay Grading System,\u201d\nin Proc. Int. Conf. Machine Learning Applications, 2023, pp. 112\u2013118.\n[9] L. Chen, \u201cArtificial Intelligence as an Automated Essay Scoring Tool,\u201d\nComput. Educ., vol. 195, pp. 104\u2013115, 2025.\n[10] A. Brown et al., \u201cExploring the Potential of Using AI Language Models\nfor Automated Essay Scoring,\u201d Expert Systems with Applications, vol.\n220, 120001, 2023.\n[11] Y. Zhang et al., \u201cHybrid Approach to Automated Essay Scoring,\u201d\nMathematics, vol. 12, no. 21, pp. 3416, 2024.\n[12] J. Devlin et al., \u201cAutomated Essay Scoring Using Transformer Models,\u201d\narXiv preprint arXiv:2102.13136, 2021.\n[13] K. Singh and R. Mehta, \u201cAutomated Essay Scoring Systems: Challenges\nand Advances,\u201d Neurocomputing, vol. 520, pp. 245\u2013260, 2025.\n[14] P. Roy et al., \u201cAutomated Language Essay Scoring Systems: Literature\nReview,\u201d IEEE Access, vol. 9, pp. 45678\u201345690, 2021.\n[15] A. Khan and M. Ali, \u201cApplication of Artificial Intelligence for Auto-\nmated Essay Grading,\u201d Int. J. Educ. Technol., vol. 10, no. 2, pp. 55\u201363,\n2024.\n[16] S. Das et al., \u201cComprehensive Review of AI-Powered Grading Systems,\u201d\nIEEE Access, vol. 13, pp. 67890\u201367905, 2025.\n[17] R. Gupta et al., \u201cAutomated Essay Scoring Using NLP Techniques,\u201d\nAIP Conf. Proc., vol. 3000, pp. 020053, 2024.\n[18] M. Iqbal et al., \u201cSurvey on Deep Learning Based Automated Essay\nScoring,\u201d Artificial Intelligence Review, vol. 57, pp. 1\u201325, 2024.\n[19] T."
+  },
+  {
+    "chunk_id": "AI_Answer_Evaluation_System_p006_c017",
+    "document_id": "AI_Answer_Evaluation_System",
+    "language": "en",
+    "pages": [
+      6
+    ],
+    "start_page": 6,
+    "end_page": 6,
+    "character_count": 239,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Wilson et al., \u201cAI-Powered Automated Grading Systems in STEM\nEducation,\u201d Mathematics, vol. 13, no. 17, pp. 2828, 2025.\n[20] A. Mehta et al., \u201cAutomated Assessment of Multimodal Answer Sheets\nin STEM,\u201d arXiv preprint arXiv:2409.15749, 2024."
+  }
+]

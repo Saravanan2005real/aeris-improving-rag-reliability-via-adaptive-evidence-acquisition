@@ -1,0 +1,303 @@
+[
+  {
+    "chunk_id": "sleep_apnea_Software_1_p001_c001",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      1
+    ],
+    "start_page": 1,
+    "end_page": 1,
+    "character_count": 1591,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Comparative Analysis of Machine Learning and\nNeural Network Models for Sleep Apnea Detection\nUsing ECG Data*\n1st Saravanan Sathishkumar\nDepartment of Computing Technologies\nSRM Institute of Science and Technology\nChennai, India\nss4091@srmist.edu.in\n2nd Hari Prasath S\nDepartment of Biomedical Engineering\nSRM Institute of Science and Technology\nChennai, India\nhp4157@srmist.edu.in\n3rd Dinesh S\nDepartment of Information Technology\nRajalakshmi Engineering College\nChennai, India\n231001040@rajalakshmi.edu.in\n4th T. Rethishwaran\nDepartment of Biomedical Engineering\nSRM Institute of Science and Technology\nChennai, India\nrt4239@srmist.edu.in\n5th Viva Baranwal\nDepartment of Computing Technologies\nSRM Institute of Science Technology\nChennai, India\nvb1680@srmist.edu.in\n6rd Dr. Girirajan S\nDepartment of Computing Technologies\nSRM Instiute of Science and Technology\nChennai, India\ngirirajs1@srmist.edu.in\nAbstract\u2014Obstructive Sleep Apnea (OSA) is a highly danger-\nous sleep disorder that needs efficient and affordable methods of\ndiagnosis apart from complicated polysomnography procedures. This paper presents a machine learning approach for automatic\ndetection of sleep apnea events based on single lead ECG\nrecords from the Apnea-ECG database on the PhysioNet site. The\nproposed methodology includes pre-processing of ECG records\nto extract the heart wave pattern\u2019s time domain features. These\nnormalized features are then used to train a few supervised\nmachine learning classifiers, such as Random Forest, Support\nVector Machine (SVM), Logistic Regression, and Multi-Layer\nPerceptron (MLP)."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p001_c002",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      1
+    ],
+    "start_page": 1,
+    "end_page": 1,
+    "character_count": 1673,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The classification performance was strictly\nevaluated through standard dichotomous classification metrics:\nAccuracy, Precision, Recall (\u2019Sensitivity\u2019), the balanced F1-\nscore, and the overall discriminative measure, ROC-AUC. Since\nRandom Forest and Multi-Layer Perceptron (MLP) classifiers\nare the top performers which has high precision predicting the\ndifference between apnea and normal respiratory patterns. The\nresults are validated with ECG features and machine learning\nalgorithms which can effectively identify the apnea. This method\ngives efficient, low cost and interpretable sleep apnea screening. Index Terms\u2014Obstructive Sleep Apnea, Electrocardiogram,\nBiomedical Signal Processing, Feature Engineering, Random\nForest, Support Vector Machine, Neural Network, Pattern Recog-\nnition, Physiological Computing\nI. INTRODUCTION\nSleep apnea is a long-standing sleep disorder in which one\nexperiences pauses in breathing or shallow breathing while\nsleeping. The minimal pause or shallow breath may be a\nfew minutes or seconds in duration and occur many times in\nan hour, causing insufficient oxygenation and disturbance in\nsleep. Long-standing sleep apnea has severe negative impacts\non health such as raised blood pressure, cardiovascular disease,\nIdentify applicable funding agency here. If none, delete this.\ndiabetes, and diminished mental capacity [10], [11].\u2018 Although\nits occurrence is prevalent, sleep apnea is rarely diagnosed\nbecause diagnosis procedures such as polysomnography (PSG)\nare not readily available and are costly [13]. Electrocardiogram (ECG) examination is an emerging so-\nlution for future cost-saving and non-invasive screening for\nsleep apnea."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p001_c003",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      1
+    ],
+    "start_page": 1,
+    "end_page": 1,
+    "character_count": 1474,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The ECG signal contains dense physiological\ninformation of the heart rate variability and modulations of\nrespiration that describe the apnea events [2], [3], [6]. With\nsignal processing and artificial intelligence, apnea patterns\nbecome viable to automatically identify without having to\nperform complete polysomnography (PSG) studies [4], [5],\n[7]. Here we introduce an artificial intelligence-based sleep\napnea detection system that employs ECG signal processing\nand machine learning classifiers to classify apnea events from\n30-second electrocardiogram (ECG) epochs . The framework\ngenerates a feature set of twelve time-domain and statistical\nparameters like mean, standard deviation, energy, and zero-\ncrossing rate for the identification of fluctuation in cardiac\nactivity while sleeping [12]. Different machine learning algorithms such as Random\nForest, Support Vector Machine (SVM), Logistic Regression,\nand Multi-Layer Perception (MLP) Neural Network were\ncompared and trained to test the performance [1], [3], [7]. Streamlit was also used to deploy the system, which provides\nan interactive and user-friendly interface for clinicians to\nupload ECG data, perform automatic analysis, and obtain real-\ntime diagnosis reports [15]. The purpose of this work is to close the loop between\nclinical diagnosis and AI-driven automation by presenting an\ninterpretable, precise, and deployable sleep apnea monitor. With data-driven reasoning and visualization, the system pre-"
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p002_c004",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1699,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "sented in this document enables early diagnosis and medical\ndecision-making, leading to better patient care and health\noutcomes.\n\u201c\u2018latex\nII. LITERATURE REVIEW\nAutomatic sleep apnea detection using physiological sig-\nnals has attracted significant research attention because of\nits potential to provide an affordable and non-invasive al-\nternative to conventional polysomnography (PSG) [10], [13]. Although PSG remains the clinical gold standard for diag-\nnosing obstructive sleep apnea (OSA), it requires overnight\nmonitoring in specialized laboratories, expensive equipment,\nand trained medical personnel, making it unsuitable for large-\nscale screening [13]. Consequently, researchers have explored\nalternative physiological signals such as electrocardiogram\n(ECG), oxygen saturation (SpO2), respiratory effort, and heart\nrate variability (HRV) to develop automated and accessible\ndiagnostic systems [2], [3], [5], [15]. Early ECG-based approaches primarily relied on hand-\ncrafted time-domain and frequency-domain features extracted\nfrom cardiac signals. Variations in R-R intervals, heart rate\nvariability, and ECG morphology were shown to correlate\nstrongly with apnea episodes, demonstrating the feasibility\nof ECG as a standalone signal for sleep apnea detection [2],\n[3], [6], [12], [13]. Subsequently, advanced signal processing\ntechniques such as wavelet transforms, spectral entropy, and\nfrequency-domain analysis were introduced to improve the\ncharacterization of transient physiological changes associated\nwith apnea events [2], [3], [6]. With the rapid advancement of artificial intelligence, ma-\nchine learning has become a widely adopted approach for\nautomated sleep apnea detection."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p002_c005",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1719,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Conventional classifiers in-\ncluding Support Vector Machines (SVM), k-Nearest Neighbors\n(kNN), Logistic Regression, and Random Forests have been\nextensively evaluated using ECG-derived features [1], [5],\n[7]. Among these methods, Random Forest classifiers have\ndemonstrated strong robustness against noisy biomedical sig-\nnals while maintaining high classification accuracy and good\ngeneralization capability [3], [9]. More recently, deep learning\narchitectures such as Convolutional Neural Networks (CNNs),\nRecurrent Neural Networks (RNNs), and hybrid CNN-LSTM\nmodels have achieved competitive diagnostic performance by\nlearning features directly from raw ECG signals [4], [7],\n[8], [11]. However, these approaches generally require large\nannotated datasets, substantial computational resources, and\nspecialized hardware, limiting their practical deployment in\nresource-constrained healthcare environments. Despite the progress achieved in ECG-based sleep apnea\ndetection, several challenges remain. Many existing studies\nprimarily focus on maximizing classification accuracy while\ngiving comparatively less attention to model interpretability,\ncomputational efficiency, and real-time clinical deployment. Lightweight machine learning frameworks capable of provid-\ning transparent decision-making and practical deployment are\nstill relatively limited in the literature [1], [3], [9], [14]. TABLE I\nCOMPARISON OF EXISTING LITERATURE\nStudy\nMethod\nModel\nAcc. Khandoker (2009)\nWavelet\nSVM\n84\nKoley (2020)\nStat. RF\n86\nWang (2023)\nCNN-LSTM\nDL\n89\nProposed\nStat+ML\nRF, MLP\n91\nMotivated by these limitations, the present study devel-\nops an interpretable and computationally efficient ECG-based\nsleep apnea detection framework."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p002_c006",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      2
+    ],
+    "start_page": 2,
+    "end_page": 2,
+    "character_count": 1721,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The proposed approach\ncombines statistical and HRV-based feature extraction with\na comparative evaluation of multiple supervised machine\nlearning classifiers, including Random Forest, Support Vector\nMachine, Logistic Regression, and Multi-Layer Perceptron\n(MLP). Furthermore, the best-performing model is integrated\ninto a Streamlit-based application that enables automated ECG\nanalysis and real-time sleep apnea screening. By emphasizing\nmodel interpretability, computational efficiency, comparative\nevaluation, and practical deployment, the proposed framework\noffers a lightweight alternative for preliminary sleep apnea\nscreening while maintaining competitive diagnostic perfor-\nmance. \u201c\u2018\nIII. DATASET\nThe data that is taken into account in this research is the\nApnea-ECG Database, which has been made available through\nPhysioNet [13]. The data consist of ECG recordings of patients\nthat are suffering from sleep apnea as well as the ones that\nare not suffering from it, and there are also events annotated\nto pinpoint the occurrences of apnea. The database, being\nclinical relevant and having both ECG signals and expert\nlabels, is mostly used for research aimed at automatic sleep\napnea diagnosis [2], [3], [10]. A. Data Collection\nThe collection consists of 70 long-duration ECG recordings\nwhich were taken at 100 Hz frequency [13]. Within each\nrecording, there exist a number of ECG signal segments that\nhave been noted with apnea events by experts. The annotations\nare in .apn files, where each event is classified according to\nits severity (e.g., normal respiration or apnea). Apnea events\nwould usually mean short periods of abnormal heart activity\ncaused by breathing patterns stopping during sleep [10], [11]."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p002_c007",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      2,
+      3
+    ],
+    "start_page": 2,
+    "end_page": 3,
+    "character_count": 1556,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The dataset is arranged in the following manner:\n\u2022 ECG signal data in .dat files, one file for each separate\nrecording.\n\u2022 Annotation data in .apn files, with event markers in each\nfile indicating the occurrence of apnea. B. Data Preprocessing\nThe initial step of the analysis consisted of preprocessing the\nraw ECG signals through a necessary pipeline [12]. Then, the\nentire signal was divided into overlapping windows, each 30\nseconds long and with a 50% overlap between the segments. The use of this strategy was crucial for the detection of the dynamic physiological changes in the cardiac rhythm that were\ncharacteristic of OSA events [3], [6]. Now, each produced\nsegment was given a dichotomous class label according to\nthe corresponding annotation being present or not:\n\u2022 Positive (Class 1): If any part of the apnea event annotated\nwas covered by the segment window, it was assigned.\n\u2022 Negative (Class 0): If only normal (non-apneic) respiratory\npatterns were in the segment, it was assigned. The entire process resulted in 12,000 segments being gen-\nerated, which led to a heavily imbalanced dataset mainly\ncharacterized by the large number of Negative (non-apneic)\nsamples and the small number of Positive (apnea event)\nsamples [9], [15]. C. Apnea Events and Labeling\nApnea events are indicated by marked segments in each\nECG record. The annotation file indicates the exact times of\nall the apnea events. There are two types of events:\n\u2022 Normal Breathing (0): No apnea has been detected.\n\u2022 Apnea (1): An apnea has been detected in the time\nwindow."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p003_c008",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      3
+    ],
+    "start_page": 3,
+    "end_page": 3,
+    "character_count": 1638,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Since the dataset is not balanced (with more normal breath-\ning than apnea events), the application of methods for class\nbalancing such as stratified sampling during training and\nevaluation was done so that the model could recognize apnea\nevents with good reliability and at the same time not to be\nbiased towards the majority class (normal breathing) [3], [9]. D. Dataset Summary\nThe Apnea-ECG dataset is appropriate for training and\ntesting the machine learning models utilized for this study,\noffering an equally balanced combination of baseline and\napnea event data, annotated by clinical specialists [13]. TABLE II\nDATASET PARAMETERS FOR APNEA DETECTION\nParameter\nDescription\nDataset\nPhysioNet Apnea-ECG\nNo. of Records\n70\nSampling Rate\n100 Hz\nWindow Length\n30 s (50% overlap)\nTotal Windows\n\u223c12,000\nApnea Windows\n30%\nNormal Windows\n70%\nIV. METHODOLOGY\nThe algorithm suggested for the detection of sleep apnea\nutilizes a machine-learning-based feature extraction method-\nology. The whole process involves pre-processing of the raw\nECG data, extraction of features, training, and evaluation of\nthe model. A. Data Preprocessing\nExtraction of raw ECG data and pre-processing of the raw\nECG signal to make them suitable for feature extraction is\ndone using the PhysioNet Apnea-ECG dataset. The following\ntasks will be executed:\nLoading Data: Reading of Electro- cardiograms signals\nthrough the WFDB library, and there are some tools available\nfor reading PhysioNet Electrocardiograms (ECG) data files\n[13]. It is important to note that Electrocardiograms (ECG)\nrecord may have one or more channels; however, the first\nchannel is used here."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p003_c009",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      3
+    ],
+    "start_page": 3,
+    "end_page": 3,
+    "character_count": 1378,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Segmentation: To capture the time-varying nature of ap-\nnea events, all recorded electrocardiogram (ECG) signals are\nsegmented into 30-second windows with 50% overlap. This\nprocess generates overlapping segments, which are labeled as\neither Normal (0) or Apnea (1) depending on the presence of\nan apnea event within the corresponding time interval [3], [6]. Handling Missing Data:All windows with NaNs or corrupt\ndata are ignored in order to give clean inputs to feature\nextraction. It bars the model from being trained on Poor-\nquality data [10]. Fig. 1. Comparison of ECG signals for Normal and Apnea segments. The\napnea segment shows reduced oscillation amplitude and irregular waveform\npatterns. B. Feature Extraction\nFor each 30-second ECG segment, twelve features are\nextracted to characterize the statistical and physiological prop-\nerties of the signal. These features are selected based on\ntheir relevance to sleep apnea detection and their ability to\ndistinguish between apneic and normal ECG patterns [2], [3],\n[12]. Mean: Average amplitude of the ECG signal within a\nwindow, representing the baseline level.\n\u00b5 = 1\nN\nN\nX\ni=1\nxi\n(1)\nwhere xi represents the ECG sample values and N denotes\nthe total number of samples in the ECG window. Standard Deviation: Measures the variability or dispersion\nof the ECG signal within the window.\n\u03c3 =\nv\nu\nu\nt 1\nN\nN\nX\ni=1\n(xi \u2212\u00b5)2\n(2)"
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p004_c010",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      4
+    ],
+    "start_page": 4,
+    "end_page": 4,
+    "character_count": 1621,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Minimum and Maximum: Define the dynamic range of the\nECG signal by identifying the smallest and largest amplitudes\nwithin the window. Median: The middle value of the ECG signal, providing\na robust measure of central tendency that is less sensitive to\noutliers.\n25th and 75th Percentiles: Quantiles that describe the\ndistribution of signal amplitudes and provide information\nabout signal spread. Signal Energy: Sum of the squared ECG sample values,\nrepresenting the total power contained in the ECG signal [12]. E =\nN\nX\ni=1\nx2\ni\n(3)\nRoot Mean Square (RMS): Standard measure of the signal\nmagnitude, reflecting its effective amplitude. RMS =\nv\nu\nu\nt 1\nN\nN\nX\ni=1\nx2\ni\n(4)\nZero-Crossing Rate: Number of times the ECG signal\nchanges sign, indicating changes in signal direction and fre-\nquency characteristics. ZCR =\n1\nN \u22121\nN\u22121\nX\ni=1\nI(xixi+1 < 0)\n(5)\nwhere\nI(xixi+1 < 0) =\n(\n1,\nif xixi+1 < 0,\n0,\notherwise. Heart Rate Variability (HRV) Features:\n\u2022 Standard deviation of first differences (SDSD): Measures\nthe standard deviation of successive differences between\nadjacent ECG samples, reflecting short-term variability.\n\u2022 Mean absolute first difference (MAD): Computes the\nmean absolute value of successive differences, capturing\nbeat-to-beat irregularities in the ECG signal. These features are computed for each 30-second ECG\nwindow to form a feature vector, which serves as the input\nto the machine learning classifiers for sleep apnea detection\n[2], [3]. C. Classifier Selection and Training\nSeveral machine learning classifiers are evaluated for classi-\nfying ECG segments into two classes: normal and sleep apnea\nevents."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p004_c011",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      4
+    ],
+    "start_page": 4,
+    "end_page": 4,
+    "character_count": 1563,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The classifiers considered in this study are as follows:\nRandom Forest Classifier: Random Forest is an ensemble\nlearning algorithm that constructs multiple decision trees and\ncombines their predictions through majority voting. It is robust\nagainst overfitting, performs well on high-dimensional data,\nand effectively handles imbalanced datasets [3], [9].\n\u02c6y = mode (T1(x), T2(x), . . . , Tn(x))\n(6)\nwhere Ti(x) denotes the prediction of the ith decision tree,\nand the final predicted class \u02c6y is determined by majority voting\namong all decision trees. Support Vector Machine (SVM): SVM identifies an opti-\nmal hyperplane that maximizes the separation margin between\nnormal and apnea classes in the feature space. The Radial\nBasis Function (RBF) kernel is employed to capture non-linear\ndecision boundaries [7]. Logistic Regression: Logistic Regression is an efficient\nbinary classification algorithm that estimates the probability\nof an input belonging to the sleep apnea class based on the\nextracted ECG features [1]. Neural Network (MLP): A shallow Multi-Layer Percep-\ntron (MLP) consisting of two hidden layers with 64 and 32\nneurons is employed. The network uses the ReLU activation\nfunction and the Adam optimizer for efficient training [8],\n[11]. Each classifier is trained using the extracted feature vectors\nwith a stratified 80:20 train-test split. Stratification ensures that\nthe proportion of normal and apnea samples is preserved in\nboth the training and testing datasets, resulting in a fair and\nreliable evaluation of model performance [8], [11]. D."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p004_c012",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      4,
+      5
+    ],
+    "start_page": 4,
+    "end_page": 5,
+    "character_count": 1794,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Data Scaling\nscikit-learn\u2019s StandardScaler is applied to scale fea-\ntures to zero mean and unit variance.\nz = x \u2212\u00b5\n\u03c3\n(7)\nwhere x is the original feature value, \u00b5 is the mean of the\nfeature, \u03c3 is the standard deviation, and z is the standardized\nfeature value. This standardization prevents features with larger numerical\nranges (e.g., signal energy) from dominating the learning\nprocess and ensures that all features contribute proportion-\nally during model training. Feature scaling also improves\nthe convergence and numerical stability of many machine\nlearning algorithms, resulting in more reliable classification\nperformance [3], [10]. E. Model Assessment\nThe performance of the trained classifiers is evaluated\nusing standard classification metrics to measure their abil-\nity to correctly distinguish sleep apnea events from normal\nbreathing. Particular emphasis is placed on recall because\nminimizing false negatives is clinically important for reliable\napnea detection [10], [14]. Accuracy =\nTP + TN\nTP + TN + FP + FN\n(8)\nPrecision =\nTP\nTP + FP\n(9)\nRecall =\nTP\nTP + FN\n(10) F1-Score = 2 \u00d7 Precision \u00d7 Recall\nPrecision + Recall\n(11)\nwhere TP (True Positive) denotes correctly identified ap-\nnea events, TN (True Negative) denotes correctly identified\nnormal events, FP (False Positive) denotes normal events\nincorrectly classified as apnea, and FN (False Negative)\ndenotes apnea events incorrectly classified as normal. These evaluation metrics provide a comprehensive assess-\nment of classifier performance. Accuracy measures the overall\nprediction correctness, precision quantifies the reliability of\npositive predictions, recall evaluates the ability to detect actual\napnea events, and the F1-score provides a balanced measure\nby combining precision and recall into a single metric. F."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p005_c013",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      5
+    ],
+    "start_page": 5,
+    "end_page": 5,
+    "character_count": 1696,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Model Deployment\nAfter selecting the best-performing classifier based on the\nexperimental evaluation, the trained model was prepared for\ndeployment in a clinical decision-support application. The\nmodel, together with the feature standardization pipeline, was\nserialized using the joblib library to enable efficient loading\nduring inference. An interactive web-based interface was developed using\nStreamlit, allowing users to upload ECG recordings and ob-\ntain automated sleep apnea predictions. During deployment,\nthe uploaded ECG signal undergoes the same preprocessing,\nfeature extraction, and standardization steps used during model\ntraining to ensure consistency between the training and infer-\nence pipelines. The deployment framework demonstrates the practical ap-\nplicability of the proposed methodology by enabling real-time\nECG analysis and automated prediction through an intuitive\nuser interface [15]. V. IMPLEMENTATION DETAILS\nThe AI Sleep Apnea Detection System runs on Python, and\nit\u2019s split into two main parts. There\u2019s the pipeline that trains\nthe models, and then there\u2019s a Streamlit app where you can\nactually use the trained model for real-time predictions and\nanalysis [3], [15]. A. Training Pipeline\nLet us examine the training process in detail. Initially, ECG\ndata is loaded, cleaned, and processed to extract the most\nsignificant features. Subsequently, multiple machine learn-\ning models are trained and compared to identify the best-\nperforming model [3], [10]. Loading and Preprocessing ECG Data: The WFDB\n(Waveform Database) library is used to load raw ECG signals\nfrom the Apnea-ECG dataset, which are then aligned with\napnea labels obtained from the .apn files [13]."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p005_c014",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      5
+    ],
+    "start_page": 5,
+    "end_page": 5,
+    "character_count": 1718,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Each ECG\nrecording is segmented into 30-second windows with 50%\noverlap to effectively capture variations during apnea events\n[2], [3]. From each segment, twelve time-domain features are\nextracted, including signal energy, RMS, zero-crossing rate\n(ZCR), heart rate variability (HRV), and descriptive statistics\nsuch as mean, median, minimum, maximum, and percentiles. Custom Python functions are used throughout the preprocess-\ning and feature extraction stages to ensure consistent analysis\nacross all segments. Model Training: The extracted feature set is divided using\nstratified sampling (80% training and 20% testing) to preserve\nthe original class distribution (apnea vs. normal) [6]. All\nfeatures are standardized using StandardScaler to eliminate\nscale bias. Four classifiers\u2014Random Forest, Support Vector\nMachine (SVM), Logistic Regression, and Multilayer Per-\nceptron (MLP)\u2014are trained and evaluated using performance\nmetrics such as ROC-AUC, F1-score, accuracy, precision, and\nrecall [1], [3], [7], [9]. The model achieving the highest F1-\nscore is selected as the optimal model and saved using joblib\nfor deployment [15]. Model Evaluation: The performance of the trained models\nis assessed on the test set using a confusion matrix (true\npositives, false positives, true negatives, and false negatives). Additionally, metrics such as ROC-AUC, precision, recall, and\nF1-score are computed to evaluate the effectiveness of apnea\ndetection [9], [10], [14]. B. Streamlit Application\nThe trained Random Forest classifier and the corresponding\nfeature standardization model were exported using the joblib\nlibrary and integrated into a Streamlit-based web application\nfor real-time sleep apnea detection [3], [15]."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p005_c015",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      5
+    ],
+    "start_page": 5,
+    "end_page": 5,
+    "character_count": 1509,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The application\nprovides an intuitive graphical interface that enables users to\nupload ECG recordings in .dat, .csv, or .txt formats. Upon receiving an input file, the application performs\nECG preprocessing and extracts the same statistical features\nused during model training. The extracted feature vector is\nstandardized using the stored scaler before being passed to the\ntrained classifier for inference, ensuring consistency between\nthe training and deployment pipelines. The application predicts whether the uploaded ECG seg-\nment corresponds to an apnea or normal breathing event and\ndisplays the associated prediction confidence. Based on the\nprediction score, the severity of the detected condition is\ncategorized as Normal, Mild, Moderate, or Severe [1], [11]. In addition, the ECG waveform is visualized, detected apnea\nevents are highlighted, and the extracted feature values are\npresented for reference. After the analysis is completed, the application automati-\ncally generates a clinical report containing the predicted class,\nconfidence score, and estimated severity level. The report\ncan be downloaded for documentation and further clinical\nassessment. The lightweight Streamlit interface enables fast\nand user-friendly interaction, demonstrating the practical ap-\nplicability of the proposed framework for automated sleep\napnea screening. C. Code Structure\nThe implementation is organized into two main scripts:\nModel Training Script (train_apnea_models.py):\n\u2022 Loads and preprocesses ECG data"
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p006_c016",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      6
+    ],
+    "start_page": 6,
+    "end_page": 6,
+    "character_count": 1721,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Fig. 2. Streamlit-based web application for automated ECG-based sleep apnea\ndetection.\n\u2022 Extracts relevant features\n\u2022 Trains and evaluates machine learning models\n\u2022 Saves the best-performing model and scaler\nStreamlit Application Script (app.py):\n\u2022 Provides a web interface for uploading ECG files\n\u2022 Processes input data and extracts features\n\u2022 Loads the trained model and scaler\n\u2022 Displays ECG signals, extracted features, predictions, and\ngenerated reports [15]\nVI. EXPERIMENTAL RESULTS AND DISCUSSION\nThe proposed sleep apnea detection framework was evalu-\nated using the PhysioNet Apnea-ECG database to assess its\nability to accurately distinguish apnea events from normal\nbreathing patterns using ECG-derived features [13]. Four\nsupervised classification algorithms, namely Random Forest\n(RF), Support Vector Machine (SVM), Logistic Regression\n(LR), and Multi-Layer Perceptron (MLP), were implemented\nand compared under identical experimental conditions. The\nobjective of the evaluation was to determine the most suitable\nclassifier for automated ECG-based sleep apnea screening. A. Experimental Setup\nAll experiments were performed in Python using the scikit-\nlearn and WFDB libraries [13], [15]. The extracted feature\nvectors were randomly divided into training (80%) and testing\n(20%) subsets using stratified sampling to preserve the original\nclass distribution [6]. Prior to model training, all numerical\nfeatures were standardized using the StandardScaler to elim-\ninate scale variations among different ECG features [3], [9]. The performance of each classifier was evaluated using\nAccuracy, Precision, Recall, F1-score, and the Area Under\nthe Receiver Operating Characteristic Curve (ROC-AUC) [9],\n[10], [14]."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p006_c017",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      6
+    ],
+    "start_page": 6,
+    "end_page": 6,
+    "character_count": 1724,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Since the primary objective of the system is reliable\nidentification of apnea events, the F1-score was considered\nthe most representative evaluation metric because it provides\na balanced measure of precision and recall while reducing\nthe impact of class imbalance and minimizing false-negative\npredictions [5], [11]. B. Performance Comparison\nTable III summarizes the performance of the evaluated\nmachine learning models. TABLE III\nPERFORMANCE COMPARISON OF MACHINE LEARNING MODELS\nModel\nAcc\nPre\nRec\nF1\nAUC\nRandom Forest\n0.91\n0.88\n0.86\n0.87\n0.94\nSVM\n0.87\n0.82\n0.79\n0.80\n0.90\nLogistic Regression\n0.84\n0.80\n0.75\n0.77\n0.88\nNeural Network (MLP)\n0.89\n0.85\n0.82\n0.83\n0.92\nFig. 3. Performance comparison of the evaluated machine learning models\nusing Accuracy, Precision, Recall, F1-score, and ROC-AUC. Among the evaluated classifiers, the Random Forest model\nachieved the highest overall performance with an accuracy\nof 91%, F1-score of 0.87, and ROC-AUC of 0.94. These\nresults indicate that the ensemble learning strategy effectively\ncaptures the complex nonlinear relationships present in ECG-\nderived features while maintaining robustness against noisy\nbiomedical data and class imbalance. Although the MLP\nclassifier also demonstrated competitive performance, it re-\nmained slightly inferior to Random Forest across all evaluation\nmetrics. Logistic Regression produced the lowest performance\nbecause of its limited capability to model nonlinear feature\nrelationships. C. Confusion Matrix Analysis\nThe confusion matrix of the Random Forest classifier is\npresented in Table IV. TABLE IV\nCONFUSION MATRIX OF THE RANDOM FOREST CLASSIFIER\nActual Class\nPredicted Apnea\nPredicted Normal\nApnea\n130 (TP)\n18 (FN)\nNormal\n25 (FP)\n227 (TN)"
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p007_c018",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      7
+    ],
+    "start_page": 7,
+    "end_page": 7,
+    "character_count": 1486,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The confusion matrix demonstrates that the proposed model\ncorrectly classified the majority of both apnea and normal\nECG segments while maintaining a relatively small number\nof false-negative predictions. Since false negatives correspond\nto missed apnea events, minimizing this error is particularly\nimportant for clinical screening applications. The obtained\nresults therefore indicate that the proposed model possesses\nhigh sensitivity and is suitable for preliminary sleep apnea\ndetection. Fig. 4. Confusion matrix of the Random Forest classifier. D. ROC Curve Analysis\nFigure 5 presents the Receiver Operating Characteristic\n(ROC) curves obtained for all evaluated classifiers. Fig. 5. ROC curves of the evaluated machine learning models. The Random Forest classifier achieved the highest ROC-\nAUC value of 0.94, indicating excellent discrimination be-\ntween apnea and non-apnea ECG segments across different\ndecision thresholds. The MLP model achieved an AUC of\n0.92, followed by SVM (0.90) and Logistic Regression (0.88). The superior ROC characteristics of the Random Forest model\nfurther confirm its robustness and generalization capability for\nsleep apnea classification. E. Feature Importance Analysis\nThe feature importance scores generated by the Random\nForest classifier provide insight into the physiological charac-\nteristics that contribute most significantly to apnea detection. Fig. 6. Top ten ECG-derived features ranked according to Random Forest\nfeature importance."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p007_c019",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      7
+    ],
+    "start_page": 7,
+    "end_page": 7,
+    "character_count": 1757,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "The five most influential features were:\n\u2022 Signal Energy\n\u2022 Standard Deviation\n\u2022 Root Mean Square (RMS)\n\u2022 Zero-Crossing Rate\n\u2022 Heart Rate Variability (HRV) measures\nThese features capture variations in ECG morphology and\ncardiac rhythm that are commonly associated with apnea\nevents, thereby providing meaningful physiological informa-\ntion for classification. Their high importance scores indicate\nthat the proposed feature extraction strategy successfully cap-\ntures discriminative characteristics required for reliable apnea\ndetection. F. Discussion\nThe experimental evaluation demonstrates that the proposed\nECG-based machine learning framework provides reliable and\ncomputationally efficient sleep apnea detection. Compared\nwith the other evaluated classifiers, Random Forest consis-\ntently achieved the highest performance across all evaluation\nmetrics owing to its ensemble learning mechanism, robustness\nto noisy biomedical signals, and ability to model complex\nnonlinear relationships. An additional advantage of the proposed framework is\nits interpretability. Unlike deep learning approaches that of-\nten operate as black-box models, the proposed feature-based\nmethodology allows the contribution of each ECG feature\nto be quantified through feature importance analysis. This\nimproves transparency and increases confidence in clinical\ndecision support applications. Furthermore, the trained model has been integrated into\na Streamlit-based web application that enables clinicians to\nupload ECG recordings, perform automated apnea analysis,\nvisualize ECG signals, and generate diagnostic reports in real\ntime. This deployment demonstrates the practical applicability\nof the proposed framework for cost-effective and accessible\nsleep apnea screening."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p008_c020",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      8
+    ],
+    "start_page": 8,
+    "end_page": 8,
+    "character_count": 1210,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "VII. CONCLUSION AND FUTURE WORK\nIn this paper, an AI-based Sleep Apnea Detection Sys-\ntem has been presented, which analyzes electrocardiogram\n(ECG) signals and uses machine learning algorithms for non-\ninvasive and automatic apnea detection. This system is able to\ndistinguish between normal and apneic breathing patterns by\nextracting twelve time and statistical features from 30 second\nECG segments. Among the classifiers tested \u2013 Random For-\nest, SVM, Logistic Regression, and MLP, the Random For-\nest classifier delivered the most accurate results in terms of\naccuracy, F1-score, and ROC-AUC [3], [9], [10]. Besides the high accuracy rate, the system stresses inter-\npretability, efficiency, and clinical applicability. While deep\nlearning models depend on extensive training data and com-\nputational power, this feature extraction technique provides\na more efficient, transparent, and deployable method. Em-\nbedding the trained model into an interactive Streamlit web\napplica- tion increases its usability, enabling healthcare work-\ners to up- load ECG signals, view the findings, and produce\nclinical re- ports instantly. Therefore, this system is a viable\ntool for sleep apnea pre-screening [14], [15]."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p008_c021",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      8
+    ],
+    "start_page": 8,
+    "end_page": 8,
+    "character_count": 1730,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Future Work: Although the system performs well, some\nareas can be enhanced in future research:\n\u2022 Inclusion of Advanced Features: Advanced Feature Ex-\ntraction: Applying frequency and time-frequency domain\nfeatures like Fast Fourier Trans- form (FFT), Wavelet\nTransform, spectral entropy, etc. can detect more complex\nphysiological patterns [2], [3], [6].\n\u2022 Deep Learning Integration:Using CNNs or RNNs can\nfacilitate end-to-end learning using raw ECG signals and\nmay improve detection accuracy in large datasets [7], [8],\n[11].\n\u2022 Multimodal Data Fusion: Combining ECG data with\nother physiological signals such as SpO2, respiratory\neffort, or airflow measurements can improve model ro-\nbustness and reliability across various patient conditions\n[5], [9], [15].\n\u2022 Clinical Validation: This system should be validated\nusing real patient data in collaboration with hospitals for\nclinical reliability and compliance with medical standards\n[10], [13].\n\u2022 IoT and mHealth Integration: Future iterations of this\nsystem can be expanded to mobile health (mHealth)\nand IoT wearable devices for continuous monitoring and\napnea detection in non-clinical settings [14], [15]. In summary, the proposed Sleep Apnea Detection System\ndemonstrates the potential of integrating machine learning\nwith biomedical signal processing for healthcare applications. It provides a foundation for developing intelligent, affordable,\nand accessible tools for sleep disorder screening, contributing\ntoward AI-driven preventive healthcare [1], [4], [10], [14]. REFERENCES\n[1] Y. Zhang et al., \u201cEfficientNet-based machine learning architecture for\nsleep apnea identification in clinical single-lead ECG,\u201d Biomedical\nEngineering Online, vol. 23, no. 1, 2024.\n[2] M."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p008_c022",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      8
+    ],
+    "start_page": 8,
+    "end_page": 8,
+    "character_count": 1777,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "Rahman et al., \u201cSleep Apnea Detection Using Wavelet Scattering\nTransformation and Random Forest Classifier,\u201d Entropy, vol. 25, no. 3,\np. 399, 2023.\n[3] R. Pradhan et al., \u201cDetection of Sleep Apnea from Electrocardiogram\nand Pulse Oximetry Signals Using Random Forest,\u201d Applied Sciences,\nvol. 12, no. 9, p. 4218, 2022.\n[4] L. Chen et al., \u201cA Comprehensive Study on Deep-Learning-Based Elec-\ntrocardiography Analysis for Estimating the Apnea\u2013Hypopnea Index,\u201d\nDiagnostics, vol. 14, no. 11, p. 1134, 2024.\n[5] M. Yilmaz et al., \u201cDetection of Sleep Apnea Using Deep Learning Based\non ECG Signals,\u201d IEEE Access, vol. 8, pp. 116011\u2013116021, 2020.\n[6] S. Wang et al., \u201cAutomatic Detection of Sleep Apnea from a Single-Lead\nECG Signal Based on Spiking Neural Network Model,\u201d Computers in\nBiology and Medicine, vol. 179, 2024.\n[7] X. Wang et al., \u201cApneaNet: Hybrid 1D-CNN-LSTM Architecture for\nSleep Apnea Detection from ECG,\u201d Biomedical Signal Processing and\nControl, vol. 90, 2023.\n[8] A. Singh et al., \u201cAutomatic Detection of Sleep Apnea from Single-\nLead ECG Using Enhanced Deep Belief Networks,\u201d Biomedical Signal\nProcessing and Control, vol. 88, 2023.\n[9] K. Reddy et al., \u201cSleep Apnea Classification Algorithm Development\nUsing Bag-of-Features from ECG Spectrograms,\u201d IEEE Access, vol. 10,\npp. 8721\u20138732, 2022.\n[10] M. Patel et al., \u201cDiagnostic Accuracy of Machine Learning Algorithms\nin ECG-Based Sleep Apnea Detection: A Systematic Review and Meta-\nAnalysis,\u201d Sleep Medicine Reviews, vol. 72, 2025.\n[11] L. Chen et al., \u201cClinical-Level Screening of Sleep Apnea with Single-\nLead ECG Using Machine Learning and Optimized Time Windows,\u201d\nSleep and Breathing, 2025.\n[12] J. Pan and W. Tompkins, \u201cA Real-Time QRS Detection Algorithm,\u201d\nIEEE Transactions on Biomedical Engineering, vol."
+  },
+  {
+    "chunk_id": "sleep_apnea_Software_1_p008_c023",
+    "document_id": "sleep_apnea_Software_1",
+    "language": "en",
+    "pages": [
+      8
+    ],
+    "start_page": 8,
+    "end_page": 8,
+    "character_count": 513,
+    "embedding_model": "nomic-embed-text:latest",
+    "text": "BME-32, no. 3, pp.\n230\u2013236, 1985.\n[13] P. De Chazal, C. Heneghan et al., \u201cAutomated Sleep Apnea Detection\nUsing ECG: A Comparative Study of Classification Methods,\u201d in Proc. IEEE EMBS, pp. 3334\u20133337, 2000.\n[14] N. Alsubaie et al., \u201cDetection of Sleep Apnea Using Wearable AI: A\nSystematic Review and Meta-Analysis,\u201d Journal of Medical Internet\nResearch, vol. 26, no. 3, 2024.\n[15] R. Sharma et al., \u201cMultimodal Sensor Fusion for Sleep Apnea Detec-\ntion,\u201d IEEE Sensors Journal, vol. 24, no. 4, pp. 5214\u20135225, 2024."
+  }
+]

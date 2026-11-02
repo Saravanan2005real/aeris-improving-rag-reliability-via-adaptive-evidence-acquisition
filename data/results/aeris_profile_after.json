@@ -1,0 +1,427 @@
+[
+  {
+    "question_id": "q_df_02",
+    "total_latency": 50.23659944534302,
+    "stages": [
+      {
+        "stage": "PLANNING",
+        "status": "COMPLETED",
+        "latency_seconds": 4.828160047531128,
+        "output_count": 1,
+        "message": "Information requirements generated."
+      },
+      {
+        "stage": "RETRIEVAL",
+        "status": "COMPLETED",
+        "latency_seconds": 6.343172073364258,
+        "output_count": 3,
+        "message": "Adaptive requirement-directed retrieval completed."
+      },
+      {
+        "stage": "COVERAGE",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 3,
+        "message": "Evidence coverage evaluated during adaptive retrieval."
+      },
+      {
+        "stage": "CLAIM_GRAPH",
+        "status": "COMPLETED",
+        "latency_seconds": 35.52298426628113,
+        "output_count": 65,
+        "message": "Claim-evidence graph constructed."
+      },
+      {
+        "stage": "VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "Initial claim verification completed."
+      },
+      {
+        "stage": "CONTRADICTION",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0025091171264648438,
+        "output_count": 0,
+        "message": "Contextual contradiction analysis completed."
+      },
+      {
+        "stage": "CROSS_LINGUAL",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "Cross-lingual evidence analysis completed."
+      },
+      {
+        "stage": "CALIBRATION",
+        "status": "SKIPPED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "No calibration records were available."
+      },
+      {
+        "stage": "SELECTIVE_VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0007512569427490234,
+        "output_count": 0,
+        "message": "Budget-aware selective verification completed."
+      },
+      {
+        "stage": "ANSWER_GENERATION",
+        "status": "COMPLETED",
+        "latency_seconds": 3.5384862422943115,
+        "output_count": 1,
+        "message": "Grounded answer generation completed."
+      },
+      {
+        "stage": "COMPLETED",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "AERIS orchestration completed."
+      }
+    ],
+    "status": "COMPLETED",
+    "error_type": null
+  },
+  {
+    "question_id": "q_mh_01",
+    "total_latency": 64.8710024356842,
+    "stages": [
+      {
+        "stage": "PLANNING",
+        "status": "COMPLETED",
+        "latency_seconds": 6.023360967636108,
+        "output_count": 2,
+        "message": "Information requirements generated."
+      },
+      {
+        "stage": "RETRIEVAL",
+        "status": "COMPLETED",
+        "latency_seconds": 8.793447256088257,
+        "output_count": 6,
+        "message": "Adaptive requirement-directed retrieval completed."
+      },
+      {
+        "stage": "COVERAGE",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 6,
+        "message": "Evidence coverage evaluated during adaptive retrieval."
+      },
+      {
+        "stage": "CLAIM_GRAPH",
+        "status": "COMPLETED",
+        "latency_seconds": 37.623143672943115,
+        "output_count": 92,
+        "message": "Claim-evidence graph constructed."
+      },
+      {
+        "stage": "VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 4.471272706985474,
+        "output_count": 4,
+        "message": "Initial claim verification completed."
+      },
+      {
+        "stage": "CONTRADICTION",
+        "status": "COMPLETED",
+        "latency_seconds": 1.0859041213989258,
+        "output_count": 0,
+        "message": "Contextual contradiction analysis completed."
+      },
+      {
+        "stage": "CROSS_LINGUAL",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "Cross-lingual evidence analysis completed."
+      },
+      {
+        "stage": "CALIBRATION",
+        "status": "SKIPPED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "No calibration records were available."
+      },
+      {
+        "stage": "SELECTIVE_VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 2.8036234378814697,
+        "output_count": 3,
+        "message": "Budget-aware selective verification completed."
+      },
+      {
+        "stage": "ANSWER_GENERATION",
+        "status": "COMPLETED",
+        "latency_seconds": 4.0702502727508545,
+        "output_count": 1,
+        "message": "Grounded answer generation completed."
+      },
+      {
+        "stage": "COMPLETED",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "AERIS orchestration completed."
+      }
+    ],
+    "status": "COMPLETED",
+    "error_type": null
+  },
+  {
+    "question_id": "q_meth_01",
+    "total_latency": 49.14977979660034,
+    "stages": [
+      {
+        "stage": "PLANNING",
+        "status": "COMPLETED",
+        "latency_seconds": 5.838945627212524,
+        "output_count": 2,
+        "message": "Information requirements generated."
+      },
+      {
+        "stage": "RETRIEVAL",
+        "status": "COMPLETED",
+        "latency_seconds": 12.202250480651855,
+        "output_count": 3,
+        "message": "Adaptive requirement-directed retrieval completed."
+      },
+      {
+        "stage": "COVERAGE",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 3,
+        "message": "Evidence coverage evaluated during adaptive retrieval."
+      },
+      {
+        "stage": "CLAIM_GRAPH",
+        "status": "COMPLETED",
+        "latency_seconds": 21.159151554107666,
+        "output_count": 44,
+        "message": "Claim-evidence graph constructed."
+      },
+      {
+        "stage": "VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 3.1249654293060303,
+        "output_count": 3,
+        "message": "Initial claim verification completed."
+      },
+      {
+        "stage": "CONTRADICTION",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0016760826110839844,
+        "output_count": 0,
+        "message": "Contextual contradiction analysis completed."
+      },
+      {
+        "stage": "CROSS_LINGUAL",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "Cross-lingual evidence analysis completed."
+      },
+      {
+        "stage": "CALIBRATION",
+        "status": "SKIPPED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "No calibration records were available."
+      },
+      {
+        "stage": "SELECTIVE_VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 2.7153725624084473,
+        "output_count": 3,
+        "message": "Budget-aware selective verification completed."
+      },
+      {
+        "stage": "ANSWER_GENERATION",
+        "status": "COMPLETED",
+        "latency_seconds": 4.107418060302734,
+        "output_count": 1,
+        "message": "Grounded answer generation completed."
+      },
+      {
+        "stage": "COMPLETED",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "AERIS orchestration completed."
+      }
+    ],
+    "status": "COMPLETED",
+    "error_type": null
+  },
+  {
+    "question_id": "q_unans_01",
+    "total_latency": 203.14558291435242,
+    "stages": [
+      {
+        "stage": "PLANNING",
+        "status": "COMPLETED",
+        "latency_seconds": 4.146820545196533,
+        "output_count": 1,
+        "message": "Information requirements generated."
+      },
+      {
+        "stage": "RETRIEVAL",
+        "status": "COMPLETED",
+        "latency_seconds": 44.226316928863525,
+        "output_count": 3,
+        "message": "Adaptive requirement-directed retrieval completed."
+      },
+      {
+        "stage": "COVERAGE",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 3,
+        "message": "Evidence coverage evaluated during adaptive retrieval."
+      },
+      {
+        "stage": "CLAIM_GRAPH",
+        "status": "COMPLETED",
+        "latency_seconds": 146.40697169303894,
+        "output_count": 56,
+        "message": "Claim-evidence graph constructed."
+      },
+      {
+        "stage": "VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 2.4957549571990967,
+        "output_count": 2,
+        "message": "Initial claim verification completed."
+      },
+      {
+        "stage": "CONTRADICTION",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0016028881072998047,
+        "output_count": 0,
+        "message": "Contextual contradiction analysis completed."
+      },
+      {
+        "stage": "CROSS_LINGUAL",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "Cross-lingual evidence analysis completed."
+      },
+      {
+        "stage": "CALIBRATION",
+        "status": "SKIPPED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "No calibration records were available."
+      },
+      {
+        "stage": "SELECTIVE_VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 2.0350210666656494,
+        "output_count": 2,
+        "message": "Budget-aware selective verification completed."
+      },
+      {
+        "stage": "ANSWER_GENERATION",
+        "status": "COMPLETED",
+        "latency_seconds": 3.832533359527588,
+        "output_count": 1,
+        "message": "Grounded answer generation completed."
+      },
+      {
+        "stage": "COMPLETED",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "AERIS orchestration completed."
+      }
+    ],
+    "status": "COMPLETED",
+    "error_type": null
+  },
+  {
+    "question_id": "q_contra_01",
+    "total_latency": 47.93967294692993,
+    "stages": [
+      {
+        "stage": "PLANNING",
+        "status": "COMPLETED",
+        "latency_seconds": 4.39148473739624,
+        "output_count": 1,
+        "message": "Information requirements generated."
+      },
+      {
+        "stage": "RETRIEVAL",
+        "status": "COMPLETED",
+        "latency_seconds": 11.690043926239014,
+        "output_count": 3,
+        "message": "Adaptive requirement-directed retrieval completed."
+      },
+      {
+        "stage": "COVERAGE",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 3,
+        "message": "Evidence coverage evaluated during adaptive retrieval."
+      },
+      {
+        "stage": "CLAIM_GRAPH",
+        "status": "COMPLETED",
+        "latency_seconds": 23.913544416427612,
+        "output_count": 58,
+        "message": "Claim-evidence graph constructed."
+      },
+      {
+        "stage": "VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 2.384219169616699,
+        "output_count": 2,
+        "message": "Initial claim verification completed."
+      },
+      {
+        "stage": "CONTRADICTION",
+        "status": "COMPLETED",
+        "latency_seconds": 0.001628875732421875,
+        "output_count": 0,
+        "message": "Contextual contradiction analysis completed."
+      },
+      {
+        "stage": "CROSS_LINGUAL",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "Cross-lingual evidence analysis completed."
+      },
+      {
+        "stage": "CALIBRATION",
+        "status": "SKIPPED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "No calibration records were available."
+      },
+      {
+        "stage": "SELECTIVE_VERIFICATION",
+        "status": "COMPLETED",
+        "latency_seconds": 1.910036563873291,
+        "output_count": 2,
+        "message": "Budget-aware selective verification completed."
+      },
+      {
+        "stage": "ANSWER_GENERATION",
+        "status": "COMPLETED",
+        "latency_seconds": 3.6487152576446533,
+        "output_count": 1,
+        "message": "Grounded answer generation completed."
+      },
+      {
+        "stage": "COMPLETED",
+        "status": "COMPLETED",
+        "latency_seconds": 0.0,
+        "output_count": 0,
+        "message": "AERIS orchestration completed."
+      }
+    ],
+    "status": "COMPLETED",
+    "error_type": null
+  }
+]

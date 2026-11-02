@@ -1,0 +1,3202 @@
+diff --git a/app/adaptive_retrieval/controller.py b/app/adaptive_retrieval/controller.py
+index e2cf799b..30df37c2 100644
+--- a/app/adaptive_retrieval/controller.py
++++ b/app/adaptive_retrieval/controller.py
+@@ -121,6 +121,10 @@ class AdaptiveRetrievalController:
+         document_id: str,
+         question: str,
+         requirement: InformationRequirement,
++        enable_adaptive_retrieval: bool = True,
++        enable_query_reformulation: bool = True,
++        enable_retrieval_memory: bool = True,
++        memory=None,
+     ) -> AdaptiveRetrievalResult:
+         """
+         Perform adaptive retrieval for one information requirement.
+@@ -156,17 +160,119 @@ class AdaptiveRetrievalController:
+         for query_idx, (current_query, query_type) in enumerate(queries_to_try):
+             query_sufficient = False
+             
++            schedule = self.candidate_k_schedule[: self.max_attempts_per_query]
++            if not enable_adaptive_retrieval:
++                schedule = [self.candidate_k_schedule[0]] if self.candidate_k_schedule else [10]
++                
+             for attempt_number, candidate_k in enumerate(
+-                self.candidate_k_schedule[: self.max_attempts_per_query],
++                schedule,
+                 start=1,
+             ):
+ 
+-                if self.memory is not None and self.memory.has_query_attempt(
+-                    query=current_query,
+-                    requirement_id=requirement.requirement_id,
+-                    candidate_k=candidate_k,
+-                ):
+-                    continue
++                cached_attempt = None
++                cached_items = []
++                if enable_retrieval_memory and memory is not None:
++                    cached_attempt = memory.get_compatible_query_attempt(
++                        query=current_query,
++                        candidate_k=candidate_k,
++                        requirement_id=requirement.requirement_id,
++                        document_id=document_id,
++                        session_id=getattr(memory, "session_id", None),
++                        require_evidence=True,
++                    )
++                    if cached_attempt is not None:
++                        try:
++                            for item_data in cached_attempt.cached_evidence:
++                                if isinstance(item_data, EvidenceItem):
++                                    cached_items.append(item_data)
++                                elif isinstance(item_data, dict):
++                                    cached_items.append(EvidenceItem(**item_data))
++                            if not cached_items:
++                                memory.record_fallback("Cached evidence list was empty or unparseable")
++                                cached_attempt = None
++                        except Exception as parse_exc:
++                            memory.record_fallback(f"Failed to parse cached evidence: {parse_exc}")
++                            cached_attempt = None
++                            cached_items = []
++
++                if cached_attempt is not None and cached_items:
++                    # Valid memory hit with evidence!
++                    final_candidate_k = candidate_k
++                    final_query = current_query
++
++                    new_chunk_ids = []
++                    for evidence in cached_items:
++                        if evidence.chunk_id not in all_evidence:
++                            all_evidence[evidence.chunk_id] = evidence
++                            new_chunk_ids.append(evidence.chunk_id)
++
++                    memory.record_cache_hit_delivery(count=len(cached_items))
++
++                    coverage_evidence = sorted(
++                        all_evidence.values(),
++                        key=lambda item: (
++                            item.rerank_score
++                            if item.rerank_score is not None
++                            else float("-inf")
++                        ),
++                        reverse=True,
++                    )[: self.rerank_top_k]
++
++                    coverage_signature = (
++                        requirement.requirement_id,
++                        tuple(item.chunk_id for item in coverage_evidence),
++                    )
++
++                    if (
++                        getattr(self, "_last_coverage_signature", None) == coverage_signature
++                        and getattr(self, "_last_coverage_result", None) is not None
++                    ):
++                        coverage_result = self._last_coverage_result
++                    else:
++                        coverage_result = self.coverage_estimator.estimate(
++                            question=question,
++                            requirements=[requirement],
++                            requirement_evidence={
++                                requirement.requirement_id: coverage_evidence
++                            },
++                        )
++                        self._last_coverage_signature = coverage_signature
++                        self._last_coverage_result = coverage_result
++
++                    requirement_coverage = coverage_result.requirement_coverages[0]
++                    final_status = requirement_coverage.coverage_status
++                    final_score = requirement_coverage.coverage_score
++
++                    sufficient = self._is_sufficient(final_status, final_score)
++
++                    attempt = RetrievalAttempt(
++                        attempt_number=global_attempt_number,
++                        requirement_id=requirement.requirement_id,
++                        query=current_query,
++                        query_type=query_type,
++                        candidate_k=candidate_k,
++                        rerank_top_k=candidate_k,
++                        retrieved_chunk_ids=[item.chunk_id for item in cached_items],
++                        new_chunk_ids=new_chunk_ids,
++                        coverage_status=final_status,
++                        coverage_score=final_score,
++                        stopped=sufficient,
++                        stop_reason=(
++                            "Evidence requirement sufficiently supported."
++                            if sufficient
++                            else None
++                        ),
++                    )
++                    attempts.append(attempt)
++                    global_attempt_number += 1
++
++                    if sufficient:
++                        stop_reason = "Evidence requirement sufficiently supported."
++                        query_sufficient = True
++                        success = True
++                        break
++                    else:
++                        continue
+ 
+                 final_candidate_k = candidate_k
+                 final_query = current_query
+@@ -200,9 +306,9 @@ class AdaptiveRetrievalController:
+                     reranked
+                 )
+ 
+-                if self.memory is not None:
++                if memory is not None:
+                     for evidence in evidence_items:
+-                        self.memory.record_evidence(
++                        memory.record_evidence(
+                             chunk_id=evidence.chunk_id,
+                             document_id=evidence.document_id,
+                             requirement_id=requirement.requirement_id,
+@@ -210,6 +316,7 @@ class AdaptiveRetrievalController:
+                             retrieval_depth=candidate_k,
+                             coverage_score=None,
+                             coverage_status=None,
++                            payload=evidence.model_dump() if hasattr(evidence, "model_dump") else (evidence.dict() if hasattr(evidence, "dict") else None),
+                         )
+ 
+                 # ---------------------------------------------------------
+@@ -269,9 +376,9 @@ class AdaptiveRetrievalController:
+                 final_status = requirement_coverage.coverage_status
+                 final_score = requirement_coverage.coverage_score
+ 
+-                if self.memory is not None:
++                if memory is not None:
+                     for evidence in evidence_items:
+-                        self.memory.record_evidence(
++                        memory.record_evidence(
+                             chunk_id=evidence.chunk_id,
+                             document_id=evidence.document_id,
+                             requirement_id=requirement.requirement_id,
+@@ -279,6 +386,7 @@ class AdaptiveRetrievalController:
+                             retrieval_depth=candidate_k,
+                             coverage_score=requirement_coverage.coverage_score,
+                             coverage_status=requirement_coverage.coverage_status,
++                            payload=evidence.model_dump() if hasattr(evidence, "model_dump") else (evidence.dict() if hasattr(evidence, "dict") else None),
+                         )
+ 
+                 # ---------------------------------------------------------
+@@ -290,8 +398,8 @@ class AdaptiveRetrievalController:
+                     final_score,
+                 )
+ 
+-                if self.memory is not None:
+-                    self.memory.record_query(
++                if memory is not None:
++                    memory.record_query(
+                         query=current_query,
+                         query_type=query_type,
+                         requirement_id=requirement.requirement_id,
+@@ -301,6 +409,10 @@ class AdaptiveRetrievalController:
+                             item.chunk_id
+                             for item in reranked
+                         ],
++                        cached_evidence=[
++                            evidence.model_dump() if hasattr(evidence, "model_dump") else (evidence.dict() if hasattr(evidence, "dict") else dict(evidence))
++                            for evidence in evidence_items
++                        ],
+                         coverage_status=final_status,
+                         coverage_score=final_score,
+                         successful=sufficient,
+@@ -341,7 +453,7 @@ class AdaptiveRetrievalController:
+             if query_sufficient:
+                 break
+                 
+-            if query_type == "original" and not query_sufficient:
++            if enable_query_reformulation and query_type == "original" and not query_sufficient:
+                 reformulated = self.query_reformulator.reformulate(
+                     question=question,
+                     requirement=requirement,
+diff --git a/app/adaptive_retrieval/query_reformulator.py b/app/adaptive_retrieval/query_reformulator.py
+index 1fea396c..768e5c55 100644
+--- a/app/adaptive_retrieval/query_reformulator.py
++++ b/app/adaptive_retrieval/query_reformulator.py
+@@ -1,4 +1,5 @@
+ import json
++import time
+ import re
+ from typing import List, Optional
+ 
+@@ -6,6 +7,8 @@ import ollama
+ 
+ from app.config import settings
+ from app.planning.schemas import InformationRequirement
++from app.utils.json_parser import extract_json
++from app.utils.model_client import get_ollama_client, timed_model_chat
+ 
+ class QueryReformulator:
+     """
+@@ -15,10 +18,12 @@ class QueryReformulator:
+         self,
+         model: Optional[str] = None,
+         host: Optional[str] = None,
++        timeout: Optional[float] = None,
+     ):
+         self.model = model or settings.ollama_model
+         self.host = host or settings.ollama_host
+-        self.client = ollama.Client(host=self.host)
++        self.timeout = timeout or settings.ollama_timeout
++        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
+ 
+     def _build_prompt(
+         self,
+@@ -75,16 +80,6 @@ Use exactly this structure:
+ }}
+ """.strip()
+ 
+-    @staticmethod
+-    def _extract_json(text: str) -> str:
+-        text = text.strip()
+-        text = re.sub(r"^```(?:json)?\s*", "", text)
+-        text = re.sub(r"\s*```$", "", text)
+-        start = text.find("{")
+-        end = text.rfind("}")
+-        if start == -1 or end == -1 or end <= start:
+-            raise ValueError("No valid JSON object found in model response.")
+-        return text[start:end + 1]
+ 
+     def reformulate(
+         self,
+@@ -96,18 +91,24 @@ Use exactly this structure:
+         prompt = self._build_prompt(question, requirement, original_query, max_variants)
+         
+         try:
+-            response = self.client.chat(
++            chat_res = timed_model_chat(
++                client=self.client,
+                 model=self.model,
+                 messages=[{"role": "user", "content": prompt}],
+                 format="json",
+-                options={"temperature": 0},
++                options={"temperature": 0, "num_predict": 1024},
++                stage="Query Reformulation",
+             )
+-            raw_content = response["message"]["content"]
+-            json_text = self._extract_json(raw_content)
++            raw_content = chat_res["content"]
++            elapsed = chat_res["elapsed_seconds"]
++            json_text = extract_json(raw_content)
+             data = json.loads(json_text)
+             queries = data.get("queries", [])
+             if not isinstance(queries, list):
+                 return []
+             return [str(q).strip() for q in queries if str(q).strip()]
+-        except Exception:
+-            return []
++        except Exception as e:
++            elapsed = time.time() - start_time if 'start_time' in locals() else 0.0
++            ctx_size = len(prompt)
++            print(f"Error during query reformulation [Model: {self.model}, Stage: reformulator, Context: {ctx_size} chars, Time: {elapsed:.2f}s]: {e}")
++            raise e
+diff --git a/app/adaptive_retrieval/schemas.py b/app/adaptive_retrieval/schemas.py
+index 8ae0a933..15205f0a 100644
+--- a/app/adaptive_retrieval/schemas.py
++++ b/app/adaptive_retrieval/schemas.py
+@@ -3,6 +3,14 @@ from pydantic import BaseModel, Field
+ from app.coverage.evidence_coverage import EvidenceItem
+ 
+ 
++def is_reformulated_query_type(query_type: str) -> bool:
++    """
++    Check if query_type indicates a reformulated query, supporting both
++    canonical 'reformulated' and indexed 'reformulation_<n>'.
++    """
++    return query_type == "reformulated" or str(query_type).startswith("reformulation")
++
++
+ class RetrievalAttempt(BaseModel):
+     """
+     Records one adaptive retrieval attempt for a single information requirement.
+diff --git a/app/answer_generation/answer_generator.py b/app/answer_generation/answer_generator.py
+index 0fdd34b7..2fe0f930 100644
+--- a/app/answer_generation/answer_generator.py
++++ b/app/answer_generation/answer_generator.py
+@@ -1,4 +1,5 @@
+ import json
++import time
+ import ollama
+ from typing import Dict, List, Any
+ 
+@@ -7,33 +8,16 @@ from app.claim_graph.graph import ClaimEvidenceGraphBuilder
+ from app.verification.graph_verifier import GraphVerificationResult
+ from app.verification.cross_claim_contradiction import CrossClaimContradictionReport
+ from app.answer_generation.schemas import GroundedAnswer, AnswerStatus, ProvenanceItem
++from app.utils.json_parser import extract_json
++from app.utils.model_client import get_ollama_client, timed_model_chat
+ 
+ class AnswerGenerator:
+-    def __init__(self, model: str = None, host: str = None):
++    def __init__(self, model: str = None, host: str = None, timeout: float = None):
+         self.model = model or settings.ollama_model
+         self.host = host or settings.ollama_host
+-        self.client = ollama.Client(host=self.host)
++        self.timeout = timeout or settings.ollama_timeout
++        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
+ 
+-    def _extract_json(self, text: str) -> str:
+-        print(f"RAW MODEL OUTPUT:\n{text}\n")
+-        text = text.strip()
+-        if "```json" in text:
+-            start = text.find("```json") + 7
+-            end = text.find("```", start)
+-            if end != -1:
+-                return text[start:end].strip()
+-        if "```" in text:
+-            start = text.find("```") + 3
+-            end = text.find("```", start)
+-            if end != -1:
+-                return text[start:end].strip()
+-        
+-        start = text.find("{")
+-        end = text.rfind("}")
+-        if start != -1 and end != -1 and end > start:
+-            return text[start:end + 1]
+-            
+-        return text
+ 
+     def generate(
+         self,
+@@ -100,7 +84,8 @@ RULES:
+ - If evidence conflicts, explicitly mention the conflict rather than silently choosing one claim, and set status to "CONFLICTED".
+ - Prefer verified claims with high confidence. Preserve uncertainty when evidence is weak.
+ - Provide a concise answer. Do not expose internal reasoning or chain of thought in the final answer.
+-- Always output your response in JSON format exactly matching the structure below.
++- Respond ONLY with valid JSON. Do not include markdown blocks, preamble, or explanation outside the JSON.
++- Start your response exactly with {{ and end exactly with }}.
+ 
+ OUTPUT FORMAT:
+ {{
+@@ -114,47 +99,118 @@ OUTPUT FORMAT:
+   "insufficiency_reason": "Brief reason if insufficient, else null"
+ }}
+ """
+-        response = self.client.chat(
+-            model=self.model,
+-            messages=[{"role": "user", "content": prompt}],
+-            options={"temperature": 0}
+-        )
++        from app.utils.diagnostics import log_generation_attempt
++        messages = [{"role": "user", "content": prompt}]
++        max_attempts = 3
++        
++        for attempt in range(1, max_attempts + 1):
++            parse_success = False
++            schema_success = False
++            repair_invoked = False
++            retry_invoked = (attempt > 1)
++            
++            try:
++                chat_res = timed_model_chat(
++                    client=self.client,
++                    model=self.model,
++                    messages=messages,
++                    options={"temperature": 0, "num_predict": 1024},
++                    stage="Answer Generation",
++                )
++                raw_content = chat_res["content"]
++                elapsed = chat_res["elapsed_seconds"]
++            except Exception as e:
++                elapsed = 0.0
++                ctx_size = len(messages[-1]["content"])
++                print(f"Error during answer generation [Model: {self.model}, Stage: generator, Context: {ctx_size} chars]: {e}")
++                raise e
+ 
+-        raw_content = response["message"]["content"]
+-        json_text = self._extract_json(raw_content)
+-        data = json.loads(json_text)
++            ctx_size = len(messages[-1]["content"])
++            
++            try:
++                import json as std_json
++                try:
++                    std_json.loads(raw_content)
++                except:
++                    repair_invoked = True
++                    
++                json_text = extract_json(raw_content)
++                parse_success = True
++                data = std_json.loads(json_text)
++                
++                if "answer" not in data or data["answer"] is None:
++                    raise ValueError("The 'answer' field is missing or null.")
++                
++                if "status" not in data:
++                    raise ValueError("The 'status' field is missing.")
++                    
++                status = data["status"]
++                try:
++                    AnswerStatus(status)
++                except ValueError:
++                    raise ValueError(f"Invalid status '{status}'.")
++                    
++                supporting_chunks = data.get("supporting_chunk_ids", [])
++                supporting_claims = data.get("supporting_claim_ids", [])
+         
+-        # Post-generation guardrail against hallucinations
+-        status = data.get("status", "INSUFFICIENT_EVIDENCE")
+-        supporting_chunks = data.get("supporting_chunk_ids", [])
++                def deduplicate(seq):
++                    seen = set()
++                    return [x for x in seq if not (x in seen or seen.add(x))]
++                    
++                valid_chunk_ids = deduplicate([cid for cid in supporting_chunks if cid in all_chunks])
++                valid_claim_ids = deduplicate([cid for cid in supporting_claims if cid in graph.claims])
+         
+-        if status in ["SUPPORTED", "PARTIALLY_SUPPORTED"] and not supporting_chunks:
+-            status = "INSUFFICIENT_EVIDENCE"
+-            data["answer"] = "The document does not provide enough information to answer this question."
+-            data["confidence"] = 0.0
+-
+-        # Build provenance
+-        provenance = []
+-        for chunk_id in supporting_chunks:
+-            chunk = all_chunks.get(chunk_id)
+-            if chunk:
+-                rel_claims = [c_id for c_id in data.get("supporting_claim_ids", []) 
+-                              if any(e.chunk_id == chunk_id for e in graph.get_claim_evidence(c_id))]
+-                provenance.append(ProvenanceItem(
+-                    document_id=chunk.document_id,
+-                    chunk_id=chunk_id,
+-                    pages=getattr(chunk, 'pages', []),
+-                    relevant_claim_ids=rel_claims
+-                ))
+-
+-        return GroundedAnswer(
+-            question=question,
+-            answer=data.get("answer", ""),
+-            status=AnswerStatus(status),
+-            confidence=data.get("confidence", 0.0),
+-            supporting_claim_ids=data.get("supporting_claim_ids", []),
+-            supporting_chunk_ids=data.get("supporting_chunk_ids", []),
+-            provenance=provenance,
+-            conflict_information=data.get("conflict_information"),
+-            insufficiency_reason=data.get("insufficiency_reason")
+-        )
++                data["supporting_chunk_ids"] = valid_chunk_ids
++                data["supporting_claim_ids"] = valid_claim_ids
++                
++                is_answerable = data.get("is_answerable_from_evidence", True)
++                
++                if status in ["SUPPORTED", "PARTIALLY_SUPPORTED", "COMPLETED"] and (not valid_chunk_ids or not valid_claim_ids):
++                    status = "INSUFFICIENT_EVIDENCE"
++                    
++                if status == "INSUFFICIENT_EVIDENCE" or (not valid_chunk_ids or not valid_claim_ids):
++                    data["answer"] = "The document does not provide enough information to answer this question."
++                    data["confidence"] = 0.0
++                    data["insufficiency_reason"] = "Model provided unsupported or hallucinatory provenance."
++                    data["supporting_claim_ids"] = []
++                    is_answerable = False
++        
++                # Build provenance
++                provenance = []
++                for chunk_id in supporting_chunks:
++                    chunk = all_chunks.get(chunk_id)
++                    if chunk:
++                        rel_claims = [c_id for c_id in data.get("supporting_claim_ids", []) 
++                                      if any(e.chunk_id == chunk_id for e in graph.get_claim_evidence(c_id))]
++                        provenance.append(ProvenanceItem(
++                            document_id=chunk.document_id,
++                            chunk_id=chunk_id,
++                            pages=getattr(chunk, 'pages', []),
++                            relevant_claim_ids=rel_claims
++                        ))
++        
++                ans = GroundedAnswer(
++                    question=question,
++                    answer=data.get("answer", ""),
++                    status=AnswerStatus(status),
++                    is_answerable_from_evidence=is_answerable,
++                    confidence=data.get("confidence", 0.0),
++                    supporting_claim_ids=data.get("supporting_claim_ids", []),
++                    supporting_chunk_ids=data.get("supporting_chunk_ids", []),
++                    provenance=provenance,
++                    conflict_information=data.get("conflict_information"),
++                    insufficiency_reason=data.get("insufficiency_reason")
++                )
++                
++                schema_success = True
++                log_generation_attempt("Answer Generation", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                return ans
++                
++            except Exception as e:
++                log_generation_attempt("Answer Generation", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                if attempt == max_attempts:
++                    raise e
++                    
++                messages.append({"role": "assistant", "content": raw_content})
++                error_msg = f"Your previous response failed validation with error: {str(e)}. Please correct the JSON structure. Ensure the 'answer' field is a valid string, not null."
++                messages.append({"role": "user", "content": error_msg})
+diff --git a/app/answer_generation/schemas.py b/app/answer_generation/schemas.py
+index b173331b..dfdda2e3 100644
+--- a/app/answer_generation/schemas.py
++++ b/app/answer_generation/schemas.py
+@@ -18,6 +18,7 @@ class GroundedAnswer(BaseModel):
+     question: str
+     answer: str
+     status: AnswerStatus
++    is_answerable_from_evidence: bool = True
+     confidence: Optional[float] = Field(
+         default=None,
+         description="Engineering score representing generation confidence, NOT a calibrated probability unless explicitly stated."
+diff --git a/app/claim_extraction/extractor.py b/app/claim_extraction/extractor.py
+index 654704a7..3ea9995d 100644
+--- a/app/claim_extraction/extractor.py
++++ b/app/claim_extraction/extractor.py
+@@ -1,10 +1,19 @@
+ import os
+ import json
+ import re
++import time
++from typing import Optional
++from app.performance_cache import aeris_cache
+ 
+ import ollama
+ from app.config import settings
+ from app.claim_extraction.schemas import ExtractedClaim, ClaimExtractionResult
++from app.utils.json_parser import extract_json
++from app.utils.model_client import get_ollama_client, timed_model_chat
++from app.utils.diagnostics import log_generation_attempt
++
++DEFAULT_EXTRACTION_TIMEOUT: float = 180.0
++
+ 
+ class ClaimExtractor:
+     """
+@@ -12,25 +21,26 @@ class ClaimExtractor:
+     using an LLM.
+     """
+ 
+-    def __init__(self, model: str = None, host: str = None):
++    def __init__(
++        self,
++        model: Optional[str] = None,
++        host: Optional[str] = None,
++        timeout: Optional[float] = None,
++        max_retries: int = 1,
++    ):
+         self.model = model or settings.ollama_model
+         self.host = host or settings.ollama_host
+-        self.client = ollama.Client(host=self.host)
+-
+-    @staticmethod
+-    def _extract_json(text: str) -> str:
+-        text = text.strip()
+-        text = re.sub(r"^```(?:json)?\s*", "", text)
+-        text = re.sub(r"\s*```$", "", text)
+-        start = text.find("{")
+-        end = text.rfind("}")
+-        if start == -1 or end == -1 or end <= start:
+-            raise ValueError("No valid JSON object found in model response.")
+-        return text[start : end + 1]
++        self.timeout = (
++            timeout
++            if timeout is not None
++            else getattr(settings, "ollama_claim_extraction_timeout", DEFAULT_EXTRACTION_TIMEOUT)
++        )
++        self.max_retries = max_retries
++        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
+ 
+     def extract(self, chunk_id: str, document_id: str, text: str) -> ClaimExtractionResult:
+         """
+-        Extract claims from a single chunk of text.
++        Extract claims from a single chunk of text with telemetry and deliberate retry logic.
+         """
+         prompt = (
+             "You are an expert fact extractor for a research-grade retrieval system.\n\n"
+@@ -73,50 +83,122 @@ class ClaimExtractor:
+ 
+             "Return STRICTLY a JSON object with a single key 'claims'.\n"
+             "The value of 'claims' must be a list of strings.\n"
+-            "Do not include markdown, explanations, numbering, or any other fields.\n\n"
++            "Do not include markdown, explanations, numbering, or any other fields.\n"
++            "Respond ONLY with valid JSON. Do not include markdown blocks, preamble, or explanation outside the JSON.\n"
++            "Start your response exactly with { and end exactly with }.\n\n"
+ 
+             f"TEXT TO ANALYZE:\n{text}"
+         )
+ 
+-        try:
+-            response = self.client.chat(
+-                model=self.model,
+-                messages=[
+-                    {"role": "user", "content": prompt}
+-                ],
+-                format="json",
+-                options={
+-                    "temperature": 0.0,
+-                },
+-            )
+-
+-            result_str = response["message"]["content"]
+-            json_text = self._extract_json(result_str)
+-            data = json.loads(json_text)
+-            raw_claims = data.get("claims", [])
+-
+-            extracted_claims = []
+-            for i, claim_text in enumerate(raw_claims):
+-                claim_id = f"{chunk_id}_claim_{i+1}"
+-                extracted_claims.append(
+-                    ExtractedClaim(
+-                        claim_id=claim_id,
+-                        text=claim_text.strip(),
+-                        source_chunk_id=chunk_id,
+-                        document_id=document_id
+-                    )
++        cache_key = {"chunk": chunk_id}
++        cached = aeris_cache.get("extraction", cache_key)
++        if cached:
++            return ClaimExtractionResult(**cached)
++
++        max_attempts = max(1, self.max_retries + 1)
++        last_exception = None
++        ctx_size = len(prompt)
++
++        for attempt in range(1, max_attempts + 1):
++            parse_success = False
++            schema_success = False
++            repair_invoked = False
++            retry_invoked = (attempt > 1)
++            elapsed = 0.0
++
++            try:
++                chat_res = timed_model_chat(
++                    client=self.client,
++                    model=self.model,
++                    messages=[
++                        {"role": "user", "content": prompt}
++                    ],
++                    format="json",
++                    options={
++                        "temperature": 0.0,
++                        "num_predict": 8192,
++                    },
++                    stage="Claim Extraction",
++                )
++                elapsed = chat_res["elapsed_seconds"]
++                result_str = chat_res["content"]
++
++                try:
++                    data = json.loads(result_str)
++                except Exception:
++                    repair_invoked = True
++                    json_text = extract_json(result_str)
++                    data = json.loads(json_text)
++
++                parse_success = True
++
++                if not isinstance(data, dict) or "claims" not in data:
++                    raise ValueError("Claim extraction output must be a JSON object with a 'claims' array.")
++
++                raw_claims = data.get("claims", [])
++                if not isinstance(raw_claims, list):
++                    raise ValueError("The 'claims' field must be a list of strings.")
++
++                schema_success = True
++
++                extracted_claims = []
++                for i, claim_text in enumerate(raw_claims):
++                    if isinstance(claim_text, str) and claim_text.strip():
++                        claim_id = f"{chunk_id}_claim_{i+1}"
++                        extracted_claims.append(
++                            ExtractedClaim(
++                                claim_id=claim_id,
++                                text=claim_text.strip(),
++                                source_chunk_id=chunk_id,
++                                document_id=document_id
++                            )
++                        )
++
++                log_generation_attempt(
++                    stage="Claim Extraction",
++                    question_id="UNKNOWN",
++                    variant="UNKNOWN",
++                    attempt=attempt,
++                    model=self.model,
++                    context_size=ctx_size,
++                    latency=elapsed,
++                    parse_success=parse_success,
++                    schema_success=schema_success,
++                    repair_invoked=repair_invoked,
++                    retry_invoked=retry_invoked,
+                 )
+ 
+-            return ClaimExtractionResult(
+-                chunk_id=chunk_id,
+-                document_id=document_id,
+-                claims=extracted_claims
+-            )
+-
+-        except Exception as e:
+-            print(f"Error during claim extraction: {e}")
+-            return ClaimExtractionResult(
+-                chunk_id=chunk_id,
+-                document_id=document_id,
+-                claims=[]
+-            )
++                res = ClaimExtractionResult(
++                    chunk_id=chunk_id,
++                    document_id=document_id,
++                    claims=extracted_claims
++                )
++                res_dict = {
++                    "chunk_id": res.chunk_id,
++                    "document_id": res.document_id,
++                    "claims": [c.model_dump() if hasattr(c, "model_dump") else c.dict() for c in res.claims],
++                }
++                aeris_cache.set("extraction", cache_key, res_dict)
++                return res
++
++            except Exception as e:
++                last_exception = e
++                log_generation_attempt(
++                    stage="Claim Extraction",
++                    question_id="UNKNOWN",
++                    variant="UNKNOWN",
++                    attempt=attempt,
++                    model=self.model,
++                    context_size=ctx_size,
++                    latency=elapsed,
++                    parse_success=parse_success,
++                    schema_success=schema_success,
++                    repair_invoked=repair_invoked,
++                    retry_invoked=retry_invoked,
++                )
++                print(
++                    f"Error during claim extraction [Model: {self.model}, Attempt: {attempt}/{max_attempts}, "
++                    f"Context: {ctx_size} chars, Time: {elapsed:.2f}s]: {e}"
++                )
++                if attempt == max_attempts:
++                    raise last_exception
+diff --git a/app/claim_extraction/normalizer.py b/app/claim_extraction/normalizer.py
+index 447709f4..c9a26649 100644
+--- a/app/claim_extraction/normalizer.py
++++ b/app/claim_extraction/normalizer.py
+@@ -1,9 +1,6 @@
+ import os
+ from typing import List, Set
+ 
+-import torch
+-from sentence_transformers import SentenceTransformer, util
+-
+ from app.claim_extraction.schemas import ExtractedClaim
+ 
+ class ClaimNormalizer:
+@@ -20,6 +17,7 @@ class ClaimNormalizer:
+         self.model_name = model_name
+         self.similarity_threshold = similarity_threshold
+         # Load the sentence transformer model
++        from sentence_transformers import SentenceTransformer
+         self.model = SentenceTransformer(self.model_name)
+ 
+     def normalize_and_deduplicate(self, claims: List[ExtractedClaim]) -> List[ExtractedClaim]:
+@@ -49,6 +47,7 @@ class ClaimNormalizer:
+         # 2. Semantic deduplication
+         texts = [claim.text for claim in unique_raw_claims]
+         embeddings = self.model.encode(texts, convert_to_tensor=True)
++        from sentence_transformers import util
+         cosine_scores = util.cos_sim(embeddings, embeddings).cpu().numpy()
+ 
+         final_claims = []
+diff --git a/app/claim_extraction/typer.py b/app/claim_extraction/typer.py
+index 07458460..2b2b32d6 100644
+--- a/app/claim_extraction/typer.py
++++ b/app/claim_extraction/typer.py
+@@ -1,106 +1,191 @@
+ import json
+ import os
+ import re
++import time
+ from typing import List
+ 
+ import ollama
+ from app.config import settings
+ from app.claim_extraction.schemas import ExtractedClaim, TypedClaim, ClaimType
++from app.utils.json_parser import extract_json
++from app.utils.model_client import get_ollama_client, timed_model_chat
+ 
+ class ClaimTyper:
+     """Classifies extracted claims into specific semantic/factual roles."""
+ 
+-    def __init__(self, model: str = None, host: str = None):
++    def __init__(self, model: str = None, host: str = None, timeout: float = None):
+         self.model = model or settings.ollama_model
+         self.host = host or settings.ollama_host
+-        self.client = ollama.Client(host=self.host)
+-
+-    @staticmethod
+-    def _extract_json(text: str) -> str:
+-        text = text.strip()
+-        text = re.sub(r"^```(?:json)?\s*", "", text)
+-        text = re.sub(r"\s*```$", "", text)
+-        start = text.find("{")
+-        end = text.rfind("}")
+-        if start == -1 or end == -1 or end <= start:
+-            raise ValueError("No valid JSON object found in model response.")
+-        return text[start : end + 1]
++        self.timeout = timeout or settings.ollama_timeout
++        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
+ 
+     def type_claims(self, claims: List[ExtractedClaim]) -> List[TypedClaim]:
+         """
+         Takes a list of ExtractedClaims and returns them as TypedClaims 
+         without altering their content or provenance.
++        Uses deterministic batching and Python-owned numerical indices to prevent
++        the LLM from hallucinating claim identities.
+         """
+         if not claims:
+             return []
+             
+-        claims_dict = {
+-            claim.claim_id: claim.text for claim in claims
+-        }
++        typed_claims_result = []
++        batch_size = 10
++        
++        from app.utils.diagnostics import log_generation_attempt
++        import json as std_json
+         
+-        prompt = (
+-            "You are an expert taxonomy classifier for a research-grade RAG system.\n"
+-            "Your task is to classify each provided claim into EXACTLY ONE of the "
+-            "following categories:\n\n"
+-            "- FACT: A general statement of fact.\n"
+-            "- METHOD: A procedure, process, strategy, or system behavior.\n"
+-            "- COMPONENT: A specific model, dataset, module, or piece of architecture.\n"
+-            "- RELATIONSHIP: How two entities or concepts interact.\n"
+-            "- QUANTITATIVE: A claim containing specific numerical values or metrics.\n"
+-            "- COMPARATIVE: A claim comparing two or more entities/methods (e.g. 'improves over X').\n"
+-            "- CAUSAL: A claim stating cause and effect.\n"
+-            "- DEFINITION: The meaning of a term or concept.\n"
+-            "- OTHER: Use this ONLY as a fallback if no other category fits.\n\n"
++        for i in range(0, len(claims), batch_size):
++            batch = claims[i : i + batch_size]
+             
+-            "RULES:\n"
+-            "1. DO NOT change the text, claim_id, or meaning of the claims.\n"
+-            "2. Output strictly a JSON object where keys are the claim IDs and values are the category names (in uppercase).\n"
+-            "3. Ensure every claim_id provided in the input is present in the output.\n\n"
++            # Create a deterministic mapping from local index to the original claim
++            index_to_claim = {idx: claim for idx, claim in enumerate(batch)}
+             
+-            f"CLAIMS TO CLASSIFY:\n{json.dumps(claims_dict, indent=2)}"
+-        )
+-        
+-        try:
+-            response = self.client.chat(
+-                model=self.model,
+-                messages=[{"role": "user", "content": prompt}],
+-                format="json",
+-                options={"temperature": 0.0}
++            # Prepare the LLM input
++            input_payload = [
++                {"index": idx, "claim_text": claim.text}
++                for idx, claim in index_to_claim.items()
++            ]
++            
++            prompt = (
++                "You are an expert taxonomy classifier for a research-grade RAG system.\n"
++                "Your task is to classify each provided claim into EXACTLY ONE of the "
++                "following categories:\n\n"
++                "- FACT: A general statement of fact.\n"
++                "- METHOD: A procedure, process, strategy, or system behavior.\n"
++                "- COMPONENT: A specific model, dataset, module, or piece of architecture.\n"
++                "- RELATIONSHIP: How two entities or concepts interact.\n"
++                "- QUANTITATIVE: A claim containing specific numerical values or metrics.\n"
++                "- COMPARATIVE: A claim comparing two or more entities/methods (e.g. 'improves over X').\n"
++                "- CAUSAL: A claim stating cause and effect.\n"
++                "- DEFINITION: The meaning of a term or concept.\n"
++                "- OTHER: Use this ONLY as a fallback if no other category fits.\n\n"
++                
++                "RULES:\n"
++                "1. Output strictly a JSON array of objects, each containing 'index' and 'claim_type'.\n"
++                "2. Ensure every index provided in the input is present in the output exactly once.\n"
++                "3. Respond ONLY with valid JSON. Do not include markdown blocks, preamble, or explanation.\n"
++                "4. Start your response exactly with [ and end exactly with ].\n"
++                "5. Do NOT include any original text or chunk IDs in your response.\n\n"
++                
++                f"CLAIMS TO CLASSIFY:\n{std_json.dumps(input_payload, indent=2)}"
+             )
+             
+-            result_str = response["message"]["content"]
+-            json_text = self._extract_json(result_str)
+-            typing_results = json.loads(json_text)
++            messages = [{"role": "user", "content": prompt}]
++            max_attempts = 3
++            
+             
+-            typed_claims = []
+-            for claim in claims:
+-                claim_type_str = typing_results.get(claim.claim_id, "OTHER").upper()
++            for attempt in range(1, max_attempts + 1):
++                batch_typed_claims = []
++                parse_success = False
++                schema_success = False
++                repair_invoked = False
++                retry_invoked = (attempt > 1)
++                
+                 try:
+-                    claim_type = ClaimType(claim_type_str)
+-                except ValueError:
+-                    claim_type = ClaimType.OTHER
+-                    
+-                typed_claims.append(
+-                    TypedClaim(
+-                        claim_id=claim.claim_id,
+-                        text=claim.text,
+-                        source_chunk_id=claim.source_chunk_id,
+-                        document_id=claim.document_id,
+-                        claim_type=claim_type
++                    chat_res = timed_model_chat(
++                        client=self.client,
++                        model=self.model,
++                        messages=messages,
++                        options={
++                            "temperature": 0.0,
++                            "num_predict": 8192,
++                        },
++                        stage="Claim Typing",
+                     )
+-                )
+-                
+-            return typed_claims
+-        except Exception as e:
+-            print(f"Error during claim typing: {e}")
+-            # Fallback: return everything as OTHER
+-            return [
+-                TypedClaim(
+-                    claim_id=c.claim_id,
+-                    text=c.text,
+-                    source_chunk_id=c.source_chunk_id,
+-                    document_id=c.document_id,
+-                    claim_type=ClaimType.OTHER
+-                )
+-                for c in claims
+-            ]
++                    elapsed = chat_res["elapsed_seconds"]
++                    result_str = chat_res["content"]
++                except Exception as e:
++                    elapsed = 0.0
++                    ctx_size = len(messages[-1]["content"])
++                    print(f"Error during claim typing [Model: {self.model}, Stage: typing, Context: {ctx_size} chars]: {e}")
++                    raise e
++    
++                ctx_size = len(messages[-1]["content"])
++    
++                try:
++                    try:
++                        std_json.loads(result_str)
++                    except:
++                        repair_invoked = True
++                        
++                    json_text = extract_json(result_str)
++                    parse_success = True
++                    typing_results = std_json.loads(json_text)
++                    
++                    if not isinstance(typing_results, list):
++                        raise ValueError("Output must be a JSON array of objects.")
++                        
++                    returned_indexes = []
++                    parsed_results = {}
++                    
++                    for item in typing_results:
++                        if not isinstance(item, dict):
++                            raise ValueError("Each item in the JSON array must be an object.")
++                        if "index" not in item or "claim_type" not in item:
++                            raise ValueError("Each object must contain 'index' and 'claim_type'.")
++                        
++                        idx = int(item["index"])
++                        returned_indexes.append(idx)
++                        parsed_results[idx] = item["claim_type"]
++                        
++                    expected_indexes = set(index_to_claim.keys())
++                    returned_set = set(returned_indexes)
++                    
++                    if len(returned_indexes) != len(returned_set):
++                        raise ValueError("Duplicate indexes found in the response.")
++                        
++                    missing_indexes = expected_indexes - returned_set
++                    unknown_indexes = returned_set - expected_indexes
++                    
++                    if missing_indexes or unknown_indexes:
++                        error_details = []
++                        if missing_indexes:
++                            error_details.append(f"Missing required indexes: {list(missing_indexes)}")
++                        if unknown_indexes:
++                            error_details.append(f"Unknown indexes returned (not in input): {list(unknown_indexes)}")
++                        raise ValueError(" | ".join(error_details))
++    
++                    if len(parsed_results) != len(expected_indexes):
++                        raise ValueError(f"Number of returned classifications ({len(parsed_results)}) must exactly match input ({len(expected_indexes)}).")
++    
++                    schema_success = True
++                    
++                    for idx, claim in index_to_claim.items():
++                        claim_type_str = str(parsed_results[idx]).upper()
++                        try:
++                            claim_type = ClaimType(claim_type_str)
++                        except ValueError:
++                            raise ValueError(f"Invalid claim type '{claim_type_str}' for index {idx}.")
++                            
++                        batch_typed_claims.append(
++                            TypedClaim(
++                                claim_id=claim.claim_id,
++                                text=claim.text,
++                                source_chunk_id=claim.source_chunk_id,
++                                document_id=claim.document_id,
++                                claim_type=claim_type
++                            )
++                        )
++                        
++                    log_generation_attempt("Claim Typing", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                    break # Batch successful
++                    
++                except Exception as e:
++                    log_generation_attempt("Claim Typing", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                    if attempt == max_attempts:
++                        class ClaimTypingError(Exception):
++                            def __init__(self, msg):
++                                super().__init__(msg)
++                        raise ClaimTypingError(f"Claim typing failed after {max_attempts} attempts. Error: {str(e)}")
++                        
++                    messages.append({"role": "assistant", "content": result_str})
++                    if "Missing required indexes" in str(e) or "Unknown indexes" in str(e):
++                        error_msg = f"Your previous response failed validation: {str(e)}.\n\nReturn exactly one classification for every required index. Valid indexes are {list(expected_indexes)}. Do not omit or invent indexes."
++                    else:
++                        error_msg = f"Your previous response failed validation with error: {str(e)}. Please correct the JSON structure to strictly be a JSON array of objects with 'index' and 'claim_type'."
++                    messages.append({"role": "user", "content": error_msg})
++                    
++            typed_claims_result.extend(batch_typed_claims)
++            
++        return typed_claims_result
+diff --git a/app/claim_graph/graph.py b/app/claim_graph/graph.py
+index 8d9fe092..30c47935 100644
+--- a/app/claim_graph/graph.py
++++ b/app/claim_graph/graph.py
+@@ -1,7 +1,5 @@
+ from typing import Optional
+ 
+-from sentence_transformers import SentenceTransformer
+-
+ from app.claim_graph.schemas import (
+     ClaimEvidenceEdge,
+     ClaimEvidenceGraph,
+@@ -42,6 +40,7 @@ class ClaimEvidenceGraphBuilder:
+         # Step 15D
+         self.evidence_relations = {}
+ 
++        from sentence_transformers import SentenceTransformer
+         self.embedding_model = SentenceTransformer(embedding_model)
+ 
+     def add_claim(
+diff --git a/app/config.py b/app/config.py
+index 034a134c..ec6ada3d 100644
+--- a/app/config.py
++++ b/app/config.py
+@@ -5,6 +5,10 @@ class Settings(BaseSettings):
+     ollama_host: str = "http://localhost:11434"
+     ollama_model: str = "llama3.2:latest"
+     embedding_model: str = "nomic-embed-text:latest"
++    ollama_timeout: float = 60.0
++    ollama_connect_timeout: float = 10.0
++    ollama_claim_extraction_timeout: float = 180.0
++    max_anomaly_latency_seconds: float = 300.0
+ 
+     model_config = SettingsConfigDict(
+         env_file=".env",
+diff --git a/app/controller/controller.py b/app/controller/controller.py
+index 9427eac3..fb7be1a6 100644
+--- a/app/controller/controller.py
++++ b/app/controller/controller.py
+@@ -1,6 +1,9 @@
+ from __future__ import annotations
++import time
+ 
+ from typing import Any, Callable, Dict, Iterable, List, Optional
++from app.retrieval_memory.memory import RetrievalMemory, RetrievalMemoryRegistry
++from app.verification.requirement_support import RequirementSupportValidator
+ 
+ from app.controller.schemas import (
+     ControllerConfig,
+@@ -37,6 +40,7 @@ class AERISController:
+         calibrator=None,
+         selective_verification_executor=None,
+         answer_generator=None,
++        requirement_validator=None,
+     ):
+         self.planner = planner
+         self.adaptive_retrieval_controller = adaptive_retrieval_controller
+@@ -57,6 +61,7 @@ class AERISController:
+         self.calibrator = calibrator
+         self.selective_verification_executor = selective_verification_executor
+         self.answer_generator = answer_generator
++        self.requirement_validator = requirement_validator or RequirementSupportValidator()
+ 
+     # ------------------------------------------------------------------
+     # Public API
+@@ -69,8 +74,9 @@ class AERISController:
+             # ----------------------------------------------------------
+             # 1. PLANNING
+             # ----------------------------------------------------------
+-
++            t0 = time.perf_counter()
+             plan = self.planner.plan(request.question)
++            t_plan = time.perf_counter() - t0
+ 
+             stages.append(
+                 self._stage(
+@@ -78,6 +84,7 @@ class AERISController:
+                     StageStatus.COMPLETED,
+                     "Information requirements generated.",
+                     len(plan.requirements),
++                    latency_seconds=t_plan,
+                 )
+             )
+ 
+@@ -85,7 +92,24 @@ class AERISController:
+             # 2. ADAPTIVE RETRIEVAL
+             # ----------------------------------------------------------
+ 
++            t0 = time.perf_counter()
+             retrieval_results = []
++            
++            if request.config.enable_retrieval_memory:
++                if getattr(request.config, "scoped_retrieval_memory", True):
++                    memory = RetrievalMemoryRegistry.get_scoped_memory(
++                        document_id=request.document_id,
++                        session_id=getattr(request.config, "session_id", None),
++                        question=request.question,
++                    )
++                else:
++                    memory = RetrievalMemory(
++                        document_id=request.document_id,
++                        question=request.question,
++                        session_id=getattr(request.config, "session_id", None),
++                    )
++            else:
++                memory = None
+ 
+             for requirement in plan.requirements:
+                 result = (
+@@ -94,6 +118,10 @@ class AERISController:
+                         document_id=request.document_id,
+                         question=request.question,
+                         requirement=requirement,
++                        enable_adaptive_retrieval=request.config.enable_adaptive_retrieval,
++                        enable_query_reformulation=request.config.enable_query_reformulation,
++                        enable_retrieval_memory=request.config.enable_retrieval_memory,
++                        memory=memory,
+                     )
+                 )
+ 
+@@ -102,6 +130,24 @@ class AERISController:
+             evidence_items = self._collect_evidence(
+                 retrieval_results
+             )
++            # Ordered, deterministic deduplication of retrieved chunk IDs
++            retrieved_chunk_ids = []
++            for item in evidence_items:
++                cid = item.get("chunk_id")
++                if cid and cid not in retrieved_chunk_ids:
++                    retrieved_chunk_ids.append(cid)
++
++            retrieval_attempts_history = []
++            for res in retrieval_results:
++                for att in res.attempts:
++                    if hasattr(att, "model_dump"):
++                        retrieval_attempts_history.append(att.model_dump())
++                    elif hasattr(att, "dict"):
++                        retrieval_attempts_history.append(att.dict())
++                    else:
++                        retrieval_attempts_history.append(dict(att))
++
++            t_retrieval = time.perf_counter() - t0
+ 
+             stages.append(
+                 self._stage(
+@@ -109,6 +155,7 @@ class AERISController:
+                     StageStatus.COMPLETED,
+                     "Adaptive requirement-directed retrieval completed.",
+                     len(evidence_items),
++                    latency_seconds=t_retrieval,
+                 )
+             )
+ 
+@@ -121,9 +168,11 @@ class AERISController:
+             # a second time.
+             # ----------------------------------------------------------
+ 
++            t0 = time.perf_counter()
+             coverage_metadata = self._collect_coverage_metadata(
+                 retrieval_results
+             )
++            t_coverage = time.perf_counter() - t0
+ 
+             stages.append(
+                 self._stage(
+@@ -132,6 +181,7 @@ class AERISController:
+                     "Evidence coverage evaluated during adaptive retrieval.",
+                     len(evidence_items),
+                     coverage_metadata,
++                    latency_seconds=t_coverage,
+                 )
+             )
+ 
+@@ -139,6 +189,7 @@ class AERISController:
+             # 4. CLAIM EXTRACTION
+             # ----------------------------------------------------------
+ 
++            t0 = time.perf_counter()
+             raw_claims = []
+ 
+             for evidence in evidence_items:
+@@ -193,6 +244,7 @@ class AERISController:
+                 )
+ 
+             graph_builder.auto_link_claims_to_evidence()
++            t_claim_graph = time.perf_counter() - t0
+ 
+             stages.append(
+                 self._stage(
+@@ -200,6 +252,7 @@ class AERISController:
+                     StageStatus.COMPLETED,
+                     "Claim-evidence graph constructed.",
+                     len(typed_claims),
++                    latency_seconds=t_claim_graph,
+                 )
+             )
+ 
+@@ -207,35 +260,53 @@ class AERISController:
+             # 8. INITIAL CLAIM VERIFICATION
+             # ----------------------------------------------------------
+ 
++            t_start = time.perf_counter()
+             verification_results = []
++            verified_count = 0
+ 
+-            for claim in typed_claims:
+-                if not graph_builder.get_claim_evidence(claim.claim_id):
+-                    continue
++            if request.config.enable_claim_verification:
++                for claim in typed_claims:
++                    if not graph_builder.get_claim_evidence(claim.claim_id):
++                        continue
+ 
+-                result = self.graph_verifier.verify_claim(
+-                    graph_builder,
+-                    claim.claim_id,
+-                )
++                    result = self.graph_verifier.verify_claim(
++                        graph_builder,
++                        claim.claim_id,
++                    )
+ 
+-                verification_results.append(result)
++                    verification_results.append(result)
+ 
+-            verified_count = len(verification_results)
++                verified_count = len(verification_results)
++                t_verify = time.perf_counter() - t_start
+ 
+-            stages.append(
+-                self._stage(
+-                    ControllerStage.VERIFICATION,
+-                    StageStatus.COMPLETED,
+-                    "Initial claim verification completed.",
+-                    verified_count,
++                stages.append(
++                    self._stage(
++                        ControllerStage.VERIFICATION,
++                        StageStatus.COMPLETED,
++                        "Initial claim verification completed.",
++                        verified_count,
++                        latency_seconds=t_verify,
++                    )
++                )
++            else:
++                t_verify = time.perf_counter() - t_start
++                stages.append(
++                    self._stage(
++                        ControllerStage.VERIFICATION,
++                        StageStatus.SKIPPED,
++                        "Claim verification was disabled for ablation.",
++                        0,
++                        latency_seconds=t_verify,
++                    )
+                 )
+-            )
+ 
+             # ----------------------------------------------------------
+             # 9. CONTRADICTION ANALYSIS
+             # ----------------------------------------------------------
+ 
++            t0 = time.perf_counter()
+             contradiction_count = 0
++            contradiction_report = None
+ 
+             if (
+                 request.config.enable_contradiction_analysis
+@@ -254,6 +325,7 @@ class AERISController:
+                 contradiction_count = self._count_contradictions(
+                     contradiction_report
+                 )
++                t_contra = time.perf_counter() - t0
+ 
+                 stages.append(
+                     self._stage(
+@@ -261,15 +333,18 @@ class AERISController:
+                         StageStatus.COMPLETED,
+                         "Contextual contradiction analysis completed.",
+                         contradiction_count,
++                        latency_seconds=t_contra,
+                     )
+                 )
+             else:
++                t_contra = time.perf_counter() - t0
+                 stages.append(
+                     self._stage(
+                         ControllerStage.CONTRADICTION,
+                         StageStatus.SKIPPED,
+                         "Contradiction analysis was not configured.",
+                         0,
++                        latency_seconds=t_contra,
+                     )
+                 )
+ 
+@@ -277,6 +352,7 @@ class AERISController:
+             # 10. CROSS-LINGUAL ANALYSIS
+             # ----------------------------------------------------------
+ 
++            t0 = time.perf_counter()
+             cross_lingual_count = 0
+ 
+             if (
+@@ -284,34 +360,61 @@ class AERISController:
+                 and self.cross_lingual_analyzer is not None
+                 and self.cross_lingual_integrator is not None
+             ):
+-                cross_lingual_results = (
+-                    self.cross_lingual_analyzer(graph_builder)
+-                )
+-
+-                for result, evidence_pairs in cross_lingual_results:
+-                    self.cross_lingual_integrator.integrate(
+-                        graph_builder,
+-                        result,
+-                        evidence_pairs,
++                try:
++                    cross_lingual_results = (
++                        self.cross_lingual_analyzer(graph_builder)
+                     )
+ 
+-                    cross_lingual_count += 1
++                    for result, evidence_pairs in cross_lingual_results:
++                        self.cross_lingual_integrator.integrate(
++                            graph_builder,
++                            result,
++                            evidence_pairs,
++                        )
+ 
+-                stages.append(
+-                    self._stage(
+-                        ControllerStage.CROSS_LINGUAL,
+-                        StageStatus.COMPLETED,
+-                        "Cross-lingual evidence analysis completed.",
+-                        cross_lingual_count,
++                        cross_lingual_count += 1
++                    t_cross = time.perf_counter() - t0
++
++                    if cross_lingual_count > 0:
++                        stages.append(
++                            self._stage(
++                                ControllerStage.CROSS_LINGUAL,
++                                StageStatus.COMPLETED,
++                                f"Cross-lingual evidence analysis completed ({cross_lingual_count} pairs evaluated).",
++                                cross_lingual_count,
++                                latency_seconds=t_cross,
++                            )
++                        )
++                    else:
++                        stages.append(
++                            self._stage(
++                                ControllerStage.CROSS_LINGUAL,
++                                StageStatus.SKIPPED,
++                                "SKIPPED (MONOLINGUAL): no cross-lingual evidence pairs found for analysis.",
++                                0,
++                                latency_seconds=t_cross,
++                            )
++                        )
++                except Exception as e:
++                    t_cross = time.perf_counter() - t0
++                    stages.append(
++                        self._stage(
++                            ControllerStage.CROSS_LINGUAL,
++                            StageStatus.FAILED,
++                            f"Cross-lingual analysis failed: {str(e)}",
++                            0,
++                            latency_seconds=t_cross,
++                        )
+                     )
+-                )
+             else:
++                t_cross = time.perf_counter() - t0
+                 stages.append(
+                     self._stage(
+                         ControllerStage.CROSS_LINGUAL,
+                         StageStatus.SKIPPED,
+                         "Cross-lingual analysis was not configured.",
+                         0,
++                        latency_seconds=t_cross,
+                     )
+                 )
+ 
+@@ -319,6 +422,7 @@ class AERISController:
+             # 11. CALIBRATION
+             # ----------------------------------------------------------
+ 
++            t0 = time.perf_counter()
+             calibrated_count = 0
+ 
+             if (
+@@ -338,6 +442,7 @@ class AERISController:
+                     calibrated_count = len(
+                         calibration_records
+                     )
++                    t_calib = time.perf_counter() - t0
+ 
+                     stages.append(
+                         self._stage(
+@@ -345,24 +450,29 @@ class AERISController:
+                             StageStatus.COMPLETED,
+                             "Calibration applied to available records.",
+                             calibrated_count,
++                            latency_seconds=t_calib,
+                         )
+                     )
+                 else:
++                    t_calib = time.perf_counter() - t0
+                     stages.append(
+                         self._stage(
+                             ControllerStage.CALIBRATION,
+                             StageStatus.SKIPPED,
+                             "No calibration records were available.",
+                             0,
++                            latency_seconds=t_calib,
+                         )
+                     )
+             else:
++                t_calib = time.perf_counter() - t0
+                 stages.append(
+                     self._stage(
+                         ControllerStage.CALIBRATION,
+                         StageStatus.SKIPPED,
+                         "Calibration was not configured.",
+                         0,
++                        latency_seconds=t_calib,
+                     )
+                 )
+ 
+@@ -370,6 +480,7 @@ class AERISController:
+             # 12. SELECTIVE VERIFICATION
+             # ----------------------------------------------------------
+ 
++            t0 = time.perf_counter()
+             selected_count = 0
+ 
+             if (
+@@ -395,6 +506,7 @@ class AERISController:
+                     "selected_count",
+                     0,
+                 )
++                t_selective = time.perf_counter() - t0
+ 
+                 stages.append(
+                     self._stage(
+@@ -402,15 +514,18 @@ class AERISController:
+                         StageStatus.COMPLETED,
+                         "Budget-aware selective verification completed.",
+                         selected_count,
++                        latency_seconds=t_selective,
+                     )
+                 )
+             else:
++                t_selective = time.perf_counter() - t0
+                 stages.append(
+                     self._stage(
+                         ControllerStage.SELECTIVE_VERIFICATION,
+                         StageStatus.SKIPPED,
+                         "Selective verification was not configured.",
+                         0,
++                        latency_seconds=t_selective,
+                     )
+                 )
+ 
+@@ -418,6 +533,7 @@ class AERISController:
+             # 13. ANSWER GENERATION
+             # ----------------------------------------------------------
+ 
++            t0 = time.perf_counter()
+             final_answer = None
+             answer_status = None
+             answer_confidence = None
+@@ -426,6 +542,7 @@ class AERISController:
+             provenance = []
+             conflict_info = None
+             insufficiency_info = None
++            downgrade_details = []
+ 
+             if (
+                 getattr(request.config, "answer_generation_enabled", True)
+@@ -447,21 +564,157 @@ class AERISController:
+                 conflict_info = answer_result.conflict_information
+                 insufficiency_info = answer_result.insufficiency_reason
+ 
++                # Requirement-level support validation
++                if answer_status in ["SUPPORTED", "COMPLETED", "PARTIALLY_SUPPORTED"]:
++                    claims_texts = [graph_builder.claims[cid].text for cid in supporting_claim_ids if cid in graph_builder.claims]
++                    evidence_texts = [
++                        graph_builder.evidence[cid].text
++                        for cid in supporting_chunk_ids
++                        if cid in graph_builder.evidence and hasattr(graph_builder.evidence[cid], "text")
++                    ]
++                    
++                    if plan and plan.requirements:
++                        req_val_results = []
++                        for req in plan.requirements:
++                            val_res = self.requirement_validator.validate(
++                                question=request.question,
++                                requirement=req.description,
++                                answer=final_answer,
++                                claims=claims_texts,
++                                evidence_texts=evidence_texts,
++                                requirement_id=getattr(req, "id", None) or getattr(req, "requirement_id", None),
++                            )
++                            req_val_results.append((req, val_res))
++                        
++                        total_reqs = len(req_val_results)
++                        supported_count = sum(1 for _, res in req_val_results if res.is_supported)
++                        contradicted_count = sum(
++                            1 for _, res in req_val_results
++                            if getattr(res, "evidence_support_status", "") == "CONTRADICTED"
++                        )
++                        unsupported_reqs = [
++                            getattr(r, "requirement_id", None) or getattr(r, "id", None) or getattr(r, "description", "")
++                            for r, res in req_val_results if not res.is_supported
++                        ]
++
++                        # Essential requirements (priority == 1). If none tagged priority 1, all are essential.
++                        essential_reqs = [
++                            r for r, _ in req_val_results
++                            if getattr(r, "priority", 1) == 1
++                        ]
++                        if not essential_reqs:
++                            essential_reqs = [r for r, _ in req_val_results]
++
++                        essential_unsupported = [
++                            getattr(r, "requirement_id", None) or getattr(r, "id", None) or getattr(r, "description", "")
++                            for r, res in req_val_results
++                            if (r in essential_reqs) and not res.is_supported
++                        ]
++                        essential_contradicted = [
++                            getattr(r, "requirement_id", None) or getattr(r, "id", None) or getattr(r, "description", "")
++                            for r, res in req_val_results
++                            if (r in essential_reqs) and getattr(res, "evidence_support_status", "") == "CONTRADICTED"
++                        ]
++
++                        reasons = [res.rationale for _, res in req_val_results if getattr(res, "rationale", None)]
++                        categories = list({
++                            str(getattr(res, "downgrade_category", None) or getattr(res, "category", "UNSUPPORTED"))
++                            for _, res in req_val_results
++                            if getattr(res, "downgrade_category", None) or getattr(res, "category", None)
++                        })
++
++                        # B4 Aggregation Semantics:
++                        # 1. Contradiction: If any requirement is contradicted by evidence
++                        if contradicted_count > 0:
++                            answer_status = "CONFLICTED" if answer_status != "INSUFFICIENT_EVIDENCE" else "INSUFFICIENT_EVIDENCE"
++                            downgrade_details.append({
++                                "downgrade_type": "REQUIREMENT_CONTRADICTED",
++                                "categories": categories,
++                                "unsupported_requirements": unsupported_reqs,
++                                "essential_unsupported": essential_unsupported,
++                                "essential_contradicted": essential_contradicted,
++                                "supporting_claim_ids": supporting_claim_ids,
++                                "supporting_chunk_ids": supporting_chunk_ids,
++                                "validator_rationales": reasons,
++                            })
++                            defect_msg = f"Requirement contradiction detected: {'; '.join(reasons)}"
++                            insufficiency_info = f"{insufficiency_info} | {defect_msg}" if insufficiency_info else defect_msg
++
++                        # 2. Complete evidence failure: none supported -> INSUFFICIENT_EVIDENCE
++                        elif supported_count == 0:
++                            answer_status = "INSUFFICIENT_EVIDENCE"
++                            downgrade_details.append({
++                                "downgrade_type": "REQUIREMENT_UNSUPPORTED",
++                                "categories": categories,
++                                "unsupported_requirements": unsupported_reqs,
++                                "essential_unsupported": essential_unsupported,
++                                "supporting_claim_ids": supporting_claim_ids,
++                                "supporting_chunk_ids": supporting_chunk_ids,
++                                "validator_rationales": reasons,
++                            })
++                            defect_msg = f"Requirement support validation failed: {'; '.join(reasons) if reasons else 'No requirements satisfied.'}"
++                            insufficiency_info = f"{insufficiency_info} | {defect_msg}" if insufficiency_info else defect_msg
++
++                        # 3. Partial support: some supported, but some sub-requirements unsupported
++                        elif supported_count < total_reqs:
++                            # Missing essential requirements strictly prevent classification as fully SUPPORTED
++                            if answer_status in ["SUPPORTED", "COMPLETED"]:
++                                answer_status = "PARTIALLY_SUPPORTED"
++                            downgrade_details.append({
++                                "downgrade_type": "REQUIREMENT_PARTIALLY_UNSUPPORTED",
++                                "categories": categories,
++                                "supported_count": supported_count,
++                                "total_requirements": total_reqs,
++                                "unsupported_requirements": unsupported_reqs,
++                                "essential_unsupported": essential_unsupported,
++                                "supporting_claim_ids": supporting_claim_ids,
++                                "supporting_chunk_ids": supporting_chunk_ids,
++                                "validator_rationales": reasons,
++                            })
++                            defect_msg = f"Partial requirement support: {supported_count}/{total_reqs} requirements established ({'; '.join(unsupported_reqs)} unsupported; essential missing: {'; '.join(essential_unsupported) if essential_unsupported else 'none'})."
++                            insufficiency_info = f"{insufficiency_info} | {defect_msg}" if insufficiency_info else defect_msg
++
++                # Enforce citation provenance validation: every cited chunk must belong to retrieved_chunk_ids
++                provenance_defects = [
++                    cid for cid in supporting_chunk_ids if cid not in retrieved_chunk_ids
++                ]
++                if provenance_defects:
++                    defect_msg = f"Provenance defect: cited chunk(s) {provenance_defects} not in retrieved evidence pool."
++                    insufficiency_info = f"{insufficiency_info} | {defect_msg}" if insufficiency_info else defect_msg
++                    downgrade_details.append({
++                        "downgrade_type": "PROVENANCE_DEFECT",
++                        "unretrieved_chunk_ids": provenance_defects,
++                        "supporting_chunk_ids": supporting_chunk_ids,
++                    })
++                    if answer_status in ["SUPPORTED", "COMPLETED", "PARTIALLY_SUPPORTED"]:
++                        answer_status = "INSUFFICIENT_EVIDENCE"
++
++                t_ans = time.perf_counter() - t0
++
+                 stages.append(
+                     self._stage(
+                         ControllerStage.ANSWER_GENERATION,
+                         StageStatus.COMPLETED,
+                         "Grounded answer generation completed.",
+                         1,
++                        latency_seconds=t_ans,
+                     )
+                 )
+             else:
++                provenance_defects = []
++                supporting_claim_ids = []
++                supporting_chunk_ids = []
++                provenance = []
++                conflict_info = None
++                insufficiency_info = "Answer generation was not configured or missing generator."
++                t_ans = time.perf_counter() - t0
+                 stages.append(
+                     self._stage(
+                         ControllerStage.ANSWER_GENERATION,
+                         StageStatus.SKIPPED,
+                         "Answer generation was not configured or missing generator.",
+                         0,
++                        latency_seconds=t_ans,
+                     )
+                 )
+ 
+@@ -480,6 +733,49 @@ class AERISController:
+ 
+             graph = graph_builder.build()
+ 
++            # Telemetry Tracking
++            base_k = (
++                self.adaptive_retrieval_controller.candidate_k_schedule[0]
++                if (
++                    hasattr(self, "adaptive_retrieval_controller")
++                    and self.adaptive_retrieval_controller
++                    and hasattr(self.adaptive_retrieval_controller, "candidate_k_schedule")
++                    and isinstance(self.adaptive_retrieval_controller.candidate_k_schedule, (list, tuple))
++                    and len(self.adaptive_retrieval_controller.candidate_k_schedule) > 0
++                    and isinstance(self.adaptive_retrieval_controller.candidate_k_schedule[0], (int, float))
++                )
++                else getattr(request.config, "candidate_k", 10)
++            )
++
++            ar_calls = 0
++            cand_expansions = 0
++            ref_calls = 0
++
++            for res in retrieval_results:
++                ar_calls += len(res.attempts)
++                for att in res.attempts:
++                    if att.candidate_k > base_k:
++                        cand_expansions += 1
++                    if att.query_type == "reformulated" or str(att.query_type).startswith("reformulation"):
++                        ref_calls += 1
++
++            # Only mark adaptive_retrieval_triggered if adaptive retrieval is ENABLED and candidate depth actually expanded
++            ar_triggered = (cand_expansions > 0) if request.config.enable_adaptive_retrieval else False
++
++            # Query reformulation is tracked independently
++            ref_triggered = (ref_calls > 0) if request.config.enable_query_reformulation else False
++
++            mem_hits = memory.hit_count if memory else 0
++            mem_lookups = memory.lookup_count if memory else 0
++            mem_skips = memory.skip_count if memory else 0
++            mem_misses = memory.miss_count if memory else 0
++            mem_cached_evidence = getattr(memory, "cached_evidence_count", 0) if memory else 0
++            mem_fallbacks = getattr(memory, "fallback_count", 0) if memory else 0
++            mem_incompatibilities = getattr(memory, "incompatibility_count", 0) if memory else 0
++
++            verification_call_count = len(verification_results) if request.config.enable_claim_verification else 0
++            verification_skipped_count = len(typed_claims) - verification_call_count if request.config.enable_claim_verification else 0
++
+             return ControllerResult(
+                 document_id=request.document_id,
+                 question=request.question,
+@@ -490,6 +786,9 @@ class AERISController:
+                 answer_confidence=answer_confidence,
+                 supporting_claim_ids=supporting_claim_ids,
+                 supporting_chunk_ids=supporting_chunk_ids,
++                retrieved_chunk_ids=retrieved_chunk_ids,
++                retrieval_attempts_history=retrieval_attempts_history,
++                provenance_defects=provenance_defects,
+                 provenance=provenance,
+                 conflict_information=conflict_info,
+                 insufficiency_information=insufficiency_info,
+@@ -502,15 +801,49 @@ class AERISController:
+                     "cross_lingual_relations": cross_lingual_count,
+                     "calibrated_records": calibrated_count,
+                     "coverage": coverage_metadata,
++                    "provenance_defects": provenance_defects,
++                    "downgrade_details": downgrade_details,
++                    "retrieved_chunk_count": len(retrieved_chunk_ids),
++
++                    "adaptive_retrieval_triggered": ar_triggered,
++                    "retrieval_attempt_count": ar_calls,
++                    "candidate_depth_expansions": cand_expansions,
++
++                    "reformulation_triggered": ref_triggered,
++                    "reformulation_attempt_count": ref_calls,
++
++                    "memory_lookup_count": mem_lookups,
++                    "memory_hit_count": mem_hits,
++                    "memory_miss_count": mem_misses,
++                    "memory_skip_count": mem_skips,
++                    "memory_cached_evidence_count": mem_cached_evidence,
++                    "memory_fallback_count": mem_fallbacks,
++                    "memory_incompatibility_count": mem_incompatibilities,
++
++                    "verification_call_count": verification_call_count,
++                    "claims_verified": verified_count,
++                    "verification_skipped_count": verification_skipped_count,
++
++                    "contradiction_call_count": 1 if (request.config.enable_contradiction_analysis and contradiction_report) else 0,
++                    "contradiction_pairs_evaluated": len(contradiction_report.conflicts) if contradiction_report and hasattr(contradiction_report, 'conflicts') else 0,
++
++                    "cross_lingual_call_count": 1 if request.config.enable_cross_lingual_analysis else 0,
++                    "cross_lingual_pairs_evaluated": cross_lingual_count,
++                    
++                    "selective_verification_call_count": 1 if (request.config.enable_selective_verification and selected_count > 0) else 0,
++                    "selected_claim_count": selected_count,
++                    "skipped_claim_count": len(typed_claims) - selected_count if request.config.enable_selective_verification else 0,
+                 },
+             )
+ 
+         except Exception as exc:
++            import traceback
++            error_msg = f"{str(exc)}\n{traceback.format_exc()}"
+             stages.append(
+                 self._stage(
+                     ControllerStage.FAILED,
+                     StageStatus.FAILED,
+-                    str(exc),
++                    error_msg,
+                     0,
+                 )
+             )
+@@ -521,6 +854,9 @@ class AERISController:
+                 status=StageStatus.FAILED,
+                 stages=stages,
+                 final_answer=None,
++                retrieved_chunk_ids=[],
++                retrieval_attempts_history=[],
++                provenance_defects=[],
+                 claim_count=0,
+                 evidence_count=0,
+                 verified_claim_count=0,
+@@ -563,7 +899,7 @@ class AERISController:
+                     candidates = value
+                     break
+ 
+-            for item in candidates:
++            for item in candidates[:3]:
+                 chunk_id = getattr(item, "chunk_id", None)
+ 
+                 if not chunk_id:
+@@ -739,6 +1075,7 @@ class AERISController:
+         message: str,
+         output_count: int = 0,
+         metadata: Optional[Dict[str, Any]] = None,
++        latency_seconds: float = 0.0,
+     ) -> ControllerStageResult:
+         return ControllerStageResult(
+             stage=stage,
+@@ -746,4 +1083,5 @@ class AERISController:
+             message=message,
+             output_count=output_count,
+             metadata=metadata or {},
++            latency_seconds=latency_seconds,
+         )
+diff --git a/app/controller/schemas.py b/app/controller/schemas.py
+index 66188637..9351ab21 100644
+--- a/app/controller/schemas.py
++++ b/app/controller/schemas.py
+@@ -37,6 +37,11 @@ class ControllerStageResult(BaseModel):
+         default=0,
+         ge=0,
+     )
++    
++    latency_seconds: float = Field(
++        default=0.0,
++        ge=0.0
++    )
+ 
+     metadata: Dict[str, Any] = Field(
+         default_factory=dict
+@@ -66,6 +71,11 @@ class ControllerConfig(BaseModel):
+         ge=0,
+     )
+ 
++    enable_adaptive_retrieval: bool = True
++    enable_query_reformulation: bool = True
++    enable_retrieval_memory: bool = True
++    enable_claim_verification: bool = True
++
+     enable_contradiction_analysis: bool = True
+ 
+     enable_cross_lingual_analysis: bool = True
+@@ -76,6 +86,9 @@ class ControllerConfig(BaseModel):
+ 
+     answer_generation_enabled: bool = True
+ 
++    session_id: Optional[str] = None
++    scoped_retrieval_memory: bool = True
++
+ 
+ class ControllerRequest(BaseModel):
+     document_id: str = Field(
+@@ -113,7 +126,23 @@ class ControllerResult(BaseModel):
+     )
+ 
+     supporting_chunk_ids: List[str] = Field(
+-        default_factory=list
++        default_factory=list,
++        description="Distinct chunk IDs cited by the generated answer."
++    )
++
++    retrieved_chunk_ids: List[str] = Field(
++        default_factory=list,
++        description="Ordered unique chunk IDs returned by adaptive hybrid retrieval and passed into claim extraction."
++    )
++
++    retrieval_attempts_history: List[Dict[str, Any]] = Field(
++        default_factory=list,
++        description="Per-attempt breakdown of query, query_type, candidate_k, and retrieved chunk IDs."
++    )
++
++    provenance_defects: List[str] = Field(
++        default_factory=list,
++        description="Any cited chunk IDs that were not present in retrieved_chunk_ids."
+     )
+ 
+     provenance: List[Dict[str, Any]] = Field(
+diff --git a/app/coverage/evidence_coverage.py b/app/coverage/evidence_coverage.py
+index 7a0cb9a6..397e2bd5 100644
+--- a/app/coverage/evidence_coverage.py
++++ b/app/coverage/evidence_coverage.py
+@@ -1,4 +1,6 @@
+ import json
++import time
++from app.performance_cache import aeris_cache
+ import re
+ from typing import List, Optional
+ 
+@@ -7,6 +9,8 @@ from pydantic import BaseModel, Field
+ 
+ from app.config import settings
+ from app.planning.schemas import InformationRequirement
++from app.utils.json_parser import extract_json
++from app.utils.model_client import get_ollama_client, timed_model_chat
+ 
+ 
+ class EvidenceItem(BaseModel):
+@@ -97,11 +101,13 @@ class EvidenceCoverageEstimator:
+         self,
+         model: Optional[str] = None,
+         host: Optional[str] = None,
++        timeout: Optional[float] = None,
+     ):
+         self.model = model or settings.ollama_model
+         self.host = host or settings.ollama_host
++        self.timeout = timeout or settings.ollama_timeout
+ 
+-        self.client = ollama.Client(host=self.host)
++        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
+ 
+     def _build_prompt(
+         self,
+@@ -130,7 +136,8 @@ RULES:
+ - coverage_score = (0.30 * directness) + (0.25 * relevance) + (0.25 * completeness) + (0.20 * evidence_type_match)
+ - coverage_status: "SUPPORTED" if score >= 0.70, "PARTIAL" if score >= 0.35, else "UNSUPPORTED"
+ - Do not infer facts. Related topic/terminology is NOT supporting evidence.
+-- Respond ONLY with valid JSON.
++- Respond ONLY with valid JSON. Do not include markdown blocks, preamble, or explanation outside the JSON.
++- Start your response exactly with {{ and end exactly with }}.
+ 
+ OUTPUT FORMAT:
+ {{
+@@ -144,31 +151,6 @@ OUTPUT FORMAT:
+ }}
+ """.strip()
+ 
+-    @staticmethod
+-    def _extract_json(text: str) -> str:
+-        text = text.strip()
+-
+-        text = re.sub(
+-            r"^```(?:json)?\s*",
+-            "",
+-            text
+-        )
+-
+-        text = re.sub(
+-            r"\s*```$",
+-            "",
+-            text
+-        )
+-
+-        start = text.find("{")
+-        end = text.rfind("}")
+-
+-        if start == -1 or end == -1 or end <= start:
+-            raise ValueError(
+-                "No valid JSON object found in model response."
+-            )
+-
+-        return text[start:end + 1]
+ 
+     def _evaluate_pair(
+         self,
+@@ -181,22 +163,32 @@ OUTPUT FORMAT:
+             evidence,
+         )
+ 
+-        response = self.client.chat(
+-            model=self.model,
+-            messages=[
+-                {
+-                    "role": "user",
+-                    "content": prompt,
+-                }
+-            ],
+-            options={
+-                "temperature": 0,
+-            },
+-        )
+-
+-        raw_content = response["message"]["content"]
+-
+-        json_text = self._extract_json(
++        try:
++            chat_res = timed_model_chat(
++                client=self.client,
++                model=self.model,
++                messages=[
++                    {
++                        "role": "user",
++                        "content": prompt,
++                    }
++                ],
++                format="json",
++                options={
++                    "temperature": 0,
++                    "num_predict": 1024,
++                },
++                stage="Coverage",
++            )
++            elapsed = chat_res["elapsed_seconds"]
++            raw_content = chat_res["content"]
++        except Exception as e:
++            elapsed = 0.0
++            ctx_size = len(prompt)
++            print(f"Error during evidence coverage [Model: {self.model}, Stage: coverage, Context: {ctx_size} chars]: {e}")
++            raise e
++
++        json_text = extract_json(
+             raw_content
+         )
+ 
+@@ -333,11 +325,29 @@ OUTPUT FORMAT:
+ 
+             for item in req_evidence:
+ 
++                # OPTIMIZATION: FAST-PATH DETERMINISTIC THRESHOLDING
++                if getattr(item, "rerank_score", 0.0) >= 0.90:
++                    evidence_evaluations.append({
++                        "evidence": item,
++                        "status": "SUPPORTED",
++                        "score": 0.90,
++                        "directness": 0.9,
++                        "relevance": 0.9,
++                        "completeness": 0.9,
++                        "evidence_type_match": 0.9,
++                        "explanation": "Fast-path: Exceptionally high reranker confidence indicates sufficient semantic overlap."
++                    })
++                    break
++
+                 try:
+-                    evaluation = self._evaluate_pair(
++                    cache_key = {"req": requirement.description, "chunk": item.chunk_id}
++                    evaluation = aeris_cache.get("coverage", cache_key)
++                    if not evaluation:
++                        evaluation = self._evaluate_pair(
+                         requirement,
+                         item,
+                     )
++                        aeris_cache.set("coverage", cache_key, evaluation)
+ 
+                     evidence_evaluations.append(
+                         {
+@@ -362,7 +372,7 @@ OUTPUT FORMAT:
+                         f"requirement={requirement.requirement_id}, "
+                         f"chunk={item.chunk_id}: {exc}"
+                     )
+-                    continue
++                    raise exc
+ 
+             if not evidence_evaluations:
+                 requirement_coverages.append(
+diff --git a/app/indexing/embedding_service.py b/app/indexing/embedding_service.py
+index c67abfb4..6f2a5dc7 100644
+--- a/app/indexing/embedding_service.py
++++ b/app/indexing/embedding_service.py
+@@ -1,10 +1,11 @@
+ import ollama
+ from typing import List
+ from app.config import settings
++from app.utils.model_client import get_ollama_client
+ 
+ class EmbeddingService:
+     def __init__(self):
+-        self.client = ollama.Client(host=settings.ollama_host)
++        self.client = get_ollama_client(host=settings.ollama_host, timeout=settings.ollama_timeout)
+         self.model = settings.embedding_model
+         
+     def embed_text(self, text: str) -> List[float]:
+diff --git a/app/planning/requirement_planner.py b/app/planning/requirement_planner.py
+index 09353fc1..7a209e78 100644
+--- a/app/planning/requirement_planner.py
++++ b/app/planning/requirement_planner.py
+@@ -1,4 +1,6 @@
+ import json
++import time
++from app.performance_cache import aeris_cache
+ import re
+ from typing import Optional
+ 
+@@ -6,6 +8,8 @@ import ollama
+ 
+ from app.config import settings
+ from app.planning.schemas import RequirementPlan
++from app.utils.json_parser import extract_json
++from app.utils.model_client import get_ollama_client, timed_model_chat, ModelCallError
+ 
+ 
+ class RequirementPlanner:
+@@ -20,11 +24,13 @@ class RequirementPlanner:
+         self,
+         model: Optional[str] = None,
+         host: Optional[str] = None,
++        timeout: Optional[float] = None,
+     ):
+         self.model = model or settings.ollama_model
+         self.host = host or settings.ollama_host
++        self.timeout = timeout or settings.ollama_timeout
+ 
+-        self.client = ollama.Client(host=self.host)
++        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
+ 
+     def _build_prompt(self, question: str) -> str:
+         return f"""
+@@ -94,7 +100,8 @@ PLANNING RULES:
+ 
+ 14. Generate 1-3 retrieval queries per requirement.
+ 
+-15. Return ONLY valid JSON.
++15. Return ONLY valid JSON. Do not include markdown blocks, preamble, or explanation outside the JSON.
++    Start your response exactly with {{ and end exactly with }}.
+ 
+ QUESTION TYPES:
+ 
+@@ -266,27 +273,6 @@ User question:
+ {question}
+ """.strip()
+ 
+-    @staticmethod
+-    def _extract_json(text: str) -> str:
+-        """
+-        Extract a JSON object even if the model accidentally adds
+-        surrounding text.
+-        """
+-
+-        text = text.strip()
+-
+-        # Remove markdown fences if present.
+-        text = re.sub(r"^```(?:json)?\s*", "", text)
+-        text = re.sub(r"\s*```$", "", text)
+-
+-        # Locate the outermost JSON object.
+-        start = text.find("{")
+-        end = text.rfind("}")
+-
+-        if start == -1 or end == -1 or end <= start:
+-            raise ValueError("No valid JSON object found in model response.")
+-
+-        return text[start : end + 1]
+ 
+     def plan(self, question: str) -> RequirementPlan:
+         """
+@@ -303,29 +289,87 @@ User question:
+ 
+         prompt = self._build_prompt(question)
+ 
+-        response = self.client.chat(
+-            model=self.model,
+-            messages=[
+-                {
+-                    "role": "user",
+-                    "content": prompt,
+-                }
+-            ],
+-            format="json",
+-            options={
+-                "temperature": 0,
+-            },
+-        )
+-
+-        raw_content = response["message"]["content"]
+-
+-        json_text = self._extract_json(raw_content)
+-
+-        data = json.loads(json_text)
+-
+-        plan = RequirementPlan.model_validate(data)
++        cache_key = {"q": question}
++        cached = aeris_cache.get("planner", cache_key)
++        if cached:
++            return RequirementPlan(**cached)
++
++        from app.utils.diagnostics import log_generation_attempt
++        messages = [{"role": "user", "content": prompt}]
++        
++        max_attempts = 3
++        
++        for attempt in range(1, max_attempts + 1):
++            parse_success = False
++            schema_success = False
++            repair_invoked = False
++            retry_invoked = (attempt > 1)
++            
++            try:
++                chat_res = timed_model_chat(
++                    client=self.client,
++                    model=self.model,
++                    messages=messages,
++                    options={
++                        "temperature": 0,
++                        "num_predict": 1024,
++                    },
++                    stage="Planning",
++                )
++                raw_content = chat_res["content"]
++                elapsed = chat_res["elapsed_seconds"]
++            except Exception as e:
++                elapsed = 0.0
++                ctx_size = len(messages[-1]["content"])
++                print(f"Error during requirement planning [Model: {self.model}, Stage: planner, Context: {ctx_size} chars]: {e}")
++                raise e
++
++            ctx_size = len(messages[-1]["content"])
++
++            try:
++                # To detect if repair was used, we check if original fails standard json
++                import json as std_json
++                try:
++                    std_json.loads(raw_content)
++                except:
++                    repair_invoked = True
++                    
++                json_text = extract_json(raw_content)
++                parse_success = True
++                
++                data = std_json.loads(json_text)
++                plan = RequirementPlan.model_validate(data)
++                schema_success = True
++                
++                log_generation_attempt("Planning", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                break  # Success, exit loop
++                
++            except Exception as e:
++                log_generation_attempt("Planning", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                if attempt == max_attempts:
++                    class RequirementPlanningError(Exception):
++                        def __init__(self, msg):
++                            super().__init__(msg)
++                    raise RequirementPlanningError(f"Requirement planning failed after {max_attempts} attempts. Error: {str(e)}")
++                    
++                messages.append({"role": "assistant", "content": raw_content})
++                import pydantic
++                missing_fields = []
++                if isinstance(e, pydantic.ValidationError):
++                    for err in e.errors():
++                        if err.get("type") == "missing":
++                            loc_str = " -> ".join(map(str, err.get("loc", [])))
++                            missing_fields.append(loc_str)
++                
++                if missing_fields:
++                    error_msg = f"Your previous response omitted required fields:\n{missing_fields}\n\nReturn a complete RequirementPlan containing every required field. Do not omit fields."
++                else:
++                    error_msg = f"Your previous response failed validation with error: {str(e)}. Please correct the JSON structure and schema to strictly match the requested format. Do not omit required fields."
++                messages.append({"role": "user", "content": error_msg})
+ 
+         # Ensure the planner preserves the exact user question.
+         plan.question = question
+ 
++        aeris_cache.set("planner", cache_key, plan.model_dump())
++
+         return plan
+diff --git a/app/retrieval/reranker.py b/app/retrieval/reranker.py
+index beac2856..2e4a99c3 100644
+--- a/app/retrieval/reranker.py
++++ b/app/retrieval/reranker.py
+@@ -3,8 +3,6 @@ from __future__ import annotations
+ from dataclasses import dataclass
+ from typing import List
+ 
+-from sentence_transformers import CrossEncoder
+-
+ from app.retrieval.hybrid_retriever import HybridResult
+ 
+ 
+@@ -37,6 +35,7 @@ class Reranker:
+         model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2",
+     ):
+         self.model_name = model_name
++        from sentence_transformers import CrossEncoder
+         self.model = CrossEncoder(model_name)
+ 
+     def rerank(
+diff --git a/app/retrieval_memory/memory.py b/app/retrieval_memory/memory.py
+index ababd2ab..377ae332 100644
+--- a/app/retrieval_memory/memory.py
++++ b/app/retrieval_memory/memory.py
+@@ -1,4 +1,6 @@
+-from typing import List, Optional
++from collections import OrderedDict
++import threading
++from typing import Any, Dict, List, Optional
+ 
+ from app.retrieval_memory.schemas import (
+     QueryMemory,
+@@ -9,21 +11,31 @@ from app.retrieval_memory.schemas import (
+ 
+ class RetrievalMemory:
+     """
+-    In-memory retrieval history for AERIS-RAG.
+-
+-    Step 11A intentionally keeps memory in RAM.
+-    Persistence and controller integration will be added later.
++    In-memory retrieval history for AERIS-RAG with support for explicit
++    per-document and per-session scoping, compatibility matching, and telemetry.
+     """
+ 
+     def __init__(
+         self,
+         document_id: str,
+-        question: str,
++        question: str = "",
++        session_id: Optional[str] = None,
+     ):
+         self.state = RetrievalMemoryState(
+             document_id=document_id,
+             question=question,
+         )
++        self.session_id = session_id
++        self.lookup_count = 0
++        self.hit_count = 0
++        self.skip_count = 0
++        self.cached_evidence_count = 0
++        self.fallback_count = 0
++        self.incompatibility_count = 0
++
++    @property
++    def miss_count(self) -> int:
++        return max(0, self.lookup_count - self.hit_count)
+ 
+     # ------------------------------------------------------------------
+     # QUERY MEMORY
+@@ -37,11 +49,24 @@ class RetrievalMemory:
+         candidate_k: int = 0,
+         rerank_top_k: int = 0,
+         retrieved_chunk_ids: Optional[List[str]] = None,
++        cached_evidence: Optional[List[Any]] = None,
+         coverage_status: Optional[str] = None,
+         coverage_score: Optional[float] = None,
+         successful: bool = False,
+     ) -> QueryMemory:
+ 
++        serialized_evidence: List[Dict[str, Any]] = []
++        if cached_evidence:
++            for item in cached_evidence:
++                if hasattr(item, "model_dump"):
++                    serialized_evidence.append(item.model_dump())
++                elif hasattr(item, "dict"):
++                    serialized_evidence.append(item.dict())
++                elif isinstance(item, dict):
++                    serialized_evidence.append(item)
++                elif hasattr(item, "__dict__"):
++                    serialized_evidence.append(dict(item.__dict__))
++
+         memory = QueryMemory(
+             query=query,
+             query_type=query_type,
+@@ -49,13 +74,13 @@ class RetrievalMemory:
+             candidate_k=candidate_k,
+             rerank_top_k=rerank_top_k,
+             retrieved_chunk_ids=retrieved_chunk_ids or [],
++            cached_evidence=serialized_evidence,
+             coverage_status=coverage_status,
+             coverage_score=coverage_score,
+             successful=successful,
+         )
+ 
+         self.state.query_history.append(memory)
+-
+         return memory
+ 
+     # ------------------------------------------------------------------
+@@ -71,6 +96,7 @@ class RetrievalMemory:
+         retrieval_depth: Optional[int] = None,
+         coverage_score: Optional[float] = None,
+         coverage_status: Optional[str] = None,
++        payload: Optional[Dict[str, Any]] = None,
+     ) -> EvidenceMemory:
+ 
+         existing = self.get_evidence(chunk_id)
+@@ -79,9 +105,11 @@ class RetrievalMemory:
+             existing = EvidenceMemory(
+                 chunk_id=chunk_id,
+                 document_id=document_id,
++                payload=payload,
+             )
+-
+             self.state.evidence_history.append(existing)
++        elif payload is not None and existing.payload is None:
++            existing.payload = payload
+ 
+         if requirement_id and requirement_id not in existing.requirement_ids:
+             existing.requirement_ids.append(requirement_id)
+@@ -125,30 +153,109 @@ class RetrievalMemory:
+         return existing
+ 
+     # ------------------------------------------------------------------
+-    # LOOKUPS
++    # LOOKUPS & COMPATIBILITY
+     # ------------------------------------------------------------------
+ 
+-    def has_query_attempt(
++    def get_compatible_query_attempt(
+         self,
+         query: str,
+-        requirement_id: Optional[str],
+-        candidate_k: int,
+-    ) -> bool:
++        candidate_k: int = 0,
++        requirement_id: Optional[str] = None,
++        document_id: Optional[str] = None,
++        session_id: Optional[str] = None,
++        match_requirement: bool = True,
++        require_evidence: bool = True,
++    ) -> Optional[QueryMemory]:
++        """
++        Retrieves a compatible query attempt from memory, verifying:
++        - document_id isolation (must match self.state.document_id).
++        - session_id isolation (must match self.session_id).
++        - query text (normalized case-insensitive match).
++        - requirement_id match (when match_requirement is True and requirement_id is provided).
++        - candidate_k depth compatibility (cached depth must be >= requested candidate_k).
++        - valid reconstructible cached_evidence (when require_evidence is True).
++
++        Telemetry tracking:
++        - Increments lookup_count.
++        - Increments hit_count on compatible match.
++        - Increments fallback_count if entry matches query/depth but lacks valid evidence.
++        - Increments incompatibility_count and skip_count on scope/depth mismatch.
++        """
++        self.lookup_count += 1
++
++        # Check document isolation
++        if document_id is not None and document_id != self.state.document_id:
++            self.incompatibility_count += 1
++            self.skip_count += 1
++            return None
++
++        # Check session isolation
++        if session_id is not None and session_id != self.session_id:
++            self.incompatibility_count += 1
++            self.skip_count += 1
++            return None
++
+         normalized_query = query.strip().lower()
+ 
+         for item in self.state.query_history:
+             if item.query.strip().lower() != normalized_query:
+                 continue
+ 
+-            if item.requirement_id != requirement_id:
+-                continue
++            # Requirement dimension compatibility
++            if match_requirement and requirement_id is not None:
++                if item.requirement_id is not None and item.requirement_id != requirement_id:
++                    self.incompatibility_count += 1
++                    continue
+ 
+-            if item.candidate_k != candidate_k:
++            # Candidate depth compatibility: cached depth must be sufficient
++            # e.g., an entry cached at k=10 cannot satisfy a request for k=25 or k=50
++            if item.candidate_k < candidate_k:
++                self.incompatibility_count += 1
+                 continue
+ 
+-            return True
++            # If require_evidence is True, verify entry contains valid reconstructible evidence
++            if require_evidence:
++                if (
++                    not item.cached_evidence
++                    or not isinstance(item.cached_evidence, list)
++                    or len(item.cached_evidence) == 0
++                ):
++                    # Candidate matched query & depth, but contains no reconstructible evidence!
++                    # Treat as cache miss and record fallback
++                    self.fallback_count += 1
++                    return None
++
++            self.hit_count += 1
++            return item
+ 
+-        return False
++        return None
++
++    def has_query_attempt(
++        self,
++        query: str,
++        requirement_id: Optional[str] = None,
++        candidate_k: int = 0,
++        document_id: Optional[str] = None,
++        session_id: Optional[str] = None,
++        match_requirement: bool = True,
++    ) -> bool:
++        """
++        Determines whether a compatible query attempt exists in memory.
++        Enforces strict dimension compatibility without requiring cached_evidence payload,
++        preserving backward compatibility with unit tests.
++        """
++        return (
++            self.get_compatible_query_attempt(
++                query=query,
++                candidate_k=candidate_k,
++                requirement_id=requirement_id,
++                document_id=document_id,
++                session_id=session_id,
++                match_requirement=match_requirement,
++                require_evidence=False,
++            )
++            is not None
++        )
+ 
+     def has_query(
+         self,
+@@ -199,18 +306,16 @@ class RetrievalMemory:
+         self,
+         chunk_id: str,
+     ) -> bool:
+-
+         return self.get_evidence(chunk_id) is not None
+ 
+     def get_all_chunk_ids(self) -> List[str]:
+-
+         return [
+             item.chunk_id
+             for item in self.state.evidence_history
+         ]
+ 
+     # ------------------------------------------------------------------
+-    # SUMMARY
++    # SUMMARY & LIFECYCLE
+     # ------------------------------------------------------------------
+ 
+     def query_count(self) -> int:
+@@ -219,9 +324,108 @@ class RetrievalMemory:
+     def evidence_count(self) -> int:
+         return len(self.state.evidence_history)
+ 
++    def record_cache_hit_delivery(self, count: int = 1) -> None:
++        """Records delivered cached evidence count."""
++        self.cached_evidence_count += max(0, count)
++
++    def record_fallback(self, reason: Optional[str] = None) -> None:
++        """Records a retrieval fallback due to invalid or unparseable cached entry."""
++        self.fallback_count += 1
++
++    def record_skip(self, reason: Optional[str] = None) -> None:
++        self.skip_count += 1
++
++    def invalidate_for_document(self, document_id: str) -> None:
++        if self.state.document_id == document_id:
++            self.clear()
++
+     def clear(self) -> None:
+         self.state.query_history.clear()
+         self.state.evidence_history.clear()
++        self.lookup_count = 0
++        self.hit_count = 0
++        self.skip_count = 0
++        self.cached_evidence_count = 0
++        self.fallback_count = 0
++        self.incompatibility_count = 0
+ 
+     def get_state(self) -> RetrievalMemoryState:
+         return self.state
++
++
++class RetrievalMemoryRegistry:
++    """
++    Registry for explicitly scoped retrieval memory instances.
++    Provides thread-safe access, session-level and document-level isolation,
++    and a bounded LRU capacity to prevent unbounded memory growth.
++    """
++    _instances: OrderedDict[str, RetrievalMemory] = OrderedDict()
++    _lock = threading.RLock()
++    _max_capacity: int = 1000
++
++    @classmethod
++    def set_capacity(cls, capacity: int) -> None:
++        """Sets the maximum capacity for bounded LRU cache."""
++        with cls._lock:
++            cls._max_capacity = max(1, capacity)
++            while len(cls._instances) > cls._max_capacity:
++                cls._instances.popitem(last=False)
++
++    @classmethod
++    def get_capacity(cls) -> int:
++        with cls._lock:
++            return cls._max_capacity
++
++    @classmethod
++    def get_scoped_memory(
++        cls,
++        document_id: str,
++        session_id: Optional[str] = None,
++        question: Optional[str] = None,
++    ) -> RetrievalMemory:
++        key = f"{document_id}::{session_id or 'default'}"
++        with cls._lock:
++            if key in cls._instances:
++                cls._instances.move_to_end(key)
++                return cls._instances[key]
++
++            if len(cls._instances) >= cls._max_capacity:
++                cls._instances.popitem(last=False)
++
++            instance = RetrievalMemory(
++                document_id=document_id,
++                question=question or "",
++                session_id=session_id,
++            )
++            cls._instances[key] = instance
++            return instance
++
++    @classmethod
++    def invalidate(
++        cls,
++        document_id: Optional[str] = None,
++        session_id: Optional[str] = None,
++    ) -> None:
++        """
++        Invalidates memory entries matching the specified document and/or session scope.
++        If both are None, all cached memory is invalidated.
++        """
++        with cls._lock:
++            if document_id is None and session_id is None:
++                cls._instances.clear()
++            else:
++                keys_to_del = [
++                    k for k in cls._instances
++                    if (document_id is None or k.startswith(f"{document_id}::"))
++                    and (session_id is None or k.endswith(f"::{session_id}"))
++                ]
++                for k in keys_to_del:
++                    del cls._instances[k]
++
++    @classmethod
++    def clear(cls) -> None:
++        cls.invalidate()
++
++    @classmethod
++    def invalidate_for_document(cls, document_id: str) -> None:
++        cls.invalidate(document_id=document_id)
+diff --git a/app/retrieval_memory/schemas.py b/app/retrieval_memory/schemas.py
+index 178187bd..f68523ce 100644
+--- a/app/retrieval_memory/schemas.py
++++ b/app/retrieval_memory/schemas.py
+@@ -1,4 +1,4 @@
+-from typing import List, Optional
++from typing import Any, Dict, List, Optional
+ from pydantic import BaseModel, Field
+ 
+ 
+@@ -16,6 +16,7 @@ class QueryMemory(BaseModel):
+     rerank_top_k: int = Field(default=0, ge=0)
+ 
+     retrieved_chunk_ids: List[str] = Field(default_factory=list)
++    cached_evidence: List[Dict[str, Any]] = Field(default_factory=list)
+ 
+     coverage_status: Optional[str] = None
+     coverage_score: Optional[float] = None
+@@ -40,6 +41,7 @@ class EvidenceMemory(BaseModel):
+     best_coverage_score: Optional[float] = None
+ 
+     coverage_status: Optional[str] = None
++    payload: Optional[Dict[str, Any]] = None
+ 
+ 
+ class RetrievalMemoryState(BaseModel):
+diff --git a/app/verification/claim_verifier.py b/app/verification/claim_verifier.py
+index 0bb66b57..6367b3bd 100644
+--- a/app/verification/claim_verifier.py
++++ b/app/verification/claim_verifier.py
+@@ -6,6 +6,9 @@ from typing import List, Optional
+ 
+ import ollama
+ from pydantic import BaseModel, Field
++from app.config import settings
++from app.utils.json_parser import extract_json
++from app.utils.model_client import get_ollama_client, timed_model_chat
+ 
+ 
+ class VerificationLabel(str, Enum):
+@@ -52,11 +55,14 @@ class ClaimVerifier:
+         VerificationStrength.LOW: 0.35,
+     }
+ 
+-    def __init__(self, model: Optional[str] = None):
++    def __init__(self, model: Optional[str] = None, host: Optional[str] = None, timeout: Optional[float] = None):
+         self.model = model or os.getenv(
+             "OLLAMA_MODEL",
+-            "llama3.2:latest",
++            settings.ollama_model,
+         )
++        self.host = host or settings.ollama_host
++        self.timeout = timeout or settings.ollama_timeout
++        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
+ 
+     # =========================================================
+     # SINGLE-EVIDENCE VERIFICATION
+@@ -193,53 +199,6 @@ Return exactly:
+ }}
+ """
+ 
+-    # =========================================================
+-    # JSON PARSER
+-    # =========================================================
+-
+-    def _extract_json(self, text: str) -> dict:
+-
+-        text = text.strip()
+-
+-        try:
+-            return json.loads(text)
+-        except json.JSONDecodeError:
+-            pass
+-
+-        cleaned = re.sub(
+-            r"```(?:json)?",
+-            "",
+-            text,
+-            flags=re.IGNORECASE,
+-        ).replace("```", "").strip()
+-
+-        try:
+-            return json.loads(cleaned)
+-        except json.JSONDecodeError:
+-            pass
+-
+-        match = re.search(
+-            r"\{.*\}",
+-            text,
+-            flags=re.DOTALL,
+-        )
+-
+-        if match:
+-            return json.loads(match.group(0))
+-
+-        if "{" in text and "}" not in text:
+-            try:
+-                fixed_text = text.strip()
+-                if not fixed_text.endswith('"'):
+-                    fixed_text += '"'
+-                fixed_text += "\n}"
+-                return json.loads(fixed_text[fixed_text.find("{"):])
+-            except Exception:
+-                pass
+-
+-        raise ValueError(
+-            f"Could not parse verifier JSON:\n{text}"
+-        )
+ 
+     # =========================================================
+     # SINGLE EVIDENCE API
+@@ -256,43 +215,76 @@ Return exactly:
+             evidence=evidence,
+         )
+ 
+-        response = ollama.chat(
+-            model=self.model,
+-            messages=[
+-                {
+-                    "role": "user",
+-                    "content": prompt,
+-                }
+-            ],
+-            options={
+-                "temperature": 0,
+-            },
+-        )
+-
+-        result = self._extract_json(
+-            response["message"]["content"]
+-        )
+-
+-        label = VerificationLabel(
+-            result["label"].strip().upper()
+-        )
+-
+-        strength = VerificationStrength(
+-            result["strength"].strip().upper()
+-        )
+-
+-        confidence = self.STRENGTH_SCORES[strength]
++        from app.utils.diagnostics import log_generation_attempt
++        messages = [{"role": "user", "content": prompt}]
++        max_attempts = 3
++        
++        for attempt in range(1, max_attempts + 1):
++            parse_success = False
++            schema_success = False
++            repair_invoked = False
++            retry_invoked = (attempt > 1)
++            
++            try:
++                chat_res = timed_model_chat(
++                    client=self.client,
++                    model=self.model,
++                    messages=messages,
++                    options={
++                        "temperature": 0,
++                        "num_predict": 1024,
++                    },
++                    stage="Verification",
++                )
++                elapsed = chat_res["elapsed_seconds"]
++                raw_content = chat_res["content"]
++            except Exception as e:
++                elapsed = 0.0
++                ctx_size = len(messages[-1]["content"])
++                print(f"Error during claim verification [Model: {self.model}, Stage: verification, Context: {ctx_size} chars]: {e}")
++                raise e
++
++            ctx_size = len(messages[-1]["content"])
+ 
+-        return ClaimVerificationResult(
+-            claim=claim,
+-            evidence=evidence,
+-            label=label,
+-            confidence=confidence,
+-            strength=strength,
+-            rationale=str(
+-                result["rationale"]
+-            ).strip(),
+-        )
++            try:
++                import json as std_json
++                try:
++                    std_json.loads(raw_content)
++                except:
++                    repair_invoked = True
++                    
++                json_text = extract_json(raw_content)
++                parse_success = True
++                
++                result = std_json.loads(json_text)
++                
++                label = VerificationLabel(result["label"].strip().upper())
++                strength = VerificationStrength(result["strength"].strip().upper())
++                rationale = str(result["rationale"]).strip()
++                schema_success = True
++                
++                confidence = self.STRENGTH_SCORES[strength]
++                
++                res = ClaimVerificationResult(
++                    claim=claim,
++                    evidence=evidence,
++                    label=label,
++                    confidence=confidence,
++                    strength=strength,
++                    rationale=rationale,
++                )
++                
++                log_generation_attempt("Verification", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                return res
++                
++            except Exception as e:
++                log_generation_attempt("Verification", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                if attempt == max_attempts:
++                    raise e
++                    
++                messages.append({"role": "assistant", "content": raw_content})
++                error_msg = f"Your previous response failed validation with error: {str(e)}. Please correct the JSON structure to strictly contain 'label', 'strength', and 'rationale' as specified."
++                messages.append({"role": "user", "content": error_msg})
+ 
+     # =========================================================
+     # MULTI-EVIDENCE API
+@@ -314,41 +306,74 @@ Return exactly:
+             evidence=evidence,
+         )
+ 
+-        response = ollama.chat(
+-            model=self.model,
+-            messages=[
+-                {
+-                    "role": "user",
+-                    "content": prompt,
+-                }
+-            ],
+-            options={
+-                "temperature": 0,
+-            },
+-        )
+-
+-        result = self._extract_json(
+-            response["message"]["content"]
+-        )
+-
+-        label = VerificationLabel(
+-            result["label"].strip().upper()
+-        )
+-
+-        strength = VerificationStrength(
+-            result["strength"].strip().upper()
+-        )
+-
+-        confidence = self.STRENGTH_SCORES[strength]
++        from app.utils.diagnostics import log_generation_attempt
++        messages = [{"role": "user", "content": prompt}]
++        max_attempts = 3
++        
++        for attempt in range(1, max_attempts + 1):
++            parse_success = False
++            schema_success = False
++            repair_invoked = False
++            retry_invoked = (attempt > 1)
++            
++            try:
++                chat_res = timed_model_chat(
++                    client=self.client,
++                    model=self.model,
++                    messages=messages,
++                    options={
++                        "temperature": 0,
++                        "num_predict": 1024,
++                    },
++                    stage="Verification",
++                )
++                elapsed = chat_res["elapsed_seconds"]
++                raw_content = chat_res["content"]
++            except Exception as e:
++                elapsed = 0.0
++                ctx_size = len(messages[-1]["content"])
++                print(f"Error during claim verification [Model: {self.model}, Stage: verification, Context: {ctx_size} chars]: {e}")
++                raise e
++
++            ctx_size = len(messages[-1]["content"])
+ 
+-        return MultiEvidenceVerificationResult(
+-            claim=claim,
+-            evidence_count=len(evidence),
+-            evidence=evidence,
+-            label=label,
+-            confidence=confidence,
+-            strength=strength,
+-            rationale=str(
+-                result["rationale"]
+-            ).strip(),
+-        )
++            try:
++                import json as std_json
++                try:
++                    std_json.loads(raw_content)
++                except:
++                    repair_invoked = True
++                    
++                json_text = extract_json(raw_content)
++                parse_success = True
++                
++                result = std_json.loads(json_text)
++                
++                label = VerificationLabel(result["label"].strip().upper())
++                strength = VerificationStrength(result["strength"].strip().upper())
++                rationale = str(result["rationale"]).strip()
++                schema_success = True
++                
++                confidence = self.STRENGTH_SCORES[strength]
++                
++                res = MultiEvidenceVerificationResult(
++                    claim=claim,
++                    evidence_count=len(evidence),
++                    evidence=evidence,
++                    label=label,
++                    confidence=confidence,
++                    strength=strength,
++                    rationale=rationale,
++                )
++                
++                log_generation_attempt("Verification", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                return res
++                
++            except Exception as e:
++                log_generation_attempt("Verification", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
++                if attempt == max_attempts:
++                    raise e
++                    
++                messages.append({"role": "assistant", "content": raw_content})
++                error_msg = f"Your previous response failed validation with error: {str(e)}. Please correct the JSON structure to strictly contain 'label', 'strength', and 'rationale' as specified."
++                messages.append({"role": "user", "content": error_msg})
+diff --git a/app/verification/contradiction_classifier.py b/app/verification/contradiction_classifier.py
+index 1c18688c..a9a64d20 100644
+--- a/app/verification/contradiction_classifier.py
++++ b/app/verification/contradiction_classifier.py
+@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
+ import ollama
+ 
+ from app.config import settings
++from app.utils.model_client import get_ollama_client, timed_model_chat
+ 
+ 
+ class ContradictionLabel(str, Enum):
+@@ -42,8 +43,11 @@ class ContextualContradictionClassifier:
+         ContradictionLabel.UNCERTAIN: 0.35,
+     }
+ 
+-    def __init__(self, model: str | None = None):
++    def __init__(self, model: str | None = None, host: str | None = None, timeout: float | None = None):
+         self.model = model or settings.ollama_model
++        self.host = host or settings.ollama_host
++        self.timeout = timeout or settings.ollama_timeout
++        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
+ 
+     def classify(
+         self,
+@@ -122,7 +126,8 @@ Evidence B:
+ {evidence_b}
+ """
+ 
+-        response = ollama.chat(
++        chat_res = timed_model_chat(
++            client=self.client,
+             model=self.model,
+             messages=[
+                 {
+@@ -133,9 +138,10 @@ Evidence B:
+             options={
+                 "temperature": 0,
+             },
++            stage="Contradiction",
+         )
+ 
+-        content = response["message"]["content"].strip()
++        content = chat_res["content"].strip()
+ 
+         # Simple json extraction fallback (we did this in earlier steps but the user prompt doesn't specify it)
+         # Actually I will just use what the user provided, if it fails I'll add the brace fallback.
+diff --git a/app/verification/cross_claim_contradiction.py b/app/verification/cross_claim_contradiction.py
+index 82900c8d..052a414b 100644
+--- a/app/verification/cross_claim_contradiction.py
++++ b/app/verification/cross_claim_contradiction.py
+@@ -109,10 +109,28 @@ class CrossClaimContradictionAnalyzer:
+                     evidence_a = graph.evidence[chunk_a_id]
+                     evidence_b = graph.evidence[chunk_b_id]
+ 
+-                    result = self.classifier.classify(
+-                        evidence_a=evidence_a.text,
+-                        evidence_b=evidence_b.text,
+-                    )
++                    # OPTIMIZATION: Semantic pre-filtering (word overlap)
++                    import re
++                    stopwords = {"a", "an", "the", "is", "are", "was", "were", "to", "of", "and", "in", "it", "that", "this", "on", "for", "with", "as", "by"}
++                    words1 = set(w for w in evidence_a.text.lower().split() if w not in stopwords)
++                    words2 = set(w for w in evidence_b.text.lower().split() if w not in stopwords)
++                    
++                    if len(words1) > 0 and len(words2) > 0 and len(words1.intersection(words2)) == 0:
++                        # No overlap, highly unlikely to contradict. Skip expensive NLI inference.
++                        continue
++                        
++                    from app.performance_cache import aeris_cache
++                    cache_key = {"p": f"{chunk_a_id}<>{chunk_b_id}"}
++                    cached = aeris_cache.get("contradiction", cache_key)
++                    if cached:
++                        from app.verification.contradiction_classifier import ContradictionResult
++                        result = ContradictionResult(**cached)
++                    else:
++                        result = self.classifier.classify(
++                            evidence_a=evidence_a.text,
++                            evidence_b=evidence_b.text,
++                        )
++                        aeris_cache.set("contradiction", cache_key, result.dict())
+ 
+                     results.append(
+                         CrossClaimContradictionResult(
+diff --git a/app/verification/cross_lingual_agreement.py b/app/verification/cross_lingual_agreement.py
+index 4275a343..7b6cd3dd 100644
+--- a/app/verification/cross_lingual_agreement.py
++++ b/app/verification/cross_lingual_agreement.py
+@@ -1,7 +1,8 @@
+ from enum import Enum
+ 
+ from pydantic import BaseModel, Field
+-from ollama import Client
++from app.config import settings
++from app.utils.model_client import get_ollama_client, timed_model_chat
+ 
+ 
+ class CrossLingualAgreementLabel(str, Enum):
+@@ -45,11 +46,14 @@ class CrossLingualEvidenceClassifier:
+ 
+     def __init__(
+         self,
+-        host: str = "http://localhost:11434",
+-        model: str = "llama3.2:latest",
++        host: str | None = None,
++        model: str | None = None,
++        timeout: float | None = None,
+     ):
+-        self.client = Client(host=host)
+-        self.model = model
++        self.host = host or settings.ollama_host
++        self.model = model or settings.ollama_model
++        self.timeout = timeout or settings.ollama_timeout
++        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
+ 
+     def classify(
+         self,
+@@ -167,7 +171,8 @@ Evidence B:
+ {evidence_b}
+ """
+ 
+-        response = self.client.chat(
++        chat_res = timed_model_chat(
++            client=self.client,
+             model=self.model,
+             messages=[
+                 {
+@@ -179,9 +184,10 @@ Evidence B:
+                 "temperature": 0,
+             },
+             format="json",
++            stage="Cross-Lingual",
+         )
+ 
+-        data = response["message"]["content"]
++        data = chat_res["content"]
+ 
+         import json
+ 
+diff --git a/app/verification/cross_lingual_claim.py b/app/verification/cross_lingual_claim.py
+index f5e2fac3..d3414238 100644
+--- a/app/verification/cross_lingual_claim.py
++++ b/app/verification/cross_lingual_claim.py
+@@ -114,26 +114,50 @@ class ClaimCrossLingualAnalyzer:
+             for item in evidence_items
+         }
+ 
++        # OPTIMIZATION: Monolingual Bypass
++        if len(languages) <= 1:
++            # Monolingual claim -> Skip cross-lingual analysis
++            return ClaimCrossLingualResult(
++                claim_id=claim_id,
++                claim=claim.text,
++                evidence_count=len(evidence_items),
++                language_count=len(languages),
++                pair_count=0,
++                agreement_count=0,
++                contradiction_count=0,
++                contextual_difference_count=0,
++                uncertain_count=0,
++                overall_label=CrossLingualAgreementLabel.UNCERTAIN,
++                confidence=1.0,
++                rationale="SKIPPED (MONOLINGUAL)",
++                pair_results=[],
++            )
++
+         pair_results = []
+ 
+         for i in range(len(evidence_items)):
+-
+             for j in range(i + 1, len(evidence_items)):
+-
+                 chunk_a, text_a, language_a = evidence_items[i]
+                 chunk_b, text_b, language_b = evidence_items[j]
+ 
+-                # Same-language evidence is not part of
+-                # cross-lingual analysis.
++                # Same-language evidence is not part of cross-lingual analysis.
+                 if language_a == language_b:
+                     continue
+ 
+-                result = self.classifier.classify(
+-                    evidence_a=text_a,
+-                    evidence_b=text_b,
+-                    language_a=language_a,
+-                    language_b=language_b,
+-                )
++                from app.performance_cache import aeris_cache
++                cache_key = {"c": f"{chunk_a}<>{chunk_b}"}
++                cached = aeris_cache.get("crosslingual", cache_key)
++                if cached:
++                    from app.verification.cross_lingual_agreement import CrossLingualAgreementResult
++                    result = CrossLingualAgreementResult(**cached)
++                else:
++                    result = self.classifier.classify(
++                        evidence_a=text_a,
++                        evidence_b=text_b,
++                        language_a=language_a,
++                        language_b=language_b,
++                    )
++                    aeris_cache.set("crosslingual", cache_key, result.model_dump() if hasattr(result, "model_dump") else result.dict())
+ 
+                 pair_results.append(
+                     CrossLingualPairResult(

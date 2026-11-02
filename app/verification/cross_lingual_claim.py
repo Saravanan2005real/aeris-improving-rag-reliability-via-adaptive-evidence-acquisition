@@ -114,26 +114,50 @@ class ClaimCrossLingualAnalyzer:
             for item in evidence_items
         }
 
+        # OPTIMIZATION: Monolingual Bypass
+        if len(languages) <= 1:
+            # Monolingual claim -> Skip cross-lingual analysis
+            return ClaimCrossLingualResult(
+                claim_id=claim_id,
+                claim=claim.text,
+                evidence_count=len(evidence_items),
+                language_count=len(languages),
+                pair_count=0,
+                agreement_count=0,
+                contradiction_count=0,
+                contextual_difference_count=0,
+                uncertain_count=0,
+                overall_label=CrossLingualAgreementLabel.UNCERTAIN,
+                confidence=1.0,
+                rationale="SKIPPED (MONOLINGUAL)",
+                pair_results=[],
+            )
+
         pair_results = []
 
         for i in range(len(evidence_items)):
-
             for j in range(i + 1, len(evidence_items)):
-
                 chunk_a, text_a, language_a = evidence_items[i]
                 chunk_b, text_b, language_b = evidence_items[j]
 
-                # Same-language evidence is not part of
-                # cross-lingual analysis.
+                # Same-language evidence is not part of cross-lingual analysis.
                 if language_a == language_b:
                     continue
 
-                result = self.classifier.classify(
-                    evidence_a=text_a,
-                    evidence_b=text_b,
-                    language_a=language_a,
-                    language_b=language_b,
-                )
+                from app.performance_cache import aeris_cache
+                cache_key = {"c": f"{chunk_a}<>{chunk_b}"}
+                cached = aeris_cache.get("crosslingual", cache_key)
+                if cached:
+                    from app.verification.cross_lingual_agreement import CrossLingualAgreementResult
+                    result = CrossLingualAgreementResult(**cached)
+                else:
+                    result = self.classifier.classify(
+                        evidence_a=text_a,
+                        evidence_b=text_b,
+                        language_a=language_a,
+                        language_b=language_b,
+                    )
+                    aeris_cache.set("crosslingual", cache_key, result.model_dump() if hasattr(result, "model_dump") else result.dict())
 
                 pair_results.append(
                     CrossLingualPairResult(

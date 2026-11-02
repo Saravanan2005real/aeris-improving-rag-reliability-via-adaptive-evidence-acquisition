@@ -1,0 +1,32 @@
+{
+  "experiment_id": "exp_measurement_smoke_20261011_215641",
+  "total_records": 4,
+  "expected_records": 224,
+  "unique_pairs": 4,
+  "duplicate_pairs": 0,
+  "missing_pairs": 220,
+  "variant_count": 1,
+  "question_count": 4,
+  "variant_counts": {
+    "FULL_AERIS": 4
+  },
+  "question_counts": {
+    "q_df_01": 1,
+    "q_mh_01": 1,
+    "q_mh_03": 1,
+    "q_unans_01": 1
+  },
+  "experiment_ids": [
+    "exp_measurement_smoke_20261011_215641"
+  ],
+  "cache_files": {
+    "FULL_AERIS": true
+  },
+  "gate": "FAIL",
+  "reasons": [
+    "Expected 224 records, found 4",
+    "Expected 8 variants, found 1",
+    "Expected 28 questions, found 4",
+    "Found 220 missing question-variant pairs"
+  ]
+}

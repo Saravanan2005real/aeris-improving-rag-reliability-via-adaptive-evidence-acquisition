@@ -1,7 +1,5 @@
 from typing import Optional
 
-from sentence_transformers import SentenceTransformer
-
 from app.claim_graph.schemas import (
     ClaimEvidenceEdge,
     ClaimEvidenceGraph,
@@ -42,6 +40,7 @@ class ClaimEvidenceGraphBuilder:
         # Step 15D
         self.evidence_relations = {}
 
+        from sentence_transformers import SentenceTransformer
         self.embedding_model = SentenceTransformer(embedding_model)
 
     def add_claim(
@@ -192,6 +191,18 @@ class ClaimEvidenceGraphBuilder:
     def auto_link_claims_to_evidence(self):
         if not self.claims or not self.evidence:
             return []
+
+        # Direct linkage: each claim extracted from a chunk is inherently linked to that chunk
+        for claim_id, claim in self.claims.items():
+            if claim.source_chunk_id and claim.source_chunk_id in self.evidence:
+                edge_id = f"{claim_id}->{claim.source_chunk_id}"
+                if edge_id not in self.edges:
+                    self.add_edge(
+                        claim_id=claim_id,
+                        chunk_id=claim.source_chunk_id,
+                        edge_type=EdgeType.RELATED,
+                        confidence=1.0,
+                    )
 
         claim_ids = list(self.claims.keys())
         evidence_ids = list(self.evidence.keys())

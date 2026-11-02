@@ -37,6 +37,11 @@ class ControllerStageResult(BaseModel):
         default=0,
         ge=0,
     )
+    
+    latency_seconds: float = Field(
+        default=0.0,
+        ge=0.0
+    )
 
     metadata: Dict[str, Any] = Field(
         default_factory=dict
@@ -66,6 +71,11 @@ class ControllerConfig(BaseModel):
         ge=0,
     )
 
+    enable_adaptive_retrieval: bool = True
+    enable_query_reformulation: bool = True
+    enable_retrieval_memory: bool = True
+    enable_claim_verification: bool = True
+
     enable_contradiction_analysis: bool = True
 
     enable_cross_lingual_analysis: bool = True
@@ -75,6 +85,9 @@ class ControllerConfig(BaseModel):
     enable_selective_verification: bool = True
 
     answer_generation_enabled: bool = True
+
+    session_id: Optional[str] = None
+    scoped_retrieval_memory: bool = True
 
 
 class ControllerRequest(BaseModel):
@@ -113,7 +126,23 @@ class ControllerResult(BaseModel):
     )
 
     supporting_chunk_ids: List[str] = Field(
-        default_factory=list
+        default_factory=list,
+        description="Distinct chunk IDs cited by the generated answer."
+    )
+
+    retrieved_chunk_ids: List[str] = Field(
+        default_factory=list,
+        description="Ordered unique chunk IDs returned by adaptive hybrid retrieval and passed into claim extraction."
+    )
+
+    retrieval_attempts_history: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="Per-attempt breakdown of query, query_type, candidate_k, and retrieved chunk IDs."
+    )
+
+    provenance_defects: List[str] = Field(
+        default_factory=list,
+        description="Any cited chunk IDs that were not present in retrieved_chunk_ids."
     )
 
     provenance: List[Dict[str, Any]] = Field(

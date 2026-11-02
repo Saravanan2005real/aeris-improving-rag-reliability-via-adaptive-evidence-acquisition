@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 import ollama
 
 from app.config import settings
+from app.utils.model_client import get_ollama_client, timed_model_chat
 
 
 class ContradictionLabel(str, Enum):
@@ -42,8 +43,11 @@ class ContextualContradictionClassifier:
         ContradictionLabel.UNCERTAIN: 0.35,
     }
 
-    def __init__(self, model: str | None = None):
+    def __init__(self, model: str | None = None, host: str | None = None, timeout: float | None = None):
         self.model = model or settings.ollama_model
+        self.host = host or settings.ollama_host
+        self.timeout = timeout or settings.ollama_timeout
+        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
 
     def classify(
         self,
@@ -122,7 +126,8 @@ Evidence B:
 {evidence_b}
 """
 
-        response = ollama.chat(
+        chat_res = timed_model_chat(
+            client=self.client,
             model=self.model,
             messages=[
                 {
@@ -133,9 +138,10 @@ Evidence B:
             options={
                 "temperature": 0,
             },
+            stage="Contradiction",
         )
 
-        content = response["message"]["content"].strip()
+        content = chat_res["content"].strip()
 
         # Simple json extraction fallback (we did this in earlier steps but the user prompt doesn't specify it)
         # Actually I will just use what the user provided, if it fails I'll add the brace fallback.

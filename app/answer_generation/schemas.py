@@ -18,6 +18,7 @@ class GroundedAnswer(BaseModel):
     question: str
     answer: str
     status: AnswerStatus
+    is_answerable_from_evidence: bool = True
     confidence: Optional[float] = Field(
         default=None,
         description="Engineering score representing generation confidence, NOT a calibrated probability unless explicitly stated."

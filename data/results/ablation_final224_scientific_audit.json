@@ -1,0 +1,62 @@
+{
+  "experiment_id": "exp_final224_20261011_113501",
+  "answerable_questions_supported": 23,
+  "answerable_questions_insufficient": 137,
+  "unanswerable_questions_supported_false_support": 0,
+  "unanswerable_questions_correctly_rejected": 64,
+  "total_unanswerable_evaluations": 64,
+  "total_answerable_evaluations": 160,
+  "false_support_rate": 0.0,
+  "false_support_formula": "0 / 64",
+  "answerable_supported_rate": 0.14375,
+  "answerability_accuracy": 0.38839285714285715,
+  "supported_without_claims": 0,
+  "supported_without_valid_evidence": 0,
+  "high_confidence_no_evidence": 0,
+  "duplicate_claim_ids": 0,
+  "duplicate_chunk_ids": 0,
+  "answerability_gate": "PASS",
+  "provenance_gate": "PASS",
+  "variant_evidence_metrics": {
+    "FULL_AERIS": {
+      "answerable_denominator": 20,
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_ADAPTIVE_RETRIEVAL": {
+      "answerable_denominator": 20,
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_CLAIM_VERIFICATION": {
+      "answerable_denominator": 20,
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_CONTRADICTION_ANALYSIS": {
+      "answerable_denominator": 20,
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_CROSSLINGUAL_AGREEMENT": {
+      "answerable_denominator": 20,
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_QUERY_REFORMULATION": {
+      "answerable_denominator": 20,
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_RETRIEVAL_MEMORY": {
+      "answerable_denominator": 20,
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    },
+    "NO_SELECTIVE_VERIFICATION": {
+      "answerable_denominator": 20,
+      "evidence_hit_rate": 0.35,
+      "evidence_recall": 0.275
+    }
+  }
+}

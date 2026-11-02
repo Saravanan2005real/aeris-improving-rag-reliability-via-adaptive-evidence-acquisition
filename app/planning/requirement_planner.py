@@ -1,4 +1,6 @@
 import json
+import time
+from app.performance_cache import aeris_cache
 import re
 from typing import Optional
 
@@ -6,6 +8,8 @@ import ollama
 
 from app.config import settings
 from app.planning.schemas import RequirementPlan
+from app.utils.json_parser import extract_json
+from app.utils.model_client import get_ollama_client, timed_model_chat, ModelCallError
 
 
 class RequirementPlanner:
@@ -20,11 +24,13 @@ class RequirementPlanner:
         self,
         model: Optional[str] = None,
         host: Optional[str] = None,
+        timeout: Optional[float] = None,
     ):
         self.model = model or settings.ollama_model
         self.host = host or settings.ollama_host
+        self.timeout = timeout or settings.ollama_timeout
 
-        self.client = ollama.Client(host=self.host)
+        self.client = get_ollama_client(host=self.host, timeout=self.timeout)
 
     def _build_prompt(self, question: str) -> str:
         return f"""
@@ -94,7 +100,8 @@ PLANNING RULES:
 
 14. Generate 1-3 retrieval queries per requirement.
 
-15. Return ONLY valid JSON.
+15. Return ONLY valid JSON. Do not include markdown blocks, preamble, or explanation outside the JSON.
+    Start your response exactly with {{ and end exactly with }}.
 
 QUESTION TYPES:
 
@@ -266,27 +273,6 @@ User question:
 {question}
 """.strip()
 
-    @staticmethod
-    def _extract_json(text: str) -> str:
-        """
-        Extract a JSON object even if the model accidentally adds
-        surrounding text.
-        """
-
-        text = text.strip()
-
-        # Remove markdown fences if present.
-        text = re.sub(r"^```(?:json)?\s*", "", text)
-        text = re.sub(r"\s*```$", "", text)
-
-        # Locate the outermost JSON object.
-        start = text.find("{")
-        end = text.rfind("}")
-
-        if start == -1 or end == -1 or end <= start:
-            raise ValueError("No valid JSON object found in model response.")
-
-        return text[start : end + 1]
 
     def plan(self, question: str) -> RequirementPlan:
         """
@@ -303,29 +289,87 @@ User question:
 
         prompt = self._build_prompt(question)
 
-        response = self.client.chat(
-            model=self.model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
-            format="json",
-            options={
-                "temperature": 0,
-            },
-        )
+        cache_key = {"q": question}
+        cached = aeris_cache.get("planner", cache_key)
+        if cached:
+            return RequirementPlan(**cached)
 
-        raw_content = response["message"]["content"]
+        from app.utils.diagnostics import log_generation_attempt
+        messages = [{"role": "user", "content": prompt}]
+        
+        max_attempts = 3
+        
+        for attempt in range(1, max_attempts + 1):
+            parse_success = False
+            schema_success = False
+            repair_invoked = False
+            retry_invoked = (attempt > 1)
+            
+            try:
+                chat_res = timed_model_chat(
+                    client=self.client,
+                    model=self.model,
+                    messages=messages,
+                    options={
+                        "temperature": 0,
+                        "num_predict": 1024,
+                    },
+                    stage="Planning",
+                )
+                raw_content = chat_res["content"]
+                elapsed = chat_res["elapsed_seconds"]
+            except Exception as e:
+                elapsed = 0.0
+                ctx_size = len(messages[-1]["content"])
+                print(f"Error during requirement planning [Model: {self.model}, Stage: planner, Context: {ctx_size} chars]: {e}")
+                raise e
 
-        json_text = self._extract_json(raw_content)
+            ctx_size = len(messages[-1]["content"])
 
-        data = json.loads(json_text)
-
-        plan = RequirementPlan.model_validate(data)
+            try:
+                # To detect if repair was used, we check if original fails standard json
+                import json as std_json
+                try:
+                    std_json.loads(raw_content)
+                except:
+                    repair_invoked = True
+                    
+                json_text = extract_json(raw_content)
+                parse_success = True
+                
+                data = std_json.loads(json_text)
+                plan = RequirementPlan.model_validate(data)
+                schema_success = True
+                
+                log_generation_attempt("Planning", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
+                break  # Success, exit loop
+                
+            except Exception as e:
+                log_generation_attempt("Planning", "UNKNOWN", "UNKNOWN", attempt, self.model, ctx_size, elapsed, parse_success, schema_success, repair_invoked, retry_invoked)
+                if attempt == max_attempts:
+                    class RequirementPlanningError(Exception):
+                        def __init__(self, msg):
+                            super().__init__(msg)
+                    raise RequirementPlanningError(f"Requirement planning failed after {max_attempts} attempts. Error: {str(e)}")
+                    
+                messages.append({"role": "assistant", "content": raw_content})
+                import pydantic
+                missing_fields = []
+                if isinstance(e, pydantic.ValidationError):
+                    for err in e.errors():
+                        if err.get("type") == "missing":
+                            loc_str = " -> ".join(map(str, err.get("loc", [])))
+                            missing_fields.append(loc_str)
+                
+                if missing_fields:
+                    error_msg = f"Your previous response omitted required fields:\n{missing_fields}\n\nReturn a complete RequirementPlan containing every required field. Do not omit fields."
+                else:
+                    error_msg = f"Your previous response failed validation with error: {str(e)}. Please correct the JSON structure and schema to strictly match the requested format. Do not omit required fields."
+                messages.append({"role": "user", "content": error_msg})
 
         # Ensure the planner preserves the exact user question.
         plan.question = question
+
+        aeris_cache.set("planner", cache_key, plan.model_dump())
 
         return plan

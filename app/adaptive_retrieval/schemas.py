@@ -3,6 +3,14 @@ from pydantic import BaseModel, Field
 from app.coverage.evidence_coverage import EvidenceItem
 
 
+def is_reformulated_query_type(query_type: str) -> bool:
+    """
+    Check if query_type indicates a reformulated query, supporting both
+    canonical 'reformulated' and indexed 'reformulation_<n>'.
+    """
+    return query_type == "reformulated" or str(query_type).startswith("reformulation")
+
+
 class RetrievalAttempt(BaseModel):
     """
     Records one adaptive retrieval attempt for a single information requirement.
